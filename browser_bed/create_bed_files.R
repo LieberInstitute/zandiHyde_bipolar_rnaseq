@@ -1,3 +1,6 @@
+## Based on:
+# /users/ajaffe/Lieber/Projects/RNAseq/Astrazeneca/Round3/round3_bedTrack.R
+
 library('rtracklayer')
 library('RColorBrewer')
 library('jaffelab')
