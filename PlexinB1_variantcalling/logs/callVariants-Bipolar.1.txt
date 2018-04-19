@@ -1,0 +1,14 @@
+**** Job starts ****
+Tue Feb 20 12:09:13 EST 2018
+**** JHPCE info ****
+User: eburke
+Job id: 4558673
+Job name: step8-callVariants-Bipolar
+Hostname: compute-094
+Task id: 1
+****
+Sample id: R13887_H7JLCBBXX
+****
+[mpileup] 1 samples in 1 input files
+**** Job ends ****
+Tue Feb 20 12:39:24 EST 2018

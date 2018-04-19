@@ -1,0 +1,309 @@
+**** Job starts ****
+Mon Apr  2 23:00:56 EDT 2018
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ, clusterExport, clusterMap, parApply, parCapply, parLapply, parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames, colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply, lengths,
+    Map, mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with 'browseVignettes()'. To cite Bioconductor, see 'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+Loading required package: rafalib
+Loading required package: mgcv
+Loading required package: nlme
+
+Attaching package: ‘nlme’
+
+The following object is masked from ‘package:IRanges’:
+
+    collapse
+
+This is mgcv 1.8-22. For overview type 'help("mgcv-package")'.
+Loading required package: genefilter
+
+Attaching package: ‘genefilter’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    rowSds, rowVars
+
+Loading required package: BiocParallel
+Loading required package: Biostrings
+Loading required package: XVector
+
+Attaching package: ‘Biostrings’
+
+The following object is masked from ‘package:DelayedArray’:
+
+    type
+
+The following object is masked from ‘package:base’:
+
+    strsplit
+
+Matching data files and location files
+25136of25136 genes matched
+10777of10777 SNPs matched
+
+Task finished in 0.0219999999999345 seconds
+Reordering genes
+
+Task finished in 2.09699999999998 seconds
+Processing covariates
+Task finished in 0.00299999999992906 seconds
+Processing gene expression data (imputation, residualization)
+Task finished in 0.397000000000162 seconds
+Creating output file(s)
+Task finished in 0.0270000000000437 seconds
+Performing eQTL analysis
+16.66% done, 29,265 cis-eQTLs
+33.33% done, 47,629 cis-eQTLs
+50.00% done, 64,366 cis-eQTLs
+66.66% done, 84,053 cis-eQTLs
+83.33% done, 112,551 cis-eQTLs
+Task finished in 63.752 seconds
+
+Matching data files and location files
+396818of396818 genes matched
+10777of10777 SNPs matched
+
+Task finished in 0.196999999999889 seconds
+Reordering genes
+
+Task finished in 6.78500000000008 seconds
+Processing covariates
+Task finished in 0.00199999999995271 seconds
+Processing gene expression data (imputation, residualization)
+Task finished in 6.28700000000003 seconds
+Creating output file(s)
+Task finished in 0.104000000000042 seconds
+Performing eQTL analysis
+ 1.24% done, 1,161 cis-eQTLs
+ 2.49% done, 10,350 cis-eQTLs
+ 3.75% done, 47,841 cis-eQTLs
+ 5.00% done, 65,848 cis-eQTLs
+ 6.25% done, 180,001 cis-eQTLs
+ 7.49% done, 184,235 cis-eQTLs
+ 8.74% done, 187,754 cis-eQTLs
+10.00% done, 215,811 cis-eQTLs
+11.25% done, 216,937 cis-eQTLs
+12.50% done, 232,557 cis-eQTLs
+13.74% done, 260,029 cis-eQTLs
+14.99% done, 321,392 cis-eQTLs
+16.25% done, 346,000 cis-eQTLs
+17.50% done, 348,704 cis-eQTLs
+18.75% done, 379,776 cis-eQTLs
+19.99% done, 403,274 cis-eQTLs
+21.24% done, 420,754 cis-eQTLs
+22.50% done, 438,850 cis-eQTLs
+23.75% done, 439,570 cis-eQTLs
+25.00% done, 447,983 cis-eQTLs
+26.24% done, 465,400 cis-eQTLs
+27.49% done, 467,960 cis-eQTLs
+28.75% done, 474,707 cis-eQTLs
+30.00% done, 526,555 cis-eQTLs
+31.25% done, 538,959 cis-eQTLs
+32.49% done, 540,791 cis-eQTLs
+33.74% done, 555,884 cis-eQTLs
+35.00% done, 584,560 cis-eQTLs
+36.25% done, 615,978 cis-eQTLs
+37.50% done, 628,302 cis-eQTLs
+38.74% done, 662,287 cis-eQTLs
+39.99% done, 677,045 cis-eQTLs
+41.25% done, 702,072 cis-eQTLs
+42.50% done, 709,747 cis-eQTLs
+43.75% done, 758,088 cis-eQTLs
+44.99% done, 761,987 cis-eQTLs
+46.24% done, 767,224 cis-eQTLs
+47.50% done, 770,087 cis-eQTLs
+48.75% done, 778,631 cis-eQTLs
+50.00% done, 801,516 cis-eQTLs
+51.24% done, 802,710 cis-eQTLs
+52.49% done, 821,408 cis-eQTLs
+53.75% done, 856,258 cis-eQTLs
+55.00% done, 977,300 cis-eQTLs
+56.25% done, 983,651 cis-eQTLs
+57.49% done, 988,732 cis-eQTLs
+58.74% done, 990,498 cis-eQTLs
+60.00% done, 993,930 cis-eQTLs
+61.25% done, 1,021,930 cis-eQTLs
+62.50% done, 1,046,975 cis-eQTLs
+63.74% done, 1,053,940 cis-eQTLs
+64.99% done, 1,114,608 cis-eQTLs
+66.25% done, 1,123,285 cis-eQTLs
+67.50% done, 1,135,807 cis-eQTLs
+68.75% done, 1,165,482 cis-eQTLs
+70.00% done, 1,167,570 cis-eQTLs
+71.24% done, 1,204,413 cis-eQTLs
+72.50% done, 1,207,365 cis-eQTLs
+73.75% done, 1,218,692 cis-eQTLs
+75.00% done, 1,249,276 cis-eQTLs
+76.25% done, 1,267,462 cis-eQTLs
+77.49% done, 1,358,365 cis-eQTLs
+78.75% done, 1,364,294 cis-eQTLs
+80.00% done, 1,384,377 cis-eQTLs
+81.25% done, 1,425,758 cis-eQTLs
+82.50% done, 1,448,074 cis-eQTLs
+83.74% done, 1,469,862 cis-eQTLs
+85.00% done, 1,481,476 cis-eQTLs
+86.25% done, 1,518,708 cis-eQTLs
+87.50% done, 1,585,667 cis-eQTLs
+88.75% done, 1,648,673 cis-eQTLs
+89.99% done, 1,649,539 cis-eQTLs
+91.25% done, 1,673,402 cis-eQTLs
+92.50% done, 1,729,501 cis-eQTLs
+93.75% done, 1,775,721 cis-eQTLs
+95.00% done, 1,789,735 cis-eQTLs
+96.24% done, 1,889,207 cis-eQTLs
+Task finished in 969.354 seconds
+
+Matching data files and location files
+258774of258774 genes matched
+10777of10777 SNPs matched
+
+Task finished in 0.126999999999953 seconds
+Reordering genes
+
+Task finished in 4.77700000000004 seconds
+Processing covariates
+Task finished in 0.00199999999995271 seconds
+Processing gene expression data (imputation, residualization)
+Task finished in 3.77099999999973 seconds
+Creating output file(s)
+Task finished in 0.227000000000317 seconds
+Performing eQTL analysis
+ 1.92% done, 755 cis-eQTLs
+ 3.84% done, 39,859 cis-eQTLs
+ 5.76% done, 53,494 cis-eQTLs
+ 7.69% done, 127,033 cis-eQTLs
+ 9.61% done, 130,304 cis-eQTLs
+11.53% done, 150,434 cis-eQTLs
+13.46% done, 162,172 cis-eQTLs
+15.38% done, 190,585 cis-eQTLs
+17.30% done, 239,406 cis-eQTLs
+19.23% done, 257,331 cis-eQTLs
+21.15% done, 287,029 cis-eQTLs
+23.07% done, 304,111 cis-eQTLs
+25.00% done, 310,848 cis-eQTLs
+26.92% done, 327,024 cis-eQTLs
+28.84% done, 331,492 cis-eQTLs
+30.76% done, 337,727 cis-eQTLs
+32.69% done, 376,023 cis-eQTLs
+34.61% done, 377,706 cis-eQTLs
+36.53% done, 401,819 cis-eQTLs
+38.46% done, 434,530 cis-eQTLs
+40.38% done, 455,733 cis-eQTLs
+42.30% done, 472,102 cis-eQTLs
+44.23% done, 493,601 cis-eQTLs
+46.15% done, 520,606 cis-eQTLs
+48.07% done, 526,182 cis-eQTLs
+50.00% done, 529,604 cis-eQTLs
+51.92% done, 537,329 cis-eQTLs
+53.84% done, 553,404 cis-eQTLs
+55.76% done, 564,214 cis-eQTLs
+57.69% done, 638,050 cis-eQTLs
+59.61% done, 644,655 cis-eQTLs
+61.53% done, 645,549 cis-eQTLs
+63.46% done, 664,058 cis-eQTLs
+65.38% done, 677,850 cis-eQTLs
+67.30% done, 722,011 cis-eQTLs
+69.23% done, 729,884 cis-eQTLs
+71.15% done, 754,199 cis-eQTLs
+73.07% done, 759,498 cis-eQTLs
+75.00% done, 785,886 cis-eQTLs
+76.92% done, 803,980 cis-eQTLs
+78.84% done, 859,104 cis-eQTLs
+80.76% done, 865,594 cis-eQTLs
+82.69% done, 901,917 cis-eQTLs
+84.61% done, 925,858 cis-eQTLs
+86.53% done, 944,241 cis-eQTLs
+88.46% done, 1,016,497 cis-eQTLs
+90.38% done, 1,029,258 cis-eQTLs
+92.30% done, 1,071,329 cis-eQTLs
+94.23% done, 1,116,423 cis-eQTLs
+96.15% done, 1,175,336 cis-eQTLs
+Task finished in 631.342 seconds
+
+Matching data files and location files
+73214of73214 genes matched
+10777of10777 SNPs matched
+
+Task finished in 0.0409999999997126 seconds
+Reordering genes
+
+Task finished in 2.48199999999997 seconds
+Processing covariates
+Task finished in 0.00200000000040745 seconds
+Processing gene expression data (imputation, residualization)
+Task finished in 1.14799999999968 seconds
+Creating output file(s)
+Task finished in 0.121000000000095 seconds
+Performing eQTL analysis
+ 6.66% done, 39,804 cis-eQTLs
+13.33% done, 52,749 cis-eQTLs
+19.99% done, 86,576 cis-eQTLs
+26.66% done, 98,101 cis-eQTLs
+33.33% done, 116,963 cis-eQTLs
+39.99% done, 139,090 cis-eQTLs
+46.66% done, 151,839 cis-eQTLs
+53.33% done, 172,218 cis-eQTLs
+60.00% done, 197,641 cis-eQTLs
+66.66% done, 220,846 cis-eQTLs
+73.33% done, 242,282 cis-eQTLs
+80.00% done, 276,788 cis-eQTLs
+86.66% done, 313,281 cis-eQTLs
+93.33% done, 337,599 cis-eQTLs
+100.00% done, 352,658 cis-eQTLs
+Task finished in 183.268 seconds
+
+**** Job ends ****
+Mon Apr  2 23:51:26 EDT 2018
