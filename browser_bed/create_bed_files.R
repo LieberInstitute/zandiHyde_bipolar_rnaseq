@@ -65,11 +65,13 @@ get_header <- function(region, typestatus) {
 dir.create('bed', showWarnings = FALSE)
 xx <- lapply(names(ebed), function(reg) {
     lapply(names(ebed[[1]]), function(typstat) {
-        bed <- paste0('bed/zandiBipolar_31main_bedTrack_04192018_', reg, '_', typstat, '.bed')
+        bed <- paste0('bed/zandiBipolar_31main_bedTrack_05112018_', reg, '_', typstat, '.bed')
         
     	write.table(get_header(reg, typstat), file = bed,
     		row.names=FALSE, col.names=FALSE, quote=FALSE)
-    	write.table(ebed[[reg]][[typstat]], file = bed,
+        xx <- ebed[[reg]][[typstat]]
+        if(any(xx$strand == '*')) xx$strand[xx$strand == '*'] <- '+'
+    	write.table(xx, file = bed,
     		row.names=FALSE, col.names=FALSE, quote=FALSE,append=TRUE)
         return(NULL)
     })
