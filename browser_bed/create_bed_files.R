@@ -6,10 +6,20 @@ library('RColorBrewer')
 library('jaffelab')
 library('devtools')
 
-## Load eQTL results from the 31 main SNPs and their proxy SNPs
-efiles <- dir('../eqtl/raggr_gwSignificant', pattern = 'raggr_31_snps_', full.names = TRUE)
+## Load eQTL results from the 881 candidate SNPs and their proxy SNPs
+efiles <- dir('../eqtl/raggr', pattern = 'raggr_881_snps_', full.names = TRUE)
 names(efiles) <- ss(gsub('_eqtls_fdr01.csv', '', efiles), '_snps_', 2)
 etabs <- lapply(efiles, read.csv, header = TRUE)
+
+## Filter to keep the "lead snps"
+etabs <- lapply(etabs, function(e) {
+    el <- split(e, e$IndexSNP)
+    do.call(rbind, lapply(el, function(ell) {
+        ell[which.min(ell$FDR), ]
+    }))
+})
+
+sapply(etabs, function(e) { table(e$Status) })
 
 get_col <- function(pval) {
     bedShading <- cut(pval,
@@ -65,7 +75,7 @@ get_header <- function(region, typestatus) {
 dir.create('bed', showWarnings = FALSE)
 xx <- lapply(names(ebed), function(reg) {
     lapply(names(ebed[[1]]), function(typstat) {
-        bed <- paste0('bed/zandiBipolar_31main_bedTrack_05112018_', reg, '_', typstat, '.bed')
+        bed <- paste0('bed/zandiBipolar_881lead_bedTrack_', Sys.Date(), '_', reg, '_', typstat, '.bed')
         
     	write.table(get_header(reg, typstat), file = bed,
     		row.names=FALSE, col.names=FALSE, quote=FALSE)
