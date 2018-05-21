@@ -13,13 +13,9 @@ etabs <- lapply(efiles, read.csv, header = TRUE)
 
 ## Filter to keep the "lead snps"
 etabs <- lapply(etabs, function(e) {
-    el <- split(e, e$IndexSNP)
-    do.call(rbind, lapply(el, function(ell) {
-        ell[which.min(ell$FDR), ]
-    }))
+    
+    e[e$SNP %in% unique(e$leadVariant), ]
 })
-
-sapply(etabs, function(e) { table(e$Status) })
 
 get_col <- function(pval) {
     bedShading <- cut(pval,
@@ -89,6 +85,7 @@ xx <- lapply(names(ebed), function(reg) {
 
 ## Compress into a single tar ball for sharing
 system('tar -zcvf bed.tar.gz bed')
+system('wc -l bed/*bed')
 
 
 ## Reproducibility information
