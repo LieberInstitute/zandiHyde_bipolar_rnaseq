@@ -55,15 +55,15 @@ ebed <- lapply(etabs, function(x) {
     
     df[order(df$score, decreasing = TRUE), ]
     
-    split(df[, -which(colnames(df) %in% c('status', 'type'))], paste0(df$status, '_', df$type))
+    split(df[, -which(colnames(df) %in% c('status', 'type'))], df$type)
 })
 
-stopifnot(all(sapply(ebed, length) == 8))
+stopifnot(all(sapply(ebed, length) == 4))
 
 get_header <- function(region, typestatus) {
     paste0("track name=ZandiBipolar_eQTL_", region, '_', typestatus,
     		" description='ZandiBipolar eQTL hits - ", region, ', ',
-            ss(typestatus, '_'), ', ', ss(typestatus, '_', 2),
+            ss(typestatus, '_'),
     		"' visibility=2 itemRgb='On'")
 }
 
