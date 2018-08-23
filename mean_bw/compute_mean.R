@@ -43,6 +43,9 @@ stopifnot(file.exists(f))
 message(paste(Sys.time(), 'loading', f))
 load(f, verbose = TRUE)
 
+## Remove unwanted stuff
+rm(rse_exon, rse_jxn, rse_tx)
+
 ## Set variables that change by region
 if(opt$region %in% c('amygdala', 'sacc')) {
     bwroot <- '/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/'
