@@ -1,0 +1,361 @@
+Loading git
+**** Job starts ****
+Thu Aug 23 22:25:25 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5457230
+Job name: mean_dlpfc_control
+Hostname: compute-095
+Task id: 
+Loading required package: recount
+Loading required package: SummarizedExperiment
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-23 22:26:36 Remember to run before this R script:
+    module load ucsctools
+    module load wiggletools/default
+    
+2018-08-23 22:26:37 loading /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_dlpfc.rda
+Loading objects:
+  rse_gene
+  rse_exon
+  rse_jxn
+  rse_tx
+2018-08-23 22:42:05 processing strand 
+2018-08-23 22:42:05 found 111 BigWig files
+2018-08-24 00:28:42 creating file temp_dlpfc_control/sum_part1.wig
+2018-08-24 00:28:42 command used: wiggletools write temp_dlpfc_control/sum_part1.wig sum scale 0.99989700113517 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2826_C00JVACXX.bw scale 1.00012614605909 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2839_C0UH3ACXX.bw scale 1.00004225378528 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2855_D0ATGACXX.bw scale 1.00005678276398 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2874_C0CEWACXX.bw scale 1.00007518168356 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2897_C0CEWACXX.bw scale 0.999946916749282 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2954_C00JVACXX.bw scale 1.00014073030812 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2958_C0CEWACXX.bw scale 0.999928050089517 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2983_C00JVACXX.bw scale 0.999932240420913 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2996_C0CEWACXX.bw scale 0.999935613247256 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R2999_C00JVACXX.bw scale 0.999922877301059 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3014_C00JVACXX.bw scale 0.999892082418554 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3017_C0JV6ACXX.bw scale 0.999986230240129 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3063_C00L0ACXX.bw scale 1.00015241001482 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3374_D0AUAACXX.bw scale 1.00004624598274 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3375_C0UH3ACXX.bw scale 0.999922139051357 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3385_C00JVACXX.bw scale 1.00009896736089 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3395_C28MYACXX.bw scale 1.00002684423504 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3421_C00JVACXX.bw scale 0.999939125877267 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3424_D19K4ACXX.bw scale 1.00005924311728 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3441_C00JVACXX.bw scale 0.999808296129596 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3445_D0HMLACXX.bw scale 0.999922460484827 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3447_D0HMLACXX.bw scale 0.999980989275942 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3455_C0GWRACXX.bw scale 1.00005732443332 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3460_C0JV6ACXX.bw scale 1.00010628320121 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3477_C2K2WACXX.bw scale 0.999876736846122 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3479_D0HMLACXX.bw scale 1.00001823957995 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3489_D19K4ACXX.bw scale 1.00005127866224 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3491_D0HMLACXX.bw scale 0.999897196405083 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3497_D0AUAACXX.bw scale 0.999993484621083 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3498_C0GTHACXX.bw scale 1.00011672595203 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3500_D156YACXX.bw scale 0.999932538257405 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3502_D0AUAACXX.bw scale 0.999783221465453 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3507_D0HMLACXX.bw scale 0.999973514203799 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3509_C0GTHACXX.bw scale 0.999918441459805 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3512_D156YACXX.bw scale 1.00013367520919 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3518_C0GWRACXX.bw scale 0.999952514396376 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3522_C28MYACXX.bw scale 0.999879131776073 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3523_D156YACXX.bw scale 0.99995316571527 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3539_D0HMLACXX.bw scale 1.00010329518941 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3548_C3V3YACXX.bw scale 1.00007517122981 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3549_C2K2WACXX.bw scale 1.00007654053917 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3556_D156YACXX.bw scale 0.99986606035645 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3557_D0HMLACXX.bw scale 0.99989487773561 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3558_C3V3YACXX.bw scale 0.99994448145085 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3584_C0VJYACXX.bw scale 1.00014326945554 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3592_D156YACXX.bw scale 1.00026572508879 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3593_D1BWTACXX.bw scale 0.999987527528289 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3602_C0VJYACXX.bw scale 0.999855460675411 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3619_D0HMLACXX.bw scale 1.00013314084036 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3639_C2K2WACXX.bw scale 1.00006999989248 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3765_D29GFACXX.bw scale 1.00001064216548 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3766_C0VJYACXX.bw scale 0.999980666457246 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3771_D0HMLACXX.bw scale 1.00009037104319 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3774_D0HMLACXX.bw scale 1.00005595754037 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3791_C0JV6ACXX.bw scale 0.999917706274151 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3901_C3V3YACXX.bw
+2018-08-24 02:18:05 creating file temp_dlpfc_control/sum_part2.wig
+2018-08-24 02:18:05 command used: wiggletools write temp_dlpfc_control/sum_part2.wig sum scale 0.99995746944735 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3915_C101EACXX.bw scale 1.00003197733136 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3921_C3V3YACXX.bw scale 0.999877383811209 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3932_D0HMLACXX.bw scale 1.00013560926781 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3970_D1BWTACXX.bw scale 1.00008021748287 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3990_C0GWRACXX.bw scale 0.999912434171808 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R3996_C00L0ACXX.bw scale 0.999773577371346 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4028_D11NEACXX.bw scale 0.999983725791373 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4029_D11NEACXX.bw scale 0.99992209793788 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4038_C0JV6ACXX.bw scale 1.00006637584219 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4044_C00JVACXX.bw scale 1.00008543857327 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4047_C00JVACXX.bw scale 0.999970456864351 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4048_C0UH3ACXX.bw scale 0.999902017735904 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4049_C00JVACXX.bw scale 0.999824893789638 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4054_C00JVACXX.bw scale 1.00011334987001 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4070_C00JVACXX.bw scale 1.00027307973404 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4075_C0JV6ACXX.bw scale 1.00012088751892 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4076_C00JVACXX.bw scale 0.999944243889722 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4112_C0GWRACXX.bw scale 0.999908241137284 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4114_C0GWRACXX.bw scale 1.0001125862635 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4185_D1AAPACXX.bw scale 0.999851547818015 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4196_D1AAPACXX.bw scale 0.999850067738696 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4235_C0UH3ACXX.bw scale 1.00008276064589 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4236_C0GWRACXX.bw scale 1.00008340663731 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4251_D1AACACXX.bw scale 0.999754639684208 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4252_D1AACACXX.bw scale 1.00011118507981 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4256_D1AACACXX.bw scale 1.00016861515153 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4260_D1AACACXX.bw scale 1.00006937314077 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4279_C00JVACXX.bw scale 0.999913192274499 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4281_D1AACACXX.bw scale 1.00017027798541 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4303_D19K4ACXX.bw scale 0.999843963018642 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4324_C00JVACXX.bw scale 1.00005647862803 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4326_C1MBUACXX.bw scale 1.0001313796806 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4348_C0JV6ACXX.bw scale 1.00008133596457 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4354_C0UH3ACXX.bw scale 0.999905568577849 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4356_D19K4ACXX.bw scale 1.00008820520718 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4360_C00JVACXX.bw scale 1.0000903773287 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4363_C28MPACXX.bw scale 1.00007727348195 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4386_C00JVACXX.bw scale 0.999799367851775 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4394_C0JV6ACXX.bw scale 1.00008374279674 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4397_C0JV6ACXX.bw scale 0.999828630415077 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4424_C1MBUACXX.bw scale 1.000104086054 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4701_C1MBUACXX.bw scale 1.00013686899377 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R4704_C1MBUACXX.bw scale 1.00009775434434 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5596_D0AUAACXX.bw scale 1.00009194443372 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5599_C3VHJACXX.bw scale 1.00020868471484 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5601_C3VHJACXX.bw scale 1.00010738663595 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5625_D0ATGACXX.bw scale 0.999950075219957 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5628_D0ATGACXX.bw scale 1.00003148073549 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5633_D0J0GACXX.bw scale 1.00001562791635 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5741_C0VJYACXX.bw scale 1.00016833621209 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5748_D0ATGACXX.bw scale 0.99995680439479 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5749_D0ATGACXX.bw scale 1.00025772724546 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5824_C1MBUACXX.bw scale 0.999926077973292 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5871_C0CEWACXX.bw scale 0.999912511030087 /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Coverage/R5885_C0CEWACXX.bw
+2018-08-24 04:03:39 command used: wiggletools write mean_dlpfc_control_n111.wig scale 0.00900900900900901 sum temp_dlpfc_control/sum_part1.wig temp_dlpfc_control/sum_part2.wig
+2018-08-24 04:17:52 creating file mean_dlpfc_control_n111.bw
+2018-08-24 05:07:01 mean BigWig was successfully created at mean_dlpfc_control_n111.bw
+                                            
+  [1,] "mean_dlpfc_control_n111.bw"         
+  [2,] "mean_dlpfc_control_n111.wig"        
+  [3,] ".createWig_2018-08-24_part1.sh"     
+  [4,] ".createWig_2018-08-24_part2.sh"     
+  [5,] ".createWig_2018-08-24_part3.sh"     
+  [6,] ".createWig_2018-08-24.sh"           
+  [7,] "temp_dlpfc_control/bw_sample1.auc"  
+  [8,] "temp_dlpfc_control/bw_sample10.auc" 
+  [9,] "temp_dlpfc_control/bw_sample100.auc"
+ [10,] "temp_dlpfc_control/bw_sample101.auc"
+ [11,] "temp_dlpfc_control/bw_sample102.auc"
+ [12,] "temp_dlpfc_control/bw_sample103.auc"
+ [13,] "temp_dlpfc_control/bw_sample104.auc"
+ [14,] "temp_dlpfc_control/bw_sample105.auc"
+ [15,] "temp_dlpfc_control/bw_sample106.auc"
+ [16,] "temp_dlpfc_control/bw_sample107.auc"
+ [17,] "temp_dlpfc_control/bw_sample108.auc"
+ [18,] "temp_dlpfc_control/bw_sample109.auc"
+ [19,] "temp_dlpfc_control/bw_sample11.auc" 
+ [20,] "temp_dlpfc_control/bw_sample110.auc"
+ [21,] "temp_dlpfc_control/bw_sample111.auc"
+ [22,] "temp_dlpfc_control/bw_sample12.auc" 
+ [23,] "temp_dlpfc_control/bw_sample13.auc" 
+ [24,] "temp_dlpfc_control/bw_sample14.auc" 
+ [25,] "temp_dlpfc_control/bw_sample15.auc" 
+ [26,] "temp_dlpfc_control/bw_sample16.auc" 
+ [27,] "temp_dlpfc_control/bw_sample17.auc" 
+ [28,] "temp_dlpfc_control/bw_sample18.auc" 
+ [29,] "temp_dlpfc_control/bw_sample19.auc" 
+ [30,] "temp_dlpfc_control/bw_sample2.auc"  
+ [31,] "temp_dlpfc_control/bw_sample20.auc" 
+ [32,] "temp_dlpfc_control/bw_sample21.auc" 
+ [33,] "temp_dlpfc_control/bw_sample22.auc" 
+ [34,] "temp_dlpfc_control/bw_sample23.auc" 
+ [35,] "temp_dlpfc_control/bw_sample24.auc" 
+ [36,] "temp_dlpfc_control/bw_sample25.auc" 
+ [37,] "temp_dlpfc_control/bw_sample26.auc" 
+ [38,] "temp_dlpfc_control/bw_sample27.auc" 
+ [39,] "temp_dlpfc_control/bw_sample28.auc" 
+ [40,] "temp_dlpfc_control/bw_sample29.auc" 
+ [41,] "temp_dlpfc_control/bw_sample3.auc"  
+ [42,] "temp_dlpfc_control/bw_sample30.auc" 
+ [43,] "temp_dlpfc_control/bw_sample31.auc" 
+ [44,] "temp_dlpfc_control/bw_sample32.auc" 
+ [45,] "temp_dlpfc_control/bw_sample33.auc" 
+ [46,] "temp_dlpfc_control/bw_sample34.auc" 
+ [47,] "temp_dlpfc_control/bw_sample35.auc" 
+ [48,] "temp_dlpfc_control/bw_sample36.auc" 
+ [49,] "temp_dlpfc_control/bw_sample37.auc" 
+ [50,] "temp_dlpfc_control/bw_sample38.auc" 
+ [51,] "temp_dlpfc_control/bw_sample39.auc" 
+ [52,] "temp_dlpfc_control/bw_sample4.auc"  
+ [53,] "temp_dlpfc_control/bw_sample40.auc" 
+ [54,] "temp_dlpfc_control/bw_sample41.auc" 
+ [55,] "temp_dlpfc_control/bw_sample42.auc" 
+ [56,] "temp_dlpfc_control/bw_sample43.auc" 
+ [57,] "temp_dlpfc_control/bw_sample44.auc" 
+ [58,] "temp_dlpfc_control/bw_sample45.auc" 
+ [59,] "temp_dlpfc_control/bw_sample46.auc" 
+ [60,] "temp_dlpfc_control/bw_sample47.auc" 
+ [61,] "temp_dlpfc_control/bw_sample48.auc" 
+ [62,] "temp_dlpfc_control/bw_sample49.auc" 
+ [63,] "temp_dlpfc_control/bw_sample5.auc"  
+ [64,] "temp_dlpfc_control/bw_sample50.auc" 
+ [65,] "temp_dlpfc_control/bw_sample51.auc" 
+ [66,] "temp_dlpfc_control/bw_sample52.auc" 
+ [67,] "temp_dlpfc_control/bw_sample53.auc" 
+ [68,] "temp_dlpfc_control/bw_sample54.auc" 
+ [69,] "temp_dlpfc_control/bw_sample55.auc" 
+ [70,] "temp_dlpfc_control/bw_sample56.auc" 
+ [71,] "temp_dlpfc_control/bw_sample57.auc" 
+ [72,] "temp_dlpfc_control/bw_sample58.auc" 
+ [73,] "temp_dlpfc_control/bw_sample59.auc" 
+ [74,] "temp_dlpfc_control/bw_sample6.auc"  
+ [75,] "temp_dlpfc_control/bw_sample60.auc" 
+ [76,] "temp_dlpfc_control/bw_sample61.auc" 
+ [77,] "temp_dlpfc_control/bw_sample62.auc" 
+ [78,] "temp_dlpfc_control/bw_sample63.auc" 
+ [79,] "temp_dlpfc_control/bw_sample64.auc" 
+ [80,] "temp_dlpfc_control/bw_sample65.auc" 
+ [81,] "temp_dlpfc_control/bw_sample66.auc" 
+ [82,] "temp_dlpfc_control/bw_sample67.auc" 
+ [83,] "temp_dlpfc_control/bw_sample68.auc" 
+ [84,] "temp_dlpfc_control/bw_sample69.auc" 
+ [85,] "temp_dlpfc_control/bw_sample7.auc"  
+ [86,] "temp_dlpfc_control/bw_sample70.auc" 
+ [87,] "temp_dlpfc_control/bw_sample71.auc" 
+ [88,] "temp_dlpfc_control/bw_sample72.auc" 
+ [89,] "temp_dlpfc_control/bw_sample73.auc" 
+ [90,] "temp_dlpfc_control/bw_sample74.auc" 
+ [91,] "temp_dlpfc_control/bw_sample75.auc" 
+ [92,] "temp_dlpfc_control/bw_sample76.auc" 
+ [93,] "temp_dlpfc_control/bw_sample77.auc" 
+ [94,] "temp_dlpfc_control/bw_sample78.auc" 
+ [95,] "temp_dlpfc_control/bw_sample79.auc" 
+ [96,] "temp_dlpfc_control/bw_sample8.auc"  
+ [97,] "temp_dlpfc_control/bw_sample80.auc" 
+ [98,] "temp_dlpfc_control/bw_sample81.auc" 
+ [99,] "temp_dlpfc_control/bw_sample82.auc" 
+[100,] "temp_dlpfc_control/bw_sample83.auc" 
+[101,] "temp_dlpfc_control/bw_sample84.auc" 
+[102,] "temp_dlpfc_control/bw_sample85.auc" 
+[103,] "temp_dlpfc_control/bw_sample86.auc" 
+[104,] "temp_dlpfc_control/bw_sample87.auc" 
+[105,] "temp_dlpfc_control/bw_sample88.auc" 
+[106,] "temp_dlpfc_control/bw_sample89.auc" 
+[107,] "temp_dlpfc_control/bw_sample9.auc"  
+[108,] "temp_dlpfc_control/bw_sample90.auc" 
+[109,] "temp_dlpfc_control/bw_sample91.auc" 
+[110,] "temp_dlpfc_control/bw_sample92.auc" 
+[111,] "temp_dlpfc_control/bw_sample93.auc" 
+[112,] "temp_dlpfc_control/bw_sample94.auc" 
+[113,] "temp_dlpfc_control/bw_sample95.auc" 
+[114,] "temp_dlpfc_control/bw_sample96.auc" 
+[115,] "temp_dlpfc_control/bw_sample97.auc" 
+[116,] "temp_dlpfc_control/bw_sample98.auc" 
+[117,] "temp_dlpfc_control/bw_sample99.auc" 
+[1] "Reproducibility information:"
+[1] "2018-08-24 05:07:01 EDT"
+     user    system   elapsed 
+26121.389  1990.686 24095.183 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.5.0 Patched (2018-04-30 r74679)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-08-24                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source                                         
+ acepack                1.4.1     2016-10-29 CRAN (R 3.5.0)                                 
+ AnnotationDbi          1.42.1    2018-05-17 Bioconductor                                   
+ assertthat             0.2.0     2017-04-11 CRAN (R 3.5.0)                                 
+ backports              1.1.2     2017-12-13 CRAN (R 3.5.0)                                 
+ base                 * 3.5.0     2018-05-02 local                                          
+ base64enc              0.1-3     2015-07-28 CRAN (R 3.5.0)                                 
+ bibtex                 0.4.2     2017-06-30 CRAN (R 3.5.0)                                 
+ bindr                  0.1.1     2018-03-13 CRAN (R 3.5.0)                                 
+ bindrcpp               0.2.2     2018-03-29 CRAN (R 3.5.0)                                 
+ Biobase              * 2.40.0    2018-05-02 Bioconductor                                   
+ BiocGenerics         * 0.26.0    2018-05-03 Bioconductor                                   
+ BiocParallel         * 1.14.2    2018-07-08 Bioconductor                                   
+ biomaRt                2.36.1    2018-06-13 Bioconductor                                   
+ Biostrings             2.48.0    2018-05-03 Bioconductor                                   
+ bit                    1.1-14    2018-05-29 CRAN (R 3.5.0)                                 
+ bit64                  0.9-7     2017-05-08 CRAN (R 3.5.0)                                 
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)                                 
+ blob                   1.1.1     2018-03-25 CRAN (R 3.5.0)                                 
+ BSgenome               1.48.0    2018-05-03 Bioconductor                                   
+ bumphunter             1.22.0    2018-05-03 Bioconductor                                   
+ checkmate              1.8.5     2017-10-24 CRAN (R 3.5.0)                                 
+ cluster                2.0.7-1   2018-04-13 CRAN (R 3.5.0)                                 
+ codetools              0.2-15    2016-10-05 CRAN (R 3.5.0)                                 
+ colorspace             1.3-2     2016-12-14 CRAN (R 3.5.0)                                 
+ compiler               3.5.0     2018-05-02 local                                          
+ crayon                 1.3.4     2017-09-16 CRAN (R 3.5.0)                                 
+ data.table             1.11.4    2018-05-27 cran (@1.11.4)                                 
+ datasets             * 3.5.0     2018-05-02 local                                          
+ DBI                    1.0.0     2018-05-02 CRAN (R 3.5.0)                                 
+ DelayedArray         * 0.6.2     2018-07-23 Bioconductor                                   
+ derfinder              1.14.0    2018-05-03 Bioconductor                                   
+ derfinderHelper        1.14.0    2018-05-03 Bioconductor                                   
+ devtools             * 1.13.6    2018-06-27 CRAN (R 3.5.0)                                 
+ digest                 0.6.15    2018-01-28 CRAN (R 3.5.0)                                 
+ doRNG                  1.7.1     2018-06-22 CRAN (R 3.5.0)                                 
+ downloader             0.4       2015-07-09 CRAN (R 3.5.0)                                 
+ dplyr                  0.7.6     2018-06-29 CRAN (R 3.5.0)                                 
+ foreach                1.4.4     2017-12-12 CRAN (R 3.5.0)                                 
+ foreign                0.8-70    2017-11-28 CRAN (R 3.5.0)                                 
+ Formula                1.2-3     2018-05-03 CRAN (R 3.5.0)                                 
+ GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor                                   
+ GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor                                   
+ GenomicAlignments      1.16.0    2018-05-03 Bioconductor                                   
+ GenomicFeatures        1.32.0    2018-05-03 Bioconductor                                   
+ GenomicFiles           1.16.0    2018-05-03 Bioconductor                                   
+ GenomicRanges        * 1.32.6    2018-07-20 Bioconductor                                   
+ GEOquery               2.48.0    2018-05-02 Bioconductor                                   
+ getopt               * 1.20.2    2018-02-16 CRAN (R 3.5.0)                                 
+ ggplot2                3.0.0     2018-07-03 CRAN (R 3.5.0)                                 
+ glue                   1.3.0     2018-07-17 CRAN (R 3.5.0)                                 
+ graphics             * 3.5.0     2018-05-02 local                                          
+ grDevices            * 3.5.0     2018-05-02 local                                          
+ grid                   3.5.0     2018-05-02 local                                          
+ gridExtra              2.3       2017-09-09 CRAN (R 3.5.0)                                 
+ gtable                 0.2.0     2016-02-26 CRAN (R 3.5.0)                                 
+ Hmisc                  4.1-1     2018-01-03 CRAN (R 3.5.0)                                 
+ hms                    0.4.2     2018-03-10 CRAN (R 3.5.0)                                 
+ htmlTable              1.12      2018-05-26 CRAN (R 3.5.0)                                 
+ htmltools              0.3.6     2017-04-28 CRAN (R 3.5.0)                                 
+ htmlwidgets            1.2       2018-04-19 CRAN (R 3.5.0)                                 
+ httr                   1.3.1     2017-08-20 CRAN (R 3.5.0)                                 
+ IRanges              * 2.14.10   2018-05-17 Bioconductor                                   
+ iterators              1.0.10    2018-07-13 CRAN (R 3.5.0)                                 
+ jsonlite               1.5       2017-06-01 CRAN (R 3.5.0)                                 
+ knitr                  1.20      2018-02-20 CRAN (R 3.5.0)                                 
+ lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)                                 
+ latticeExtra           0.6-28    2016-02-09 CRAN (R 3.5.0)                                 
+ lazyeval               0.2.1     2017-10-29 CRAN (R 3.5.0)                                 
+ limma                  3.36.2    2018-06-21 Bioconductor                                   
+ locfit                 1.5-9.1   2013-04-20 CRAN (R 3.5.0)                                 
+ magrittr               1.5       2014-11-22 CRAN (R 3.5.0)                                 
+ Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)                                 
+ matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)                                 
+ memoise                1.1.0     2017-04-21 CRAN (R 3.5.0)                                 
+ methods              * 3.5.0     2018-05-02 local                                          
+ munsell                0.5.0     2018-06-12 CRAN (R 3.5.0)                                 
+ nnet                   7.3-12    2016-02-02 CRAN (R 3.5.0)                                 
+ parallel             * 3.5.0     2018-05-02 local                                          
+ pillar                 1.3.0     2018-07-14 CRAN (R 3.5.0)                                 
+ pkgconfig              2.0.1     2017-03-21 CRAN (R 3.5.0)                                 
+ pkgmaker               0.27      2018-05-25 CRAN (R 3.5.0)                                 
+ plyr                   1.8.4     2016-06-08 CRAN (R 3.5.0)                                 
+ prettyunits            1.0.2     2015-07-13 CRAN (R 3.5.0)                                 
+ progress               1.2.0     2018-06-14 CRAN (R 3.5.0)                                 
+ purrr                  0.2.5     2018-05-29 CRAN (R 3.5.0)                                 
+ qvalue                 2.12.0    2018-05-03 Bioconductor                                   
+ R.methodsS3            1.7.1     2016-02-16 CRAN (R 3.5.0)                                 
+ R.oo                   1.22.0    2018-04-22 CRAN (R 3.5.0)                                 
+ R.utils                2.6.0     2017-11-05 CRAN (R 3.5.0)                                 
+ R6                     2.2.2     2017-06-17 CRAN (R 3.5.0)                                 
+ RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.5.0)                                 
+ Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)                                 
+ RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)                                 
+ readr                  1.1.1     2017-05-16 CRAN (R 3.5.0)                                 
+ recount              * 1.6.2     2018-05-17 Bioconductor                                   
+ recount.bwtool       * 0.99.28   2018-05-03 Github (LieberInstitute/recount.bwtool@834b6ab)
+ registry               0.5       2017-12-03 CRAN (R 3.5.0)                                 
+ rentrez                1.2.1     2018-03-05 CRAN (R 3.5.0)                                 
+ reshape2               1.4.3     2017-12-11 CRAN (R 3.5.0)                                 
+ rlang                  0.2.1     2018-05-30 cran (@0.2.1)                                  
+ rngtools               1.3.1     2018-05-15 CRAN (R 3.5.0)                                 
+ rpart                  4.1-13    2018-02-23 CRAN (R 3.5.0)                                 
+ Rsamtools              1.32.2    2018-07-03 Bioconductor                                   
+ RSQLite                2.1.1     2018-05-06 CRAN (R 3.5.0)                                 
+ rstudioapi             0.7       2017-09-07 CRAN (R 3.5.0)                                 
+ rtracklayer            1.40.3    2018-06-13 Bioconductor                                   
+ S4Vectors            * 0.18.3    2018-06-13 Bioconductor                                   
+ scales                 0.5.0     2017-08-24 CRAN (R 3.5.0)                                 
+ splines                3.5.0     2018-05-02 local                                          
+ stats                * 3.5.0     2018-05-02 local                                          
+ stats4               * 3.5.0     2018-05-02 local                                          
+ stringi                1.2.4     2018-07-20 CRAN (R 3.5.0)                                 
+ stringr                1.3.1     2018-05-10 CRAN (R 3.5.0)                                 
+ SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor                                   
+ survival               2.42-3    2018-04-16 CRAN (R 3.5.0)                                 
+ tibble                 1.4.2     2018-01-22 CRAN (R 3.5.0)                                 
+ tidyr                  0.8.1     2018-05-18 CRAN (R 3.5.0)                                 
+ tidyselect             0.2.4     2018-02-26 CRAN (R 3.5.0)                                 
+ tools                  3.5.0     2018-05-02 local                                          
+ utils                * 3.5.0     2018-05-02 local                                          
+ VariantAnnotation      1.26.1    2018-07-04 Bioconductor                                   
+ withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)                                 
+ XML                    3.98-1.12 2018-07-15 CRAN (R 3.5.0)                                 
+ xml2                   1.2.0     2018-01-24 CRAN (R 3.5.0)                                 
+ xtable                 1.8-2     2016-02-05 CRAN (R 3.5.0)                                 
+ XVector                0.20.0    2018-05-03 Bioconductor                                   
+ zlibbioc               1.26.0    2018-05-02 Bioconductor                                   
+**** Job ends ****
+Fri Aug 24 05:07:01 EDT 2018

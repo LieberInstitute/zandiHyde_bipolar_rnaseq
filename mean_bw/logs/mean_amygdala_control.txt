@@ -1,0 +1,510 @@
+Loading git
+**** Job starts ****
+Thu Aug 23 16:08:00 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5457224
+Job name: mean_amygdala_control
+Hostname: compute-096
+Task id: 
+Loading required package: recount
+Loading required package: SummarizedExperiment
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-23 16:10:15 Remember to run before this R script:
+    module load ucsctools
+    module load wiggletools/default
+    
+2018-08-23 16:10:15 loading /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_amygdala.rda
+Loading objects:
+  rse_gene
+  rse_exon
+  rse_jxn
+  rse_tx
+2018-08-23 16:53:20 processing strand .Forward
+2018-08-23 16:53:20 found 122 BigWig files
+2018-08-23 20:00:04 creating file temp_amygdala_control.Forward/sum_part1.wig
+2018-08-23 20:00:04 command used: wiggletools write temp_amygdala_control.Forward/sum_part1.wig sum scale 1.95110408348015 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13905_H7JHNBBXX.Forward.bw scale 1.93024867366493 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13906_H7JM5BBXX.Forward.bw scale 1.94381128110885 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13908_HF3JYBBXX.Forward.bw scale 1.93490481584132 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13909_HF3JYBBXX.Forward.bw scale 1.92939000929244 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13926_H7L3FBBXX.Forward.bw scale 1.93730281617984 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13927_HCTYLBBXX.Forward.bw scale 1.93119394442624 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13928_HFF3TBBXX.Forward.bw scale 1.92813245819043 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13929_HF3JYBBXX.Forward.bw scale 1.90706140661792 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13930_H7JLCBBXX.Forward.bw scale 1.94076369653393 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13931_HF3JYBBXX.Forward.bw scale 1.9148401242527 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13932_HF5JNBBXX.Forward.bw scale 1.92318714984976 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13933_H7K5NBBXX.Forward.bw scale 1.89213377642024 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13934_HF3JYBBXX.Forward.bw scale 1.8650759707572 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13936_H7K5NBBXX.Forward.bw scale 1.93643422259577 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13937_H7JLCBBXX.Forward.bw scale 1.93652041057896 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13938_H7JLCBBXX.Forward.bw scale 1.82044636058454 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13949_HFF3TBBXX.Forward.bw scale 1.90124017840899 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13950_HF5JNBBXX.Forward.bw scale 1.95246571812111 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13951_H7K5NBBXX.Forward.bw scale 1.95121002517304 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13952_HFF3TBBXX.Forward.bw scale 1.9526133060877 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13953_H7JM5BBXX.Forward.bw scale 1.89897722020673 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13959_H7L3FBBXX.Forward.bw scale 1.90613773502424 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13960_HF3JYBBXX.Forward.bw scale 1.96144140051968 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13961_HFFGHBBXX.Forward.bw scale 1.94332323875475 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13967_H7JM5BBXX.Forward.bw scale 1.84648879450282 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13968_H7JHNBBXX.Forward.bw scale 1.88720059648404 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13969_HF3JYBBXX.Forward.bw scale 1.88932054223989 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13974_H7JLCBBXX.Forward.bw scale 1.90196856923288 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13975_H7JKMBBXX.Forward.bw scale 1.93890710492476 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13977_H7K5NBBXX.Forward.bw scale 1.8867215317262 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13978_HFY2MBBXX.Forward.bw scale 1.91399930389461 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13984_H7JKMBBXX.Forward.bw scale 1.88534709729843 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13985_H7JM5BBXX.Forward.bw scale 1.87863899099297 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13986_H7JM5BBXX.Forward.bw scale 1.92360453602384 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13987_H7JM5BBXX.Forward.bw scale 1.96057829896281 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13988_H7JM5BBXX.Forward.bw scale 1.93518015765538 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13989_H7JLCBBXX.Forward.bw scale 1.90842493599498 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13994_HCTYLBBXX.Forward.bw scale 1.90710844762587 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13995_H7JHNBBXX.Forward.bw scale 1.90559057311799 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14002_HCTYLBBXX.Forward.bw scale 1.76401551710682 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14003_H7K5NBBXX.Forward.bw scale 1.9695686300254 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14004_H7K5NBBXX.Forward.bw scale 1.93489498797557 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14005_H7JHNBBXX.Forward.bw scale 1.89107919596197 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14006_HCTYLBBXX.Forward.bw scale 1.9235331958319 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14007_H7L3FBBXX.Forward.bw scale 1.91806509462313 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14009_H7JHNBBXX.Forward.bw scale 1.92031086713333 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14013_H7JHNBBXX.Forward.bw scale 1.90993193255979 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14014_H7JKMBBXX.Forward.bw scale 1.95302805987887 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14015_H7K5NBBXX.Forward.bw scale 1.77972430092395 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14017_HF5JNBBXX.Forward.bw scale 1.9215622294213 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14018_HF3JYBBXX.Forward.bw scale 1.88442215806455 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14020_HF5JNBBXX.Forward.bw scale 1.87564720142293 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14021_HF3JYBBXX.Forward.bw scale 1.94724349998854 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14022_H7JLCBBXX.Forward.bw scale 1.89866422903642 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14023_H7JHNBBXX.Forward.bw scale 1.95630415890384 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14024_H7JM5BBXX.Forward.bw scale 1.94552109721808 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14025_H7K5NBBXX.Forward.bw scale 1.93176205047331 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14026_H7JLCBBXX.Forward.bw scale 1.94554022540295 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14027_H7JLCBBXX.Forward.bw scale 1.92152621806201 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14028_H7JHNBBXX.Forward.bw scale 1.97225774818643 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14030_H7K5NBBXX.Forward.bw
+2018-08-23 22:00:38 creating file temp_amygdala_control.Forward/sum_part2.wig
+2018-08-23 22:00:38 command used: wiggletools write temp_amygdala_control.Forward/sum_part2.wig sum scale 1.88949904455221 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14031_HF5JNBBXX.Forward.bw scale 1.97842591658419 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14032_H7L3FBBXX.Forward.bw scale 1.92265471770262 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14034_H7L3FBBXX.Forward.bw scale 1.92833401223333 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14035_H7L3FBBXX.Forward.bw scale 1.94697419243135 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14036_H7JM5BBXX.Forward.bw scale 1.93980581683527 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14037_HF5JNBBXX.Forward.bw scale 1.88476789055013 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14038_HF3JYBBXX.Forward.bw scale 1.93893429615773 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14039_H7K5NBBXX.Forward.bw scale 1.95721550662445 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14041_H7JKMBBXX.Forward.bw scale 1.94396689083113 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14042_H7L3FBBXX.Forward.bw scale 1.9016717049064 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14043_H7JKMBBXX.Forward.bw scale 1.89973940514072 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14044_H7JM5BBXX.Forward.bw scale 1.85130461078632 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14045_H7JKMBBXX.Forward.bw scale 1.92383456923706 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14046_H7JLCBBXX.Forward.bw scale 1.94439649703175 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14047_H7JHNBBXX.Forward.bw scale 1.93006670093796 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14048_H7JLCBBXX.Forward.bw scale 1.90341263030891 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14049_HCTYLBBXX.Forward.bw scale 1.89205657136801 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14050_H7JM5BBXX.Forward.bw scale 1.92630404124856 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14051_H7JKMBBXX.Forward.bw scale 1.92111291509806 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14052_HF3JYBBXX.Forward.bw scale 1.91472686779167 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14053_H7K5NBBXX.Forward.bw scale 1.91731584724835 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14055_HCTYLBBXX.Forward.bw scale 1.93821058765773 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14056_H7L3FBBXX.Forward.bw scale 1.92712488214276 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14057_HCTYLBBXX.Forward.bw scale 1.82840416026995 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14058_HF5JNBBXX.Forward.bw scale 1.92259809625839 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14059_H7JHNBBXX.Forward.bw scale 1.93165695140741 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14060_H7JHNBBXX.Forward.bw scale 1.88133283612738 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14061_H7JLCBBXX.Forward.bw scale 1.89384357874657 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14063_HF3JYBBXX.Forward.bw scale 1.90894914679467 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14064_H7JKMBBXX.Forward.bw scale 1.93946401478968 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14066_HCTYLBBXX.Forward.bw scale 1.96114990029553 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14067_H7JHNBBXX.Forward.bw scale 1.92186185884105 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14068_HCTYLBBXX.Forward.bw scale 1.89179631167471 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14069_HCTYLBBXX.Forward.bw scale 1.87378149628337 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15029_HF5JNBBXX.Forward.bw scale 1.89698248399837 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15033_HFY2MBBXX.Forward.bw scale 1.92129349910856 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15035_HFY2MBBXX.Forward.bw scale 1.875183501322 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15036_HFFGHBBXX.Forward.bw scale 1.99126996875197 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15037_HFFGHBBXX.Forward.bw scale 1.92598472157284 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15038_HFY2MBBXX.Forward.bw scale 1.88649359844115 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15040_HF5JNBBXX.Forward.bw scale 1.88455267452242 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15041_HFY2MBBXX.Forward.bw scale 1.88337714238912 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15042_HFFGHBBXX.Forward.bw scale 1.93217245830302 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15043_HFF3TBBXX.Forward.bw scale 1.94959663160002 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15044_HFF3TBBXX.Forward.bw scale 1.88953325774113 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15045_HFFGHBBXX.Forward.bw scale 1.92801028892182 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15046_HFF3TBBXX.Forward.bw scale 1.82035483039477 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15047_HFFGHBBXX.Forward.bw scale 1.92980994472147 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15048_HFY2MBBXX.Forward.bw scale 1.95463967775519 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15049_HFF3TBBXX.Forward.bw scale 1.90579506800182 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15050_HFY2MBBXX.Forward.bw scale 1.90504858187892 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15051_HFFGHBBXX.Forward.bw scale 1.92108321470261 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15074_HFFGHBBXX.Forward.bw scale 1.92713946395773 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15078_HFF3TBBXX.Forward.bw scale 1.89096850756509 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15080_HFFGHBBXX.Forward.bw scale 1.901779076061 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15091_HF5JNBBXX.Forward.bw scale 1.91695494805752 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15094_HFF3TBBXX.Forward.bw scale 1.87779024533849 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15117_HF5JNBBXX.Forward.bw scale 1.90188058515932 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15119_HFF3TBBXX.Forward.bw scale 1.86168245226331 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15120_HFY2MBBXX.Forward.bw scale 1.82244897817102 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15121_HFY2MBBXX.Forward.bw
+2018-08-23 23:58:20 command used: wiggletools write mean_amygdala_control_n122.Forward.wig scale 0.00819672131147541 sum temp_amygdala_control.Forward/sum_part1.wig temp_amygdala_control.Forward/sum_part2.wig
+2018-08-24 00:17:12 creating file mean_amygdala_control_n122.Forward.bw
+2018-08-24 01:10:19 mean BigWig was successfully created at mean_amygdala_control_n122.Forward.bw
+2018-08-24 01:10:19 processing strand .Reverse
+2018-08-24 01:10:26 found 122 BigWig files
+2018-08-24 04:00:17 creating file temp_amygdala_control.Reverse/sum_part1.wig
+2018-08-24 04:00:17 command used: wiggletools write temp_amygdala_control.Reverse/sum_part1.wig sum scale -2.0505222347991 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13905_H7JHNBBXX.Reverse.bw scale -2.07511196608958 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13906_H7JM5BBXX.Reverse.bw scale -2.06024135317087 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13908_HF3JYBBXX.Reverse.bw scale -2.07046442658175 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13909_HF3JYBBXX.Reverse.bw scale -2.0758103895709 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13926_H7L3FBBXX.Reverse.bw scale -2.06777463433837 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13927_HCTYLBBXX.Reverse.bw scale -2.07290038811103 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13928_HFF3TBBXX.Reverse.bw scale -2.07741103051019 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13929_HF3JYBBXX.Reverse.bw scale -2.10183645322731 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13930_H7JLCBBXX.Reverse.bw scale -2.0633004228829 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13931_HF3JYBBXX.Reverse.bw scale -2.09181549638422 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13932_HF5JNBBXX.Reverse.bw scale -2.08311876633773 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13933_H7K5NBBXX.Reverse.bw scale -2.12267202531464 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13934_HF3JYBBXX.Reverse.bw scale -2.15480513747117 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13936_H7K5NBBXX.Reverse.bw scale -2.06886234651808 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13937_H7JLCBBXX.Reverse.bw scale -2.06929130596217 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13938_H7JLCBBXX.Reverse.bw scale -2.2207425873778 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13949_HFF3TBBXX.Reverse.bw scale -2.1094121295181 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13950_HF5JNBBXX.Reverse.bw scale -2.04878157639541 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13951_H7K5NBBXX.Reverse.bw scale -2.05016428907511 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13952_HFF3TBBXX.Reverse.bw scale -2.04922104244389 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13953_H7JM5BBXX.Reverse.bw scale -2.11304883928207 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13959_H7L3FBBXX.Reverse.bw scale -2.10287965543003 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13960_HF3JYBBXX.Reverse.bw scale -2.03969792726791 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13961_HFFGHBBXX.Reverse.bw scale -2.06260645350081 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13967_H7JM5BBXX.Reverse.bw scale -2.18191866013467 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13968_H7JHNBBXX.Reverse.bw scale -2.12663300164278 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13969_HF3JYBBXX.Reverse.bw scale -2.12648720559505 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13974_H7JLCBBXX.Reverse.bw scale -2.11014813199056 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13975_H7JKMBBXX.Reverse.bw scale -2.0643879115812 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13977_H7K5NBBXX.Reverse.bw scale -2.1291264269773 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13978_HFY2MBBXX.Reverse.bw scale -2.09514541903396 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13984_H7JKMBBXX.Reverse.bw scale -2.13051972228423 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13985_H7JM5BBXX.Reverse.bw scale -2.13684105095701 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13986_H7JM5BBXX.Reverse.bw scale -2.08250596058131 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13987_H7JM5BBXX.Reverse.bw scale -2.03991061452212 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13988_H7JM5BBXX.Reverse.bw scale -2.06907355765509 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13989_H7JLCBBXX.Reverse.bw scale -2.10082325885809 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13994_HCTYLBBXX.Reverse.bw scale -2.10370786235781 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R13995_H7JHNBBXX.Reverse.bw scale -2.10520377112355 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14002_HCTYLBBXX.Reverse.bw scale -2.30769467760654 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14003_H7K5NBBXX.Reverse.bw scale -2.0327287585027 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14004_H7K5NBBXX.Reverse.bw scale -2.06900753291008 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14005_H7JHNBBXX.Reverse.bw scale -2.12183973258718 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14006_HCTYLBBXX.Reverse.bw scale -2.08197185814972 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14007_H7L3FBBXX.Reverse.bw scale -2.08783531754903 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14009_H7JHNBBXX.Reverse.bw scale -2.08734123852857 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14013_H7JHNBBXX.Reverse.bw scale -2.09682997672634 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14014_H7JKMBBXX.Reverse.bw scale -2.04875194092058 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14015_H7K5NBBXX.Reverse.bw scale -2.28177657481443 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14017_HF5JNBBXX.Reverse.bw scale -2.0852269485529 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14018_HF3JYBBXX.Reverse.bw scale -2.12943983115977 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14020_HF5JNBBXX.Reverse.bw scale -2.14062060641438 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14021_HF3JYBBXX.Reverse.bw scale -2.05269484816755 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14022_H7JLCBBXX.Reverse.bw scale -2.11444047631485 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14023_H7JHNBBXX.Reverse.bw scale -2.04680830392015 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14024_H7JM5BBXX.Reverse.bw scale -2.05731919418975 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14025_H7K5NBBXX.Reverse.bw scale -2.07452596683817 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14026_H7JLCBBXX.Reverse.bw scale -2.05665202150012 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14027_H7JLCBBXX.Reverse.bw scale -2.08410111559119 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14028_H7JHNBBXX.Reverse.bw scale -2.02866981646264 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14030_H7K5NBBXX.Reverse.bw
+2018-08-24 05:49:05 creating file temp_amygdala_control.Reverse/sum_part2.wig
+2018-08-24 05:49:05 command used: wiggletools write temp_amygdala_control.Reverse/sum_part2.wig sum scale -2.12283847297178 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14031_HF5JNBBXX.Reverse.bw scale -2.02333662000483 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14032_H7L3FBBXX.Reverse.bw scale -2.08281290279397 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14034_H7L3FBBXX.Reverse.bw scale -2.07755448262963 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14035_H7L3FBBXX.Reverse.bw scale -2.05640601812215 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14036_H7JM5BBXX.Reverse.bw scale -2.06422577412985 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14037_HF5JNBBXX.Reverse.bw scale -2.12930986441969 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14038_HF3JYBBXX.Reverse.bw scale -2.06501299924911 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14039_H7K5NBBXX.Reverse.bw scale -2.04530200313266 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14041_H7JKMBBXX.Reverse.bw scale -2.05940507783568 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14042_H7L3FBBXX.Reverse.bw scale -2.10979160156219 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14043_H7JKMBBXX.Reverse.bw scale -2.11251903042941 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14044_H7JM5BBXX.Reverse.bw scale -2.1738125738857 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14045_H7JKMBBXX.Reverse.bw scale -2.08416908881421 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14046_H7JLCBBXX.Reverse.bw scale -2.05741659424027 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14047_H7JHNBBXX.Reverse.bw scale -2.07444017517588 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14048_H7JLCBBXX.Reverse.bw scale -2.10767238580925 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14049_HCTYLBBXX.Reverse.bw scale -2.11963177077337 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14050_H7JM5BBXX.Reverse.bw scale -2.0788260262073 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14051_H7JKMBBXX.Reverse.bw scale -2.086467516365 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14052_HF3JYBBXX.Reverse.bw scale -2.09419544972925 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14053_H7K5NBBXX.Reverse.bw scale -2.09080104711172 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14055_HCTYLBBXX.Reverse.bw scale -2.06763042997007 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14056_H7L3FBBXX.Reverse.bw scale -2.07875376219512 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14057_HCTYLBBXX.Reverse.bw scale -2.20878279048671 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14058_HF5JNBBXX.Reverse.bw scale -2.08259219806611 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14059_H7JHNBBXX.Reverse.bw scale -2.07215947456029 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14060_H7JHNBBXX.Reverse.bw scale -2.13584846019893 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14061_H7JLCBBXX.Reverse.bw scale -2.11792438639862 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14063_HF3JYBBXX.Reverse.bw scale -2.10066796770932 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14064_H7JKMBBXX.Reverse.bw scale -2.06445404158897 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14066_HCTYLBBXX.Reverse.bw scale -2.04154338642091 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14067_H7JHNBBXX.Reverse.bw scale -2.08456709657471 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14068_HCTYLBBXX.Reverse.bw scale -2.1220003487359 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R14069_HCTYLBBXX.Reverse.bw scale -2.14326808515197 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15029_HF5JNBBXX.Reverse.bw scale -2.11360956785877 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15033_HFY2MBBXX.Reverse.bw scale -2.08621518387346 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15035_HFY2MBBXX.Reverse.bw scale -2.1435969350416 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15036_HFFGHBBXX.Reverse.bw scale -2.00995541947209 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15037_HFFGHBBXX.Reverse.bw scale -2.08138234868167 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15038_HFY2MBBXX.Reverse.bw scale -2.12694141355581 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15040_HF5JNBBXX.Reverse.bw scale -2.13287899885107 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15041_HFY2MBBXX.Reverse.bw scale -2.13081424989997 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15042_HFFGHBBXX.Reverse.bw scale -2.07259325016505 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15043_HFF3TBBXX.Reverse.bw scale -2.0545603856509 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15044_HFF3TBBXX.Reverse.bw scale -2.12500790510969 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15045_HFFGHBBXX.Reverse.bw scale -2.07623439142295 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15046_HFF3TBBXX.Reverse.bw scale -2.21979099884883 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15047_HFFGHBBXX.Reverse.bw scale -2.0756681291747 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15048_HFY2MBBXX.Reverse.bw scale -2.04925853100851 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15049_HFF3TBBXX.Reverse.bw scale -2.10187724779183 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15050_HFY2MBBXX.Reverse.bw scale -2.10591128269361 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15051_HFFGHBBXX.Reverse.bw scale -2.08649096143646 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15074_HFFGHBBXX.Reverse.bw scale -2.07826656805644 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15078_HFF3TBBXX.Reverse.bw scale -2.12238520527581 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15080_HFFGHBBXX.Reverse.bw scale -2.1086464511658 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15091_HF5JNBBXX.Reverse.bw scale -2.08896312787312 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15094_HFF3TBBXX.Reverse.bw scale -2.13760451741018 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15117_HF5JNBBXX.Reverse.bw scale -2.10817090581746 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15119_HFF3TBBXX.Reverse.bw scale -2.15988021877153 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15120_HFY2MBBXX.Reverse.bw scale -2.21620766524572 /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/preprocessed_data/Coverage/R15121_HFY2MBBXX.Reverse.bw
+2018-08-24 07:42:38 command used: wiggletools write mean_amygdala_control_n122.Reverse.wig scale 0.00819672131147541 sum temp_amygdala_control.Reverse/sum_part1.wig temp_amygdala_control.Reverse/sum_part2.wig
+2018-08-24 08:00:37 creating file mean_amygdala_control_n122.Reverse.bw
+2018-08-24 08:49:35 mean BigWig was successfully created at mean_amygdala_control_n122.Reverse.bw
+$.Forward
+  [1] "mean_amygdala_control_n122.Forward.bw"         
+  [2] "mean_amygdala_control_n122.Forward.wig"        
+  [3] ".createWig_2018-08-24_part1.sh"                
+  [4] ".createWig_2018-08-24_part3.sh"                
+  [5] "temp_amygdala_control.Forward/bw_sample1.auc"  
+  [6] "temp_amygdala_control.Forward/bw_sample10.auc" 
+  [7] "temp_amygdala_control.Forward/bw_sample100.auc"
+  [8] "temp_amygdala_control.Forward/bw_sample101.auc"
+  [9] "temp_amygdala_control.Forward/bw_sample102.auc"
+ [10] "temp_amygdala_control.Forward/bw_sample103.auc"
+ [11] "temp_amygdala_control.Forward/bw_sample104.auc"
+ [12] "temp_amygdala_control.Forward/bw_sample105.auc"
+ [13] "temp_amygdala_control.Forward/bw_sample106.auc"
+ [14] "temp_amygdala_control.Forward/bw_sample107.auc"
+ [15] "temp_amygdala_control.Forward/bw_sample108.auc"
+ [16] "temp_amygdala_control.Forward/bw_sample109.auc"
+ [17] "temp_amygdala_control.Forward/bw_sample11.auc" 
+ [18] "temp_amygdala_control.Forward/bw_sample110.auc"
+ [19] "temp_amygdala_control.Forward/bw_sample111.auc"
+ [20] "temp_amygdala_control.Forward/bw_sample112.auc"
+ [21] "temp_amygdala_control.Forward/bw_sample113.auc"
+ [22] "temp_amygdala_control.Forward/bw_sample114.auc"
+ [23] "temp_amygdala_control.Forward/bw_sample115.auc"
+ [24] "temp_amygdala_control.Forward/bw_sample116.auc"
+ [25] "temp_amygdala_control.Forward/bw_sample117.auc"
+ [26] "temp_amygdala_control.Forward/bw_sample118.auc"
+ [27] "temp_amygdala_control.Forward/bw_sample119.auc"
+ [28] "temp_amygdala_control.Forward/bw_sample12.auc" 
+ [29] "temp_amygdala_control.Forward/bw_sample120.auc"
+ [30] "temp_amygdala_control.Forward/bw_sample121.auc"
+ [31] "temp_amygdala_control.Forward/bw_sample122.auc"
+ [32] "temp_amygdala_control.Forward/bw_sample13.auc" 
+ [33] "temp_amygdala_control.Forward/bw_sample14.auc" 
+ [34] "temp_amygdala_control.Forward/bw_sample15.auc" 
+ [35] "temp_amygdala_control.Forward/bw_sample16.auc" 
+ [36] "temp_amygdala_control.Forward/bw_sample17.auc" 
+ [37] "temp_amygdala_control.Forward/bw_sample18.auc" 
+ [38] "temp_amygdala_control.Forward/bw_sample19.auc" 
+ [39] "temp_amygdala_control.Forward/bw_sample2.auc"  
+ [40] "temp_amygdala_control.Forward/bw_sample20.auc" 
+ [41] "temp_amygdala_control.Forward/bw_sample21.auc" 
+ [42] "temp_amygdala_control.Forward/bw_sample22.auc" 
+ [43] "temp_amygdala_control.Forward/bw_sample23.auc" 
+ [44] "temp_amygdala_control.Forward/bw_sample24.auc" 
+ [45] "temp_amygdala_control.Forward/bw_sample25.auc" 
+ [46] "temp_amygdala_control.Forward/bw_sample26.auc" 
+ [47] "temp_amygdala_control.Forward/bw_sample27.auc" 
+ [48] "temp_amygdala_control.Forward/bw_sample28.auc" 
+ [49] "temp_amygdala_control.Forward/bw_sample29.auc" 
+ [50] "temp_amygdala_control.Forward/bw_sample3.auc"  
+ [51] "temp_amygdala_control.Forward/bw_sample30.auc" 
+ [52] "temp_amygdala_control.Forward/bw_sample31.auc" 
+ [53] "temp_amygdala_control.Forward/bw_sample32.auc" 
+ [54] "temp_amygdala_control.Forward/bw_sample33.auc" 
+ [55] "temp_amygdala_control.Forward/bw_sample34.auc" 
+ [56] "temp_amygdala_control.Forward/bw_sample35.auc" 
+ [57] "temp_amygdala_control.Forward/bw_sample36.auc" 
+ [58] "temp_amygdala_control.Forward/bw_sample37.auc" 
+ [59] "temp_amygdala_control.Forward/bw_sample38.auc" 
+ [60] "temp_amygdala_control.Forward/bw_sample39.auc" 
+ [61] "temp_amygdala_control.Forward/bw_sample4.auc"  
+ [62] "temp_amygdala_control.Forward/bw_sample40.auc" 
+ [63] "temp_amygdala_control.Forward/bw_sample41.auc" 
+ [64] "temp_amygdala_control.Forward/bw_sample42.auc" 
+ [65] "temp_amygdala_control.Forward/bw_sample43.auc" 
+ [66] "temp_amygdala_control.Forward/bw_sample44.auc" 
+ [67] "temp_amygdala_control.Forward/bw_sample45.auc" 
+ [68] "temp_amygdala_control.Forward/bw_sample46.auc" 
+ [69] "temp_amygdala_control.Forward/bw_sample47.auc" 
+ [70] "temp_amygdala_control.Forward/bw_sample48.auc" 
+ [71] "temp_amygdala_control.Forward/bw_sample49.auc" 
+ [72] "temp_amygdala_control.Forward/bw_sample5.auc"  
+ [73] "temp_amygdala_control.Forward/bw_sample50.auc" 
+ [74] "temp_amygdala_control.Forward/bw_sample51.auc" 
+ [75] "temp_amygdala_control.Forward/bw_sample52.auc" 
+ [76] "temp_amygdala_control.Forward/bw_sample53.auc" 
+ [77] "temp_amygdala_control.Forward/bw_sample54.auc" 
+ [78] "temp_amygdala_control.Forward/bw_sample55.auc" 
+ [79] "temp_amygdala_control.Forward/bw_sample56.auc" 
+ [80] "temp_amygdala_control.Forward/bw_sample57.auc" 
+ [81] "temp_amygdala_control.Forward/bw_sample58.auc" 
+ [82] "temp_amygdala_control.Forward/bw_sample59.auc" 
+ [83] "temp_amygdala_control.Forward/bw_sample6.auc"  
+ [84] "temp_amygdala_control.Forward/bw_sample60.auc" 
+ [85] "temp_amygdala_control.Forward/bw_sample61.auc" 
+ [86] "temp_amygdala_control.Forward/bw_sample62.auc" 
+ [87] "temp_amygdala_control.Forward/bw_sample63.auc" 
+ [88] "temp_amygdala_control.Forward/bw_sample64.auc" 
+ [89] "temp_amygdala_control.Forward/bw_sample65.auc" 
+ [90] "temp_amygdala_control.Forward/bw_sample66.auc" 
+ [91] "temp_amygdala_control.Forward/bw_sample67.auc" 
+ [92] "temp_amygdala_control.Forward/bw_sample68.auc" 
+ [93] "temp_amygdala_control.Forward/bw_sample69.auc" 
+ [94] "temp_amygdala_control.Forward/bw_sample7.auc"  
+ [95] "temp_amygdala_control.Forward/bw_sample70.auc" 
+ [96] "temp_amygdala_control.Forward/bw_sample71.auc" 
+ [97] "temp_amygdala_control.Forward/bw_sample72.auc" 
+ [98] "temp_amygdala_control.Forward/bw_sample73.auc" 
+ [99] "temp_amygdala_control.Forward/bw_sample74.auc" 
+[100] "temp_amygdala_control.Forward/bw_sample75.auc" 
+[101] "temp_amygdala_control.Forward/bw_sample76.auc" 
+[102] "temp_amygdala_control.Forward/bw_sample77.auc" 
+[103] "temp_amygdala_control.Forward/bw_sample78.auc" 
+[104] "temp_amygdala_control.Forward/bw_sample79.auc" 
+[105] "temp_amygdala_control.Forward/bw_sample8.auc"  
+[106] "temp_amygdala_control.Forward/bw_sample80.auc" 
+[107] "temp_amygdala_control.Forward/bw_sample81.auc" 
+[108] "temp_amygdala_control.Forward/bw_sample82.auc" 
+[109] "temp_amygdala_control.Forward/bw_sample83.auc" 
+[110] "temp_amygdala_control.Forward/bw_sample84.auc" 
+[111] "temp_amygdala_control.Forward/bw_sample85.auc" 
+[112] "temp_amygdala_control.Forward/bw_sample86.auc" 
+[113] "temp_amygdala_control.Forward/bw_sample87.auc" 
+[114] "temp_amygdala_control.Forward/bw_sample88.auc" 
+[115] "temp_amygdala_control.Forward/bw_sample89.auc" 
+[116] "temp_amygdala_control.Forward/bw_sample9.auc"  
+[117] "temp_amygdala_control.Forward/bw_sample90.auc" 
+[118] "temp_amygdala_control.Forward/bw_sample91.auc" 
+[119] "temp_amygdala_control.Forward/bw_sample92.auc" 
+[120] "temp_amygdala_control.Forward/bw_sample93.auc" 
+[121] "temp_amygdala_control.Forward/bw_sample94.auc" 
+[122] "temp_amygdala_control.Forward/bw_sample95.auc" 
+[123] "temp_amygdala_control.Forward/bw_sample96.auc" 
+[124] "temp_amygdala_control.Forward/bw_sample97.auc" 
+[125] "temp_amygdala_control.Forward/bw_sample98.auc" 
+[126] "temp_amygdala_control.Forward/bw_sample99.auc" 
+
+$.Reverse
+  [1] "mean_amygdala_control_n122.Reverse.bw"         
+  [2] "mean_amygdala_control_n122.Reverse.wig"        
+  [3] ".createWig_2018-08-24_part1.sh"                
+  [4] ".createWig_2018-08-24_part2.sh"                
+  [5] ".createWig_2018-08-24_part3.sh"                
+  [6] ".createWig_2018-08-24.sh"                      
+  [7] "temp_amygdala_control.Reverse/bw_sample1.auc"  
+  [8] "temp_amygdala_control.Reverse/bw_sample10.auc" 
+  [9] "temp_amygdala_control.Reverse/bw_sample100.auc"
+ [10] "temp_amygdala_control.Reverse/bw_sample101.auc"
+ [11] "temp_amygdala_control.Reverse/bw_sample102.auc"
+ [12] "temp_amygdala_control.Reverse/bw_sample103.auc"
+ [13] "temp_amygdala_control.Reverse/bw_sample104.auc"
+ [14] "temp_amygdala_control.Reverse/bw_sample105.auc"
+ [15] "temp_amygdala_control.Reverse/bw_sample106.auc"
+ [16] "temp_amygdala_control.Reverse/bw_sample107.auc"
+ [17] "temp_amygdala_control.Reverse/bw_sample108.auc"
+ [18] "temp_amygdala_control.Reverse/bw_sample109.auc"
+ [19] "temp_amygdala_control.Reverse/bw_sample11.auc" 
+ [20] "temp_amygdala_control.Reverse/bw_sample110.auc"
+ [21] "temp_amygdala_control.Reverse/bw_sample111.auc"
+ [22] "temp_amygdala_control.Reverse/bw_sample112.auc"
+ [23] "temp_amygdala_control.Reverse/bw_sample113.auc"
+ [24] "temp_amygdala_control.Reverse/bw_sample114.auc"
+ [25] "temp_amygdala_control.Reverse/bw_sample115.auc"
+ [26] "temp_amygdala_control.Reverse/bw_sample116.auc"
+ [27] "temp_amygdala_control.Reverse/bw_sample117.auc"
+ [28] "temp_amygdala_control.Reverse/bw_sample118.auc"
+ [29] "temp_amygdala_control.Reverse/bw_sample119.auc"
+ [30] "temp_amygdala_control.Reverse/bw_sample12.auc" 
+ [31] "temp_amygdala_control.Reverse/bw_sample120.auc"
+ [32] "temp_amygdala_control.Reverse/bw_sample121.auc"
+ [33] "temp_amygdala_control.Reverse/bw_sample122.auc"
+ [34] "temp_amygdala_control.Reverse/bw_sample13.auc" 
+ [35] "temp_amygdala_control.Reverse/bw_sample14.auc" 
+ [36] "temp_amygdala_control.Reverse/bw_sample15.auc" 
+ [37] "temp_amygdala_control.Reverse/bw_sample16.auc" 
+ [38] "temp_amygdala_control.Reverse/bw_sample17.auc" 
+ [39] "temp_amygdala_control.Reverse/bw_sample18.auc" 
+ [40] "temp_amygdala_control.Reverse/bw_sample19.auc" 
+ [41] "temp_amygdala_control.Reverse/bw_sample2.auc"  
+ [42] "temp_amygdala_control.Reverse/bw_sample20.auc" 
+ [43] "temp_amygdala_control.Reverse/bw_sample21.auc" 
+ [44] "temp_amygdala_control.Reverse/bw_sample22.auc" 
+ [45] "temp_amygdala_control.Reverse/bw_sample23.auc" 
+ [46] "temp_amygdala_control.Reverse/bw_sample24.auc" 
+ [47] "temp_amygdala_control.Reverse/bw_sample25.auc" 
+ [48] "temp_amygdala_control.Reverse/bw_sample26.auc" 
+ [49] "temp_amygdala_control.Reverse/bw_sample27.auc" 
+ [50] "temp_amygdala_control.Reverse/bw_sample28.auc" 
+ [51] "temp_amygdala_control.Reverse/bw_sample29.auc" 
+ [52] "temp_amygdala_control.Reverse/bw_sample3.auc"  
+ [53] "temp_amygdala_control.Reverse/bw_sample30.auc" 
+ [54] "temp_amygdala_control.Reverse/bw_sample31.auc" 
+ [55] "temp_amygdala_control.Reverse/bw_sample32.auc" 
+ [56] "temp_amygdala_control.Reverse/bw_sample33.auc" 
+ [57] "temp_amygdala_control.Reverse/bw_sample34.auc" 
+ [58] "temp_amygdala_control.Reverse/bw_sample35.auc" 
+ [59] "temp_amygdala_control.Reverse/bw_sample36.auc" 
+ [60] "temp_amygdala_control.Reverse/bw_sample37.auc" 
+ [61] "temp_amygdala_control.Reverse/bw_sample38.auc" 
+ [62] "temp_amygdala_control.Reverse/bw_sample39.auc" 
+ [63] "temp_amygdala_control.Reverse/bw_sample4.auc"  
+ [64] "temp_amygdala_control.Reverse/bw_sample40.auc" 
+ [65] "temp_amygdala_control.Reverse/bw_sample41.auc" 
+ [66] "temp_amygdala_control.Reverse/bw_sample42.auc" 
+ [67] "temp_amygdala_control.Reverse/bw_sample43.auc" 
+ [68] "temp_amygdala_control.Reverse/bw_sample44.auc" 
+ [69] "temp_amygdala_control.Reverse/bw_sample45.auc" 
+ [70] "temp_amygdala_control.Reverse/bw_sample46.auc" 
+ [71] "temp_amygdala_control.Reverse/bw_sample47.auc" 
+ [72] "temp_amygdala_control.Reverse/bw_sample48.auc" 
+ [73] "temp_amygdala_control.Reverse/bw_sample49.auc" 
+ [74] "temp_amygdala_control.Reverse/bw_sample5.auc"  
+ [75] "temp_amygdala_control.Reverse/bw_sample50.auc" 
+ [76] "temp_amygdala_control.Reverse/bw_sample51.auc" 
+ [77] "temp_amygdala_control.Reverse/bw_sample52.auc" 
+ [78] "temp_amygdala_control.Reverse/bw_sample53.auc" 
+ [79] "temp_amygdala_control.Reverse/bw_sample54.auc" 
+ [80] "temp_amygdala_control.Reverse/bw_sample55.auc" 
+ [81] "temp_amygdala_control.Reverse/bw_sample56.auc" 
+ [82] "temp_amygdala_control.Reverse/bw_sample57.auc" 
+ [83] "temp_amygdala_control.Reverse/bw_sample58.auc" 
+ [84] "temp_amygdala_control.Reverse/bw_sample59.auc" 
+ [85] "temp_amygdala_control.Reverse/bw_sample6.auc"  
+ [86] "temp_amygdala_control.Reverse/bw_sample60.auc" 
+ [87] "temp_amygdala_control.Reverse/bw_sample61.auc" 
+ [88] "temp_amygdala_control.Reverse/bw_sample62.auc" 
+ [89] "temp_amygdala_control.Reverse/bw_sample63.auc" 
+ [90] "temp_amygdala_control.Reverse/bw_sample64.auc" 
+ [91] "temp_amygdala_control.Reverse/bw_sample65.auc" 
+ [92] "temp_amygdala_control.Reverse/bw_sample66.auc" 
+ [93] "temp_amygdala_control.Reverse/bw_sample67.auc" 
+ [94] "temp_amygdala_control.Reverse/bw_sample68.auc" 
+ [95] "temp_amygdala_control.Reverse/bw_sample69.auc" 
+ [96] "temp_amygdala_control.Reverse/bw_sample7.auc"  
+ [97] "temp_amygdala_control.Reverse/bw_sample70.auc" 
+ [98] "temp_amygdala_control.Reverse/bw_sample71.auc" 
+ [99] "temp_amygdala_control.Reverse/bw_sample72.auc" 
+[100] "temp_amygdala_control.Reverse/bw_sample73.auc" 
+[101] "temp_amygdala_control.Reverse/bw_sample74.auc" 
+[102] "temp_amygdala_control.Reverse/bw_sample75.auc" 
+[103] "temp_amygdala_control.Reverse/bw_sample76.auc" 
+[104] "temp_amygdala_control.Reverse/bw_sample77.auc" 
+[105] "temp_amygdala_control.Reverse/bw_sample78.auc" 
+[106] "temp_amygdala_control.Reverse/bw_sample79.auc" 
+[107] "temp_amygdala_control.Reverse/bw_sample8.auc"  
+[108] "temp_amygdala_control.Reverse/bw_sample80.auc" 
+[109] "temp_amygdala_control.Reverse/bw_sample81.auc" 
+[110] "temp_amygdala_control.Reverse/bw_sample82.auc" 
+[111] "temp_amygdala_control.Reverse/bw_sample83.auc" 
+[112] "temp_amygdala_control.Reverse/bw_sample84.auc" 
+[113] "temp_amygdala_control.Reverse/bw_sample85.auc" 
+[114] "temp_amygdala_control.Reverse/bw_sample86.auc" 
+[115] "temp_amygdala_control.Reverse/bw_sample87.auc" 
+[116] "temp_amygdala_control.Reverse/bw_sample88.auc" 
+[117] "temp_amygdala_control.Reverse/bw_sample89.auc" 
+[118] "temp_amygdala_control.Reverse/bw_sample9.auc"  
+[119] "temp_amygdala_control.Reverse/bw_sample90.auc" 
+[120] "temp_amygdala_control.Reverse/bw_sample91.auc" 
+[121] "temp_amygdala_control.Reverse/bw_sample92.auc" 
+[122] "temp_amygdala_control.Reverse/bw_sample93.auc" 
+[123] "temp_amygdala_control.Reverse/bw_sample94.auc" 
+[124] "temp_amygdala_control.Reverse/bw_sample95.auc" 
+[125] "temp_amygdala_control.Reverse/bw_sample96.auc" 
+[126] "temp_amygdala_control.Reverse/bw_sample97.auc" 
+[127] "temp_amygdala_control.Reverse/bw_sample98.auc" 
+[128] "temp_amygdala_control.Reverse/bw_sample99.auc" 
+
+[1] "Reproducibility information:"
+[1] "2018-08-24 08:49:36 EDT"
+     user    system   elapsed 
+75462.930  7149.383 60095.597 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.5.0 Patched (2018-04-30 r74679)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-08-24                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source                                         
+ acepack                1.4.1     2016-10-29 CRAN (R 3.5.0)                                 
+ AnnotationDbi          1.42.1    2018-05-17 Bioconductor                                   
+ assertthat             0.2.0     2017-04-11 CRAN (R 3.5.0)                                 
+ backports              1.1.2     2017-12-13 CRAN (R 3.5.0)                                 
+ base                 * 3.5.0     2018-05-02 local                                          
+ base64enc              0.1-3     2015-07-28 CRAN (R 3.5.0)                                 
+ bibtex                 0.4.2     2017-06-30 CRAN (R 3.5.0)                                 
+ bindr                  0.1.1     2018-03-13 CRAN (R 3.5.0)                                 
+ bindrcpp               0.2.2     2018-03-29 CRAN (R 3.5.0)                                 
+ Biobase              * 2.40.0    2018-05-02 Bioconductor                                   
+ BiocGenerics         * 0.26.0    2018-05-03 Bioconductor                                   
+ BiocParallel         * 1.14.2    2018-07-08 Bioconductor                                   
+ biomaRt                2.36.1    2018-06-13 Bioconductor                                   
+ Biostrings             2.48.0    2018-05-03 Bioconductor                                   
+ bit                    1.1-14    2018-05-29 CRAN (R 3.5.0)                                 
+ bit64                  0.9-7     2017-05-08 CRAN (R 3.5.0)                                 
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)                                 
+ blob                   1.1.1     2018-03-25 CRAN (R 3.5.0)                                 
+ BSgenome               1.48.0    2018-05-03 Bioconductor                                   
+ bumphunter             1.22.0    2018-05-03 Bioconductor                                   
+ checkmate              1.8.5     2017-10-24 CRAN (R 3.5.0)                                 
+ cluster                2.0.7-1   2018-04-13 CRAN (R 3.5.0)                                 
+ codetools              0.2-15    2016-10-05 CRAN (R 3.5.0)                                 
+ colorspace             1.3-2     2016-12-14 CRAN (R 3.5.0)                                 
+ compiler               3.5.0     2018-05-02 local                                          
+ crayon                 1.3.4     2017-09-16 CRAN (R 3.5.0)                                 
+ data.table             1.11.4    2018-05-27 cran (@1.11.4)                                 
+ datasets             * 3.5.0     2018-05-02 local                                          
+ DBI                    1.0.0     2018-05-02 CRAN (R 3.5.0)                                 
+ DelayedArray         * 0.6.2     2018-07-23 Bioconductor                                   
+ derfinder              1.14.0    2018-05-03 Bioconductor                                   
+ derfinderHelper        1.14.0    2018-05-03 Bioconductor                                   
+ devtools             * 1.13.6    2018-06-27 CRAN (R 3.5.0)                                 
+ digest                 0.6.15    2018-01-28 CRAN (R 3.5.0)                                 
+ doRNG                  1.7.1     2018-06-22 CRAN (R 3.5.0)                                 
+ downloader             0.4       2015-07-09 CRAN (R 3.5.0)                                 
+ dplyr                  0.7.6     2018-06-29 CRAN (R 3.5.0)                                 
+ foreach                1.4.4     2017-12-12 CRAN (R 3.5.0)                                 
+ foreign                0.8-70    2017-11-28 CRAN (R 3.5.0)                                 
+ Formula                1.2-3     2018-05-03 CRAN (R 3.5.0)                                 
+ GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor                                   
+ GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor                                   
+ GenomicAlignments      1.16.0    2018-05-03 Bioconductor                                   
+ GenomicFeatures        1.32.0    2018-05-03 Bioconductor                                   
+ GenomicFiles           1.16.0    2018-05-03 Bioconductor                                   
+ GenomicRanges        * 1.32.6    2018-07-20 Bioconductor                                   
+ GEOquery               2.48.0    2018-05-02 Bioconductor                                   
+ getopt               * 1.20.2    2018-02-16 CRAN (R 3.5.0)                                 
+ ggplot2                3.0.0     2018-07-03 CRAN (R 3.5.0)                                 
+ glue                   1.3.0     2018-07-17 CRAN (R 3.5.0)                                 
+ graphics             * 3.5.0     2018-05-02 local                                          
+ grDevices            * 3.5.0     2018-05-02 local                                          
+ grid                   3.5.0     2018-05-02 local                                          
+ gridExtra              2.3       2017-09-09 CRAN (R 3.5.0)                                 
+ gtable                 0.2.0     2016-02-26 CRAN (R 3.5.0)                                 
+ Hmisc                  4.1-1     2018-01-03 CRAN (R 3.5.0)                                 
+ hms                    0.4.2     2018-03-10 CRAN (R 3.5.0)                                 
+ htmlTable              1.12      2018-05-26 CRAN (R 3.5.0)                                 
+ htmltools              0.3.6     2017-04-28 CRAN (R 3.5.0)                                 
+ htmlwidgets            1.2       2018-04-19 CRAN (R 3.5.0)                                 
+ httr                   1.3.1     2017-08-20 CRAN (R 3.5.0)                                 
+ IRanges              * 2.14.10   2018-05-17 Bioconductor                                   
+ iterators              1.0.10    2018-07-13 CRAN (R 3.5.0)                                 
+ jsonlite               1.5       2017-06-01 CRAN (R 3.5.0)                                 
+ knitr                  1.20      2018-02-20 CRAN (R 3.5.0)                                 
+ lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)                                 
+ latticeExtra           0.6-28    2016-02-09 CRAN (R 3.5.0)                                 
+ lazyeval               0.2.1     2017-10-29 CRAN (R 3.5.0)                                 
+ limma                  3.36.2    2018-06-21 Bioconductor                                   
+ locfit                 1.5-9.1   2013-04-20 CRAN (R 3.5.0)                                 
+ magrittr               1.5       2014-11-22 CRAN (R 3.5.0)                                 
+ Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)                                 
+ matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)                                 
+ memoise                1.1.0     2017-04-21 CRAN (R 3.5.0)                                 
+ methods              * 3.5.0     2018-05-02 local                                          
+ munsell                0.5.0     2018-06-12 CRAN (R 3.5.0)                                 
+ nnet                   7.3-12    2016-02-02 CRAN (R 3.5.0)                                 
+ parallel             * 3.5.0     2018-05-02 local                                          
+ pillar                 1.3.0     2018-07-14 CRAN (R 3.5.0)                                 
+ pkgconfig              2.0.1     2017-03-21 CRAN (R 3.5.0)                                 
+ pkgmaker               0.27      2018-05-25 CRAN (R 3.5.0)                                 
+ plyr                   1.8.4     2016-06-08 CRAN (R 3.5.0)                                 
+ prettyunits            1.0.2     2015-07-13 CRAN (R 3.5.0)                                 
+ progress               1.2.0     2018-06-14 CRAN (R 3.5.0)                                 
+ purrr                  0.2.5     2018-05-29 CRAN (R 3.5.0)                                 
+ qvalue                 2.12.0    2018-05-03 Bioconductor                                   
+ R.methodsS3            1.7.1     2016-02-16 CRAN (R 3.5.0)                                 
+ R.oo                   1.22.0    2018-04-22 CRAN (R 3.5.0)                                 
+ R.utils                2.6.0     2017-11-05 CRAN (R 3.5.0)                                 
+ R6                     2.2.2     2017-06-17 CRAN (R 3.5.0)                                 
+ RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.5.0)                                 
+ Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)                                 
+ RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)                                 
+ readr                  1.1.1     2017-05-16 CRAN (R 3.5.0)                                 
+ recount              * 1.6.2     2018-05-17 Bioconductor                                   
+ recount.bwtool       * 0.99.28   2018-05-03 Github (LieberInstitute/recount.bwtool@834b6ab)
+ registry               0.5       2017-12-03 CRAN (R 3.5.0)                                 
+ rentrez                1.2.1     2018-03-05 CRAN (R 3.5.0)                                 
+ reshape2               1.4.3     2017-12-11 CRAN (R 3.5.0)                                 
+ rlang                  0.2.1     2018-05-30 cran (@0.2.1)                                  
+ rngtools               1.3.1     2018-05-15 CRAN (R 3.5.0)                                 
+ rpart                  4.1-13    2018-02-23 CRAN (R 3.5.0)                                 
+ Rsamtools              1.32.2    2018-07-03 Bioconductor                                   
+ RSQLite                2.1.1     2018-05-06 CRAN (R 3.5.0)                                 
+ rstudioapi             0.7       2017-09-07 CRAN (R 3.5.0)                                 
+ rtracklayer            1.40.3    2018-06-13 Bioconductor                                   
+ S4Vectors            * 0.18.3    2018-06-13 Bioconductor                                   
+ scales                 0.5.0     2017-08-24 CRAN (R 3.5.0)                                 
+ splines                3.5.0     2018-05-02 local                                          
+ stats                * 3.5.0     2018-05-02 local                                          
+ stats4               * 3.5.0     2018-05-02 local                                          
+ stringi                1.2.4     2018-07-20 CRAN (R 3.5.0)                                 
+ stringr                1.3.1     2018-05-10 CRAN (R 3.5.0)                                 
+ SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor                                   
+ survival               2.42-3    2018-04-16 CRAN (R 3.5.0)                                 
+ tibble                 1.4.2     2018-01-22 CRAN (R 3.5.0)                                 
+ tidyr                  0.8.1     2018-05-18 CRAN (R 3.5.0)                                 
+ tidyselect             0.2.4     2018-02-26 CRAN (R 3.5.0)                                 
+ tools                  3.5.0     2018-05-02 local                                          
+ utils                * 3.5.0     2018-05-02 local                                          
+ VariantAnnotation      1.26.1    2018-07-04 Bioconductor                                   
+ withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)                                 
+ XML                    3.98-1.12 2018-07-15 CRAN (R 3.5.0)                                 
+ xml2                   1.2.0     2018-01-24 CRAN (R 3.5.0)                                 
+ xtable                 1.8-2     2016-02-05 CRAN (R 3.5.0)                                 
+ XVector                0.20.0    2018-05-03 Bioconductor                                   
+ zlibbioc               1.26.0    2018-05-02 Bioconductor                                   
+**** Job ends ****
+Fri Aug 24 08:49:36 EDT 2018
