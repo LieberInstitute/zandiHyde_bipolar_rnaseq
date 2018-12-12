@@ -170,7 +170,7 @@ run_go <- function(genes_ens, ont = c('BP', 'MF', 'CC'), universe) {
         tryCatch(compareCluster(genes_ens, fun = "enrichGO",
             OrgDb = 'org.Hs.eg.db', universe = universe,
             ont = bp, pAdjustMethod = "BH",
-            pvalueCutoff  = 0.1, qvalueCutoff  = 0.05,
+            #pvalueCutoff  = 0.1, qvalueCutoff  = 0.05,
             readable = TRUE, keyType = 'ENSEMBL'),
             error = function(e) { return(NULL) })
     })
@@ -182,7 +182,8 @@ run_go <- function(genes_ens, ont = c('BP', 'MF', 'CC'), universe) {
     
     go_cluster$KEGG <- tryCatch(compareCluster(genes_ncbi, fun = 'enrichKEGG',
         organism = 'hsa', pAdjustMethod = 'BH', universe = uni_ncbi, 
-        pvalueCutoff = 0.1, qvalueCutoff = 0.05, keyType = 'ncbi-geneid'),
+        #pvalueCutoff = 0.1, qvalueCutoff = 0.05,
+        keyType = 'ncbi-geneid'),
         error = function(e) { return(NULL) })
         
     return(go_cluster)
