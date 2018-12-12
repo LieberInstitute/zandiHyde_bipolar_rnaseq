@@ -107,6 +107,58 @@ sapply(sig_gene, length)
 
 save(sig_gene, file = 'go_files/sig_gene_881.Rdata')
 
+## Load the 881 eQTL results to subset to FDR < 0.05
+eqtl_raw_files <- dir(pattern = 'mergedEqtl.*rda')
+names(eqtl_raw_files) <- gsub('.*output_|_raggr.*', '', eqtl_raw_files)
+
+sig_gene_5perc <- lapply(eqtl_raw_files, function(raw_f) {
+    message(paste(Sys.time(), 'loading', raw_f))
+    load(raw_f, verbose = TRUE)
+    
+    allEqtl_sub <- subset(allEqtl, FDR < 0.05)
+    
+    gene_ids <- sapply(unique(allEqtl_sub$Type), function(type) {
+        sub_type <- subset(allEqtl_sub, Type == type)
+        res <- unique(sub_type$EnsemblGeneID)
+        print(paste('Number of eQTL associations at FDR<5%:', nrow(sub_type), '; number of unique gene ids:', length(res)))
+        return(res)
+    })
+    final_res <- unique(unlist(gene_ids))
+    print(paste('Number of unique gene ids across all features:', length(final_res), 'for', raw_f))
+    return(final_res)
+})
+
+# 2018-12-12 11:05:46 loading mergedEqtl_output_amyg_raggr_4features.rda
+# Loading objects:
+#   allEqtl
+# [1] "Number of eQTL associations at FDR<5%: 3724 ; number of unique gene ids: 179"
+# [1] "Number of eQTL associations at FDR<5%: 18026 ; number of unique gene ids: 277"
+# [1] "Number of eQTL associations at FDR<5%: 10429 ; number of unique gene ids: 233"
+# [1] "Number of eQTL associations at FDR<5%: 5051 ; number of unique gene ids: 193"
+# [1] "Number of unique gene ids across all features: 645 for mergedEqtl_output_amyg_raggr_4features.rda"
+# 2018-12-12 11:06:20 loading mergedEqtl_output_dlpfc_raggr_4features.rda
+# Loading objects:
+#   allEqtl
+# [1] "Number of eQTL associations at FDR<5%: 3470 ; number of unique gene ids: 174"
+# [1] "Number of eQTL associations at FDR<5%: 12790 ; number of unique gene ids: 251"
+# [1] "Number of eQTL associations at FDR<5%: 6165 ; number of unique gene ids: 189"
+# [1] "Number of eQTL associations at FDR<5%: 5589 ; number of unique gene ids: 231"
+# [1] "Number of unique gene ids across all features: 613 for mergedEqtl_output_dlpfc_raggr_4features.rda"
+# 2018-12-12 11:06:54 loading mergedEqtl_output_sacc_raggr_4features.rda
+# Loading objects:
+#   allEqtl
+# [1] "Number of eQTL associations at FDR<5%: 7364 ; number of unique gene ids: 302"
+# [1] "Number of eQTL associations at FDR<5%: 35700 ; number of unique gene ids: 436"
+# [1] "Number of eQTL associations at FDR<5%: 13210 ; number of unique gene ids: 303"
+# [1] "Number of eQTL associations at FDR<5%: 8610 ; number of unique gene ids: 272"
+# [1] "Number of unique gene ids across all features: 912 for mergedEqtl_output_sacc_raggr_4features.rda"
+
+sapply(sig_gene_5perc, length)
+# amyg dlpfc  sacc
+#  645   613   912
+length(unique(unlist(sig_gene_5perc)))
+# [1] 1380
+save(sig_gene_5perc, file = 'go_files/sig_gene_5perc.Rdata')
 
 run_go <- function(genes_ens, ont = c('BP', 'MF', 'CC'), universe) {
     # ## Change to ENSEMBL ids
@@ -136,7 +188,7 @@ run_go <- function(genes_ens, ont = c('BP', 'MF', 'CC'), universe) {
     return(go_cluster)
 }
 
-
+## FDR < 1%
 go_tested <- run_go(sig_gene, universe = uni_tested)
 sapply(go_tested, class)
 #                     BP                     MF                     CC
@@ -152,6 +204,25 @@ sapply(go_expressed, class)
 #                   KEGG
 # "compareClusterResult"
 save(go_expressed, file = 'go_files/go_expressed.Rdata')
+
+
+## FDR < 5%
+if(FALSE) {
+    load('go_files/uni_tested.Rdata', verbose = TRUE)
+    load('go_files/uni_expressed.Rdata', verbose = TRUE)
+}
+go_tested_5perc <- run_go(sig_gene_5perc, universe = uni_tested)
+sapply(go_tested_5perc, class)
+    # BP     MF     CC
+# "NULL" "NULL" "NULL"
+save(go_tested_5perc, file = 'go_files/go_tested_5perc.Rdata')
+
+go_expressed_5perc <- run_go(sig_gene_5perc, universe = uni_expressed)
+sapply(go_expressed_5perc, class)
+#                     BP                     MF                     CC
+# "compareClusterResult"                 "NULL" "compareClusterResult"
+save(go_expressed_5perc, file = 'go_files/go_expressed_5perc.Rdata')
+
 
 
 go_table <- function(go_object) {
@@ -191,6 +262,7 @@ go_write <- function(go_table, go_file) {
     write.csv(go_df, go_file, quote = FALSE)
 }
 
+## FDR < 1%
 go_tested_table <- go_table(go_tested)
 # 2018-12-11 15:41:35 found enrichment for the ontologies BP, CC, KEGG
 save(go_tested_table, file = 'go_files/go_tested_table.Rdata')
@@ -203,11 +275,24 @@ save(go_expressed_table, file = 'go_files/go_expressed_table.Rdata')
 go_write(go_expressed_table, 'go_files/go_expressed_table.csv')
 # 2018-12-11 16:01:30 fixing column geneID
 
+## FDR < 5%
+go_tested_5perc_table <- go_table(go_tested_5perc)
+save(go_tested_5perc_table, file = 'go_files/go_tested_5perc_table.Rdata')
+go_write(go_tested_5perc_table, 'go_files/go_tested_5perc_table.csv')
+
+go_expressed_5perc_table <- go_table(go_expressed_5perc)
+# 2018-12-12 12:08:00 found enrichment for the ontologies BP, CC
+save(go_expressed_5perc_table, file = 'go_files/go_expressed_5perc_table.Rdata')
+go_write(go_expressed_5perc_table, 'go_files/go_expressed_5perc_table.csv')
+# 2018-12-12 12:08:10 fixing column geneID
+
 
 ## Make the plots: requires re-loading using:
 # module load conda_R/3.4.x
 load('go_files/go_tested.Rdata', verbose = TRUE)
 load('go_files/go_expressed.Rdata', verbose = TRUE)
+load('go_files/go_tested_5perc.Rdata', verbose = TRUE)
+load('go_files/go_expressed_5perc.Rdata', verbose = TRUE)
 
 simplify_go <- function(x) {
     # gsub('amygdala', 'amyg', gsub('dep', 'de', gsub('ptsd', 'pt', x)))
@@ -232,7 +317,7 @@ plot_go <- function(go_cluster, cat = 10) {
     })
 }
 
-
+## FDR < 1%
 pdf('go_files/go_tested.pdf', width = 9, height = 9, useDingbats = FALSE)
 plot_go(go_tested)
 dev.off()
@@ -247,6 +332,23 @@ dev.off()
 
 pdf('go_files/go_expressed_all.pdf', width = 9, height = 9, useDingbats = FALSE)
 plot_go(go_expressed, cat = NULL)
+dev.off()
+
+## FDR < 5%
+pdf('go_files/go_tested_5perc.pdf', width = 9, height = 9, useDingbats = FALSE)
+plot_go(go_tested_5perc)
+dev.off()
+
+pdf('go_files/go_tested_5perc_all.pdf', width = 9, height = 9, useDingbats = FALSE)
+plot_go(go_tested_5perc, cat = NULL)
+dev.off()
+
+pdf('go_files/go_expressed_5perc.pdf', width = 9, height = 9, useDingbats = FALSE)
+plot_go(go_expressed_5perc)
+dev.off()
+
+pdf('go_files/go_expressed_5perc_all.pdf', width = 9, height = 9, useDingbats = FALSE)
+plot_go(go_expressed_5perc, cat = NULL)
 dev.off()
 
 ## Reproducibility information
