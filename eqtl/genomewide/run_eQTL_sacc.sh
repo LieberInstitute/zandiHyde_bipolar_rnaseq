@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=120G,h_vmem=120G,h_fsize=200G
+#$ -l mem_free=150G,h_vmem=150G,h_fsize=200G
 #$ -N sacc_eQTL_bipolar
 #$ -o logs/eQTL_sacc.txt
 #$ -e logs/eQTL_sacc.txt

@@ -15,6 +15,11 @@ pd = colData(rse_gene)
 pd$PrimaryDx[pd$PrimaryDx == "Other"] = "Bipolar"
 pd$PrimaryDx = factor(as.character(pd$PrimaryDx), 
 	levels = c("Control","Bipolar"))
+pdLimb = pd	
+## dlpfc
+load("eqtl_exprs_cutoffs/eQTL_expressed_rse_dlpfc.rda", verbose=TRUE)
+pdPfc = colData(rse_gene)
+
 # get RPKM
 geneRpkm = getRPKM(rse_gene, length="Length")
 

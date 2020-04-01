@@ -18,6 +18,24 @@ sigEqtlAmy = allEqtl
 load("../raggr/mergedEqtl_output_dlpfc_raggr_4features.rda", verbose=TRUE)
 sigEqtlDlpfc = allEqtl
 
+################
+## load SNPs
+load("../../genotype_data/zandiHyde_bipolar_Genotypes_n511.rda")
+snpMap$pos_hg19 = paste0(snpMap$CHR, ":", snpMap$POS)
+
+## add coordinate to eqtl results
+snpMap2 = snpMap[(snpMap$SNP %in% sigEqtlSacc$snps),]
+posInd = match(sigEqtlSacc$snps, snpMap2$SNP)
+sigEqtlSacc$hg19POS = snpMap2$pos_hg19[posInd]
+
+snpMap2 = snpMap[(snpMap$SNP %in% sigEqtlAmy$snps),]
+posInd = match(sigEqtlAmy$snps, snpMap2$SNP)
+sigEqtlAmy$hg19POS = snpMap2$pos_hg19[posInd]
+
+snpMap2 = snpMap[(snpMap$SNP %in% sigEqtlDlpfc$snps),]
+posInd = match(sigEqtlDlpfc$snps, snpMap2$SNP)
+sigEqtlDlpfc$hg19POS = snpMap2$pos_hg19[posInd]
+
 
 ################
 ## subset to 31 significant index SNPs
@@ -37,10 +55,15 @@ for (i in 1:nrow(riskLoci)) {
 }
 riskLociGW = riskLoci[which(riskLoci$genomewideSig1==TRUE),]
 
+# ## subset results
+# sigEqtlSacc2 = sigEqtlSacc[which(sigEqtlSacc$snps %in% riskLociGW$SNP2_Name),]
+# sigEqtlAmy2 = sigEqtlAmy[which(sigEqtlAmy$snps %in% riskLociGW$SNP2_Name),]
+# sigEqtlDlpfc2 = sigEqtlDlpfc[which(sigEqtlDlpfc$snps %in% riskLociGW$SNP2_Name),]
 ## subset results
-sigEqtlSacc = sigEqtlSacc[which(sigEqtlSacc$snps %in% riskLociGW$SNP2_Name),]
-sigEqtlAmy = sigEqtlAmy[which(sigEqtlAmy$snps %in% riskLociGW$SNP2_Name),]
-sigEqtlDlpfc = sigEqtlDlpfc[which(sigEqtlDlpfc$snps %in% riskLociGW$SNP2_Name),]
+sigEqtlSacc = sigEqtlSacc[which(sigEqtlSacc$hg19POS %in% riskLociGW$hg19POS2),]
+sigEqtlAmy = sigEqtlAmy[which(sigEqtlAmy$hg19POS %in% riskLociGW$hg19POS2),]
+sigEqtlDlpfc = sigEqtlDlpfc[which(sigEqtlDlpfc$hg19POS %in% riskLociGW$hg19POS2),]
+
 
 ## recalculate FDR
 sigEqtlSacc$FDR = p.adjust(sigEqtlSacc$pvalue, method="fdr")

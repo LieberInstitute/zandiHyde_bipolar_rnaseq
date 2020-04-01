@@ -14,7 +14,7 @@ pd = colData(rse_gene)
 pd$PrimaryDx[pd$PrimaryDx=="Other"] = "Bipolar"
 
 ## load SNP data
-load("../genotype_data/zandiHyde_bipolar_Genotypes_n511.rda")
+load("../../genotype_data/zandiHyde_bipolar_Genotypes_n511.rda")
 snpMap$pos_hg19 = paste0(snpMap$CHR, ":", snpMap$POS)
 
 ## drop rs10708380:150158001:TG:T (missing info in snpMap (and dbSNP))
@@ -42,6 +42,9 @@ snp = snp[keepIndex,]
 
 snpMap$maf = rowSums(snp, na.rm=TRUE)/(2*rowSums(!is.na(snp))) 
 
+# ## table for Peter
+# riskMap = riskLoci[match(snpMap$pos_hg19, riskLoci$hg19POS),]
+# write.csv(riskMap, "snps10777_map.csv")
 
 ######################
 # statistical model ##

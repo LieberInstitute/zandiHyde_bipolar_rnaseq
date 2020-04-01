@@ -59,25 +59,25 @@ exonRpkm = assays(rse_exon)$rpkm
 jxnRp10m = assays(rse_jxn)$rp10m
 txTpm = assays(rse_tx)$tpm
 
-pcaGene = prcomp(t(log2(geneRpkm+1)))
-kGene = num.sv(log2(geneRpkm+1), mod)
-genePCs = pcaGene$x[,1:kGene]
+# pcaGene = prcomp(t(log2(geneRpkm+1)))
+# kGene = num.sv(log2(geneRpkm+1), mod)
+# genePCs = pcaGene$x[,1:kGene]
 
-pcaExon = prcomp(t(log2(exonRpkm+1)))
-kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
-exonPCs = pcaExon$x[,1:kExon]
+# pcaExon = prcomp(t(log2(exonRpkm+1)))
+# kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
+# exonPCs = pcaExon$x[,1:kExon]
 
-pcaJxn = prcomp(t(log2(jxnRp10m+1)))
-kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
-jxnPCs = pcaJxn$x[,1:kJxn]
+# pcaJxn = prcomp(t(log2(jxnRp10m+1)))
+# kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
+# jxnPCs = pcaJxn$x[,1:kJxn]
 
-pcaTx = prcomp(t(log2(txTpm+1)))
-kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
-txPCs = pcaTx$x[,1:kTx]
+# pcaTx = prcomp(t(log2(txTpm+1)))
+# kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
+# txPCs = pcaTx$x[,1:kTx]
 
-save(genePCs, exonPCs, jxnPCs, txPCs, 
-	file="rdas/pcs_4features_dlpfc.rda")
-# load("rdas/pcs_4features_dlpfc.rda")
+# save(genePCs, exonPCs, jxnPCs, txPCs, 
+	# file="rdas/pcs_4features_dlpfc.rda")
+load("rdas/pcs_4features_dlpfc.rda")
 
 covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
 covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
@@ -128,33 +128,39 @@ txSlice$ResliceCombined(sliceSize = 5000)
 # ### Run EQTLs ############
 # ##########################
 
+print("Starting eQTLs")
+
 meGene = Matrix_eQTL_main(snps=theSnps, gene = geneSlice, 
 	cvrt = covsGene, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = .1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posGene, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
+save(meGene, file="matrixEqtl_output_dlpfc_genomewide_gene.rda")	
 
 meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice, 
 	cvrt = covsExon, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = .1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posExon, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
+save(meExon, file="matrixEqtl_output_dlpfc_genomewide_exon.rda")	
 
 meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice, 
 	cvrt = covsJxn, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = .1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posJxn, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
+save(meJxn, file="matrixEqtl_output_dlpfc_genomewide_jxn.rda")	
 	
 meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice, 
 	cvrt = covsTx, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = .1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posTx, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
+save(meTx, file="matrixEqtl_output_dlpfc_genomewide_tx.rda")	
 
 save(meGene, meExon, meJxn, meTx,
 	file="matrixEqtl_output_dlpfc_genomewide_4features.rda")
@@ -219,10 +225,11 @@ allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gene)$gencodeTx[match(
 	as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))]),
 	as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))]),
 	as.list(txEqtl$gene)))
-save(allEqtl, file="mergedEqtl_output_dlpfc_genomewide_4features.rda",compress=TRUE)
+# save(allEqtl, file="mergedEqtl_output_dlpfc_genomewide_4features.rda",compress=TRUE)
 
 
-
+allEqtlFDR01 = allEqtl[which(allEqtl$FDR < 0.01),]
+save(allEqtlFDR01, file="mergedEqtl_output_dlpfc_genomewide_4features_FDR01.rda",compress=TRUE)
 
 
 

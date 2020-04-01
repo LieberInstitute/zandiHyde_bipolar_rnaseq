@@ -23,11 +23,9 @@ colnames(riskLoci) = colnames(riskLoci_full) = gsub("\\.", "_", colnames(riskLoc
 riskLoci$hg19POS1 = paste0(riskLoci$SNP1_Chr, ":", riskLoci$SNP1_Pos) 
 riskLoci$hg19POS2 = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos) 
 
-riskLoci$genomewideSig1 = NA
-for (i in 1:nrow(riskLoci)) {
-	indexInd = which(indexLoci$hg19POS == riskLoci$hg19POS1[i])
-	riskLoci$genomewideSig1[i] = indexLoci$genomewide[indexInd]
-}
+posInd = match(riskLoci$hg19POS1, indexLoci$hg19POS)
+riskLoci$genomewideSig1 = indexLoci$genomewide[posInd]
+
 riskLoci = riskLoci[which(riskLoci$genomewideSig1==TRUE),]
 riskLoci_full = riskLoci
 
@@ -129,7 +127,7 @@ venn.diagram(list(Amygdala = amyg$Symbol, sACC = sacc$Symbol, DLPFC = dlp$Symbol
 ###### Index SNP info ##########
 ################################################################
 
-region = amyg
+region = sacc
 
 ## note which proxy snps have a significant result
 riskLoci$proxy_FDRsig = "na"
@@ -141,20 +139,16 @@ for (i in 1:nrow(riskLoci)) {
 
 ## Is SNP index snp or proxy
 region$Status = ifelse(region$hg19POS %in% riskLoci$hg19POS1, "Index", "Proxy")
+
 ## What is the index snp for each row
-region$IndexSNP = NA
-region$IndexSNP_hg19POS = NA
-for (i in 1:nrow(region)) {
-	proxInd = which(riskLoci$hg19POS2 == region$hg19POS[i]) ## row of proxy
-	region$IndexSNP[i] = riskLoci$SNP1_Name[proxInd]
-	region$IndexSNP_hg19POS[i] = riskLoci$hg19POS1[proxInd]
-}
+proxInd = match(region$hg19POS, riskLoci$hg19POS2)
+region$IndexSNP = riskLoci$SNP1_Name[proxInd]
+region$IndexSNP_hg19POS = riskLoci$hg19POS1[proxInd]
+
 ## was index snp checked in eqtl analysis at all
-region$IndexSNP_indata = NA
-for (i in 1:nrow(region)) {
-	indexInd = which(riskLoci_full$hg19POS2 == region$IndexSNP_hg19POS[i]) ## row of proxy
-	region$IndexSNP_indata[i] = riskLoci_full$SNP2_missing[indexInd]
-}
+indexInd = match(region$IndexSNP_hg19POS, riskLoci_full$hg19POS2) ## row of proxy
+region$IndexSNP_indata = riskLoci_full$SNP2_missing[indexInd]
+
 ## does index snp have any significant eqtl result
 region$IndexSNP_fdrSig = "na"
 for (i in 1:nrow(region)) {
@@ -176,6 +170,7 @@ for (i in 1:nrow(region)) {
 		region$IndexSNP_mostSigFeat_gene[i] = as.character(tmp$Symbol[1])
 	}
 }
+
 ## what is the lead variant for each SNP -- index if sig, else highest LD proxy
 region$leadVariant = NA
 for (i in 1:nrow(region)) {
@@ -192,9 +187,13 @@ for (i in 1:nrow(region)) {
 		region$leadVariant[i] = as.character(tmp$SNP2_Name[1])
 		}
 }
-region$leadVariant_indicator = (region$SNP == region$leadVariant)
+## Is the SNP the lead variant? (Check by position)
+leadVarInd = match(region$leadVariant, riskLoci$SNP2_Name)
+leadVarPos = riskLoci$hg19POS2[leadVarInd]
+region$leadVariant_indicator = (region$hg19POS == leadVarPos)
 
-amyg = region
+
+sacc = region
 
 
 write.csv(sacc, file="raggr_31_snps_sacc_eqtls_fdr01.csv")
@@ -209,159 +208,6 @@ write.csv(dlp, file="raggr_31_snps_dlpfc_eqtls_fdr01.csv")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#####################
-##### Subset of 881 SNPs from PGC
-#####################
-
-################
-## load eQTLs
-
-load("mergedEqtl_output_sacc_raggr_4features.rda", verbose=TRUE)
-sigEqtlSacc_sub = allEqtl[allEqtl$FDR < 0.01,]
-load("mergedEqtl_output_amyg_raggr_4features.rda", verbose=TRUE)
-sigEqtlAmy_sub = allEqtl[allEqtl$FDR < 0.01,]
-
-load("mergedEqtl_output_dlpfc_raggr_4features.rda", verbose=TRUE)
-sigEqtlDlpfc_sub = allEqtl[allEqtl$FDR < 0.01,]
-
-################
-## metrics
-
-## total features
-nrow(sigEqtlSacc_sub)  ## 38609
-nrow(sigEqtlAmy_sub)   ## 22572
-nrow(sigEqtlDlpfc_sub) ## 17539
-
-## per feature
-table(sigEqtlSacc_sub$Type)
-# Exon 	Gene  Jxn   Tx
-# 20014  4463  8641  5491
-table(sigEqtlAmy_sub$Type)
-# Exon 	 Gene  Jxn   Tx
-# 10370  2638  6435  3129
-table(sigEqtlDlpfc_sub$Type)
-# Exon  Gene  Jxn   Tx
-# 7303  2381  4272  3583
-
-## unique ensemblIDs
-tapply(sigEqtlSacc_sub$EnsemblGeneID, sigEqtlSacc_sub$Type, function(x) length(unique(x)))
-# Exon Gene  Jxn   Tx
-#  234  175  177  160
-tapply(sigEqtlAmy_sub$EnsemblGeneID, sigEqtlAmy_sub$Type, function(x) length(unique(x)))
-# Exon Gene  Jxn   Tx
-#  145  105  130  105
-tapply(sigEqtlDlpfc_sub$EnsemblGeneID, sigEqtlDlpfc_sub$Type, function(x) length(unique(x)))
-# Exon Gene  Jxn   Tx
-#  136  105  108  127
-
-
-################
-## make csv
-
-##### amygdala and sACC #####
-dlp = sigEqtlDlpfc_sub
-amyg = sigEqtlAmy_sub
-sacc = sigEqtlSacc_sub
-amyg$EnsemblGeneID = ss(amyg$EnsemblGeneID, "\\.")
-sacc$EnsemblGeneID = ss(sacc$EnsemblGeneID, "\\.")
-
-## snpMap
-load("../genotype_data/zandiHyde_bipolar_Genotypes_n511.rda")
-snpMap$hg19POS = paste0(snpMap$CHR,":",snpMap$POS)
-snpMap = snpMap[which(rownames(snpMap) %in% c(amyg$snps,sacc$snps,dlp$snps) ),c("SNP","chr_hg38","pos_hg38","hg19POS")]
-
-## featMap
-load("../data/zandiHypde_bipolar_rseTx_n511.rda")
-load("../data/zandiHypde_bipolar_rseJxn_n511.rda")
-load("../data/zandiHypde_bipolar_rseExon_n511.rda")
-load("../data/zandiHypde_bipolar_rseGene_n511.rda")
-gMap = as.data.frame(rowRanges(rse_gene))[,c("seqnames","start","end","strand","Class")]
-eMap = as.data.frame(rowRanges(rse_exon))[,c("seqnames","start","end","strand","Class")]
-jMap = as.data.frame(rowRanges(rse_jxn))[,c("seqnames","start","end","strand","Class")]
-txMap = as.data.frame(rowRanges(rse_tx))[,c("seqnames","start","end","strand","source")]
-txMap$source = "InGen"
-# rm(rse_gene, rse_exon, rse_jxn, rse_tx)
-colnames(gMap) = colnames(eMap) = colnames(jMap) = colnames(txMap) = 
-	c("feat_chr","feat_start","feat_end","strand","Class")
-featMap = rbind(rbind(rbind(gMap, eMap),jMap),txMap)
-featMap$Type = c(rep("Gene",nrow(gMap)),rep("Exon",nrow(eMap)),rep("Jxn",nrow(jMap)),rep("Tx",nrow(txMap)))
-
-geneMap = as.data.frame(rowRanges(rse_gene))[,c("gencodeID","Symbol","ensemblID","gene_type")]
-
-## put together
-snpMap_temp = snpMap[amyg$snps,]
-featMap_temp = featMap[amyg$gene,]
-geneMap_temp = geneMap[match(amyg$EnsemblGeneID, geneMap$ensemblID),]
-amyg2 = cbind(cbind(cbind(snpMap_temp,featMap_temp),geneMap_temp),amyg)
-amyg3 = amyg2[,c(1:4,16,10,5:9,12:14,17:20)]
-write.csv(amyg3, "raggr_suggestive881_snps_amyg_eqtls_fdr01.csv")
-
-snpMap_temp = snpMap[sacc$snps,]
-featMap_temp = featMap[sacc$gene,]
-geneMap_temp = geneMap[match(sacc$EnsemblGeneID, geneMap$ensemblID),]
-sacc2 = cbind(cbind(cbind(snpMap_temp,featMap_temp),geneMap_temp),sacc)
-sacc3 = sacc2[,c(1:4,16,10,5:9,12:14,17:20)]
-write.csv(sacc3, "raggr_suggestive881_snps_sacc_eqtls_fdr01.csv")
-
-tmp = amyg3
-tmp$Status = NA
-tmp$IndexSNP = NA
-tmp$IndexSNP_hg19POS = NA
-tmp$IndexPGCsig = NA
-tmp$IndexFDR = NA
-
-
-##### DLPFC #####
-dlp = sigEqtlDlpfc_sub
-dlp$EnsemblGeneID = ss(dlp$EnsemblGeneID, "\\.")
-
-## load SNP data
-load("/dcl01/ajaffe/data/lab/brainseq_phase1/genotype_data/brainseq_phase1_Genotypes_n732.rda")
-
-load("/dcl01/ajaffe/data/lab/brainseq_phase1/count_data/dlpfc_polyA_brainseq_phase1_hg38_rseTx_merged_n732.rda")
-load("/dcl01/ajaffe/data/lab/brainseq_phase1/count_data/dlpfc_polyA_brainseq_phase1_hg38_rseJxn_merged_n732.rda")
-load("/dcl01/ajaffe/data/lab/brainseq_phase1/count_data/dlpfc_polyA_brainseq_phase1_hg38_rseExon_merged_n732.rda")
-load("/dcl01/ajaffe/data/lab/brainseq_phase1/count_data/dlpfc_polyA_brainseq_phase1_hg38_rseGene_merged_n732.rda")
-gMap = as.data.frame(rowRanges(rse_gene))[,c("seqnames","start","end","strand","Class")]
-eMap = as.data.frame(rowRanges(rse_exon))[,c("seqnames","start","end","strand","Class")]
-jMap = as.data.frame(rowRanges(rse_jxn))[,c("seqnames","start","end","strand","Class")]
-txMap = as.data.frame(rowRanges(rse_tx))[,c("seqnames","start","end","strand","source")]
-txMap$source = "InGen"
-rm(rse_gene, rse_exon, rse_jxn, rse_tx)
-colnames(gMap) = colnames(eMap) = colnames(jMap) = colnames(txMap) = 
-	c("feat_chr","feat_start","feat_end","strand","Class")
-featMap = rbind(rbind(rbind(gMap, eMap),jMap),txMap)
-featMap$Type = c(rep("Gene",nrow(gMap)),rep("Exon",nrow(eMap)),rep("Jxn",nrow(jMap)),rep("Tx",nrow(txMap)))
-
-geneMap = as.data.frame(rowRanges(rse_gene))[,c("gencodeID","Symbol","ensemblID","gene_type")]
-
-
-snpMap_temp = snpMap[dlp$snps,]
-featMap_temp = featMap[dlp$gene,]
-geneMap_temp = geneMap[match(dlp$EnsemblGeneID, geneMap$ensemblID),]
-dlp2 = cbind(cbind(cbind(snpMap_temp,featMap_temp),geneMap_temp),dlp)
-dlp2 = dlp2[,-which(colnames(dlp2)=="gencodeTx")]
-
-dlp3 = dlp2[,c(2,12,13,25,19,14:18,21:23,26:29)]
-write.csv(dlp3, "raggr_suggestive881_snps_dlpfc_eqtls_fdr01.csv")
 
 
 

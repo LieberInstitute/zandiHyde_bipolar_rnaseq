@@ -12,6 +12,12 @@ load("../data/zandiHypde_bipolar_rseJxn_n511.rda")
 load("../data/zandiHypde_bipolar_rseTx_n511.rda")
 load("../data/degradation_rse_BipSeq_BothRegions.rda")
 
+# # add counts to Tx rse
+# load("../data/zandiHypde_bipolar_txCounts_n511.rda")
+# identical(colnames(txNumReads), colData(rse_tx)$SAMPLE_ID)  ## TRUE
+# colnames(txNumReads) = rownames(colData(rse_tx))
+# assays(rse_tx)$counts = txNumReads
+
 identical(colnames(rse_gene), colnames(cov_rse)) # TRUE
 rse_gene$Dx = factor(ifelse(rse_gene$PrimaryDx == "Control", "Control","Bipolar"), 
 				levels = c("Control", "Bipolar"))
@@ -60,7 +66,7 @@ varExplQsva[1:k]
 sum(varExplQsva[1:k]) # 87%
 
 # model w/o interaction to subset by region
-modSep = modJoint = model.matrix(~Dx + AgeDeath + Sex + snpPC1 + snpPC2 + snpPC3 + 
+modSep = model.matrix(~Dx + AgeDeath + Sex + snpPC1 + snpPC2 + snpPC3 + 
 	mitoRate + rRNA_rate + totalAssignedGene + RIN + ERCCsumLogErr, 
 	data=colData(rse_gene))
 
@@ -174,22 +180,26 @@ sum(outJxn_Amyg$adj.P.Val < 0.05)
 txExprs = log2(assays(rse_tx)$tpm+ 1)
 
 ##### sACC ######
-fitTx_sACC = lmFit(txExprs[,sACC_Index], modSep[sACC_Index,])
+# fitTx_sACC = lmFit(txExprs[,sACC_Index], modSep[sACC_Index,])
+fitTx_sACC = lmFit(txExprs[,sACC_Index], mod_sACC)
 eBTx_sACC = eBayes(fitTx_sACC)
 outTx_sACC = topTable(eBTx_sACC,coef=2,
 	p.value = 1,number=nrow(rse_tx), 
 	genelist = rowRanges(rse_tx))
 outTx_sACC = outTx_sACC[rownames(rse_tx),c(28:33, 10:11, 13, 15:17, 19, 26)]
-sum(outTx_sACC$adj.P.Val < 0.05)
+sum(outTx_sACC$adj.P.Val < 0.05)  ## 99
 
 ##### Amygdala ######
-fitTx_Amyg = lmFit(txExprs[,Amyg_Index], modSep[Amyg_Index,])
+# fitTx_Amyg = lmFit(txExprs[,Amyg_Index], modSep[Amyg_Index,])
+fitTx_Amyg = lmFit(txExprs[,Amyg_Index], mod_Amyg)
 eBTx_Amyg = eBayes(fitTx_Amyg)
 outTx_Amyg = topTable(eBTx_Amyg,coef=2,
 	p.value = 1,number=nrow(rse_tx),
 	genelist = rowRanges(rse_tx))
 outTx_Amyg = outTx_Amyg[rownames(rse_tx),c(28:33, 10:11, 13, 15:17, 19, 26)]
-sum(outTx_Amyg$adj.P.Val < 0.05)
+sum(outTx_Amyg$adj.P.Val < 0.05)  ## 3
+
+
 
 ####################
 ### core output ####
@@ -228,13 +238,149 @@ vGene = voom(dge,mod, plot=TRUE)
 ## do duplicate correlation
 gene_dupCorr = duplicateCorrelation(vGene$E, mod, block=colData(rse_gene)$BrNum)
 save(gene_dupCorr, file = "geneLevel_duplicateCorrelation_limma_forDE.rda")
+load("geneLevel_duplicateCorrelation_limma_forDE.rda")
 
 # and then fit
-fitGene = lmFit(vGene,block = colData(rse_gene)$BrNum, correlation=gene_dupCorr)
+fitGene = lmFit(vGene, mod, 
+	correlation=gene_dupCorr$consensus.correlation, 
+	block=colData(rse_gene)$BrNum)
 eBGene = eBayes(fitGene)
 outGene_mainEffect = topTable(eBGene,coef=2,
-	p.value = 1,number=nrow(rse_gene))
-outGene_mainEffect = outGene_mainEffect[rownames(rse_gene),]
-
-outGene_interactionEffect = topTable(eBGene,coef=ncol(mod),
 	p.value = 1,number=nrow(rse_gene), sort="none")
+outGene_interactionEffect = topTable(eBGene,coef=ncol(modJoint),
+	p.value = 1,number=nrow(rse_gene), sort="none")
+
+sum(outGene_mainEffect$adj.P.Val < 0.05)
+sum(outGene_interactionEffect$adj.P.Val < 0.05)
+
+###########
+## Exon ###
+###########
+
+dee = DGEList(counts = assays(rse_exon)$counts, 
+	genes = rowData(rse_exon))
+dee = calcNormFactors(dee)
+vExon = voom(dee,mod, plot=TRUE)
+
+## do duplicate correlation
+exon_dupCorr = duplicateCorrelation(vExon$E, mod, block=colData(rse_exon)$BrNum)
+save(exon_dupCorr, file = "exonLevel_duplicateCorrelation_limma_forDE.rda")
+load("exonLevel_duplicateCorrelation_limma_forDE.rda")
+
+# and then fit
+fitExon = lmFit(vExon, mod, 
+	correlation=exon_dupCorr$consensus.correlation, 
+	block=colData(rse_exon)$BrNum)
+eBExon = eBayes(fitExon)
+outExon_mainEffect = topTable(eBExon,coef=2,
+	p.value = 1,number=nrow(rse_exon), sort="none")
+outExon_interactionEffect = topTable(eBExon,coef=ncol(modJoint),
+	p.value = 1,number=nrow(rse_exon), sort="none")
+
+sum(outExon_mainEffect$adj.P.Val < 0.05)
+sum(outExon_interactionEffect$adj.P.Val < 0.05)
+
+
+###########
+## Junction ###
+###########
+
+dje = DGEList(counts = assays(rse_jxn)$counts, 
+	genes = rowData(rse_jxn))
+dje = calcNormFactors(dje)
+vJxn = voom(dje,mod, plot=TRUE)
+
+## do duplicate correlation
+# jxn_dupCorr = duplicateCorrelation(vJxn$E, mod, block=colData(rse_jxn)$BrNum)
+# save(jxn_dupCorr, file = "jxnLevel_duplicateCorrelation_limma_forDE.rda")
+load("jxnLevel_duplicateCorrelation_limma_forDE.rda")
+# and then fit
+fitJxn = lmFit(vJxn, mod,
+	correlation=jxn_dupCorr$consensus.correlation, 
+	block=colData(rse_jxn)$BrNum)
+eBJxn = eBayes(fitJxn)
+outJxn_mainEffect = topTable(eBJxn,coef=2,
+	p.value = 1,number=nrow(rse_jxn), sort="none")
+outJxn_interactionEffect = topTable(eBJxn,coef=ncol(modJoint),
+	p.value = 1,number=nrow(rse_jxn), sort="none")
+
+sum(outJxn_mainEffect$adj.P.Val < 0.05)
+sum(outJxn_interactionEffect$adj.P.Val < 0.05)
+
+###########
+## Txs ###
+###########
+
+## do duplicate correlation
+# tx_dupCorr = duplicateCorrelation(txExprs, mod, block=colData(rse_tx)$BrNum)
+# save(tx_dupCorr, file = "txLevel_duplicateCorrelation_limma_forDE.rda")
+load("txLevel_duplicateCorrelation_limma_forDE.rda")
+
+# and then fit
+fitTx = lmFit(txExprs, mod, 
+	correlation=tx_dupCorr$consensus.correlation, 
+	block=colData(rse_tx)$BrNum)
+eBTx = eBayes(fitTx)
+outTx_mainEffect = topTable(eBTx,coef=2,
+	p.value = 1,number=nrow(rse_tx), sort="none")
+outTx_interactionEffect = topTable(eBTx,coef=ncol(modJoint),
+	p.value = 1,number=nrow(rse_tx), sort="none")
+
+sum(outTx_mainEffect$adj.P.Val < 0.05)
+sum(outTx_interactionEffect$adj.P.Val < 0.05)
+
+######################
+## save outputs ######
+######################
+
+outGene_bothRegion = outGene_mainEffect
+colnames(outGene_bothRegion)[c(11,13:16)] = paste0(colnames(outGene_bothRegion)[c(11,13:16)],"_dxEffect")
+outGene_bothRegion = cbind(outGene_bothRegion, outGene_interactionEffect[,c(11,13:16)])
+colnames(outGene_bothRegion)[17:21] = paste0(colnames(outGene_bothRegion)[17:21],"_intEffect")
+outGene_bothRegion = outGene_bothRegion[,c(5,2,11,13:21, 3:4,6:10,12,1)]
+
+outExon_bothRegion = outExon_mainEffect
+colnames(outExon_bothRegion)[c(11,13:16)] = paste0(colnames(outExon_bothRegion)[c(11,13:16)],"_dxEffect")
+outExon_bothRegion = cbind(outExon_bothRegion, outExon_interactionEffect[,c(11,13:16)])
+colnames(outExon_bothRegion)[17:21] = paste0(colnames(outExon_bothRegion)[17:21],"_intEffect")
+outExon_bothRegion = outExon_bothRegion[,c(5,2,11,13:21, 3:4,6:10,12,1)]
+
+outJxn_bothRegion = outJxn_mainEffect
+colnames(outJxn_bothRegion)[c(18,20:23)] = paste0(colnames(outJxn_bothRegion)[c(18,20:23)],"_dxEffect")
+outJxn_bothRegion = cbind(outJxn_bothRegion, outJxn_interactionEffect[,c(18,20:23)])
+colnames(outJxn_bothRegion)[24:28] = paste0(colnames(outJxn_bothRegion)[24:28],"_intEffect")
+outJxn_bothRegion = outJxn_bothRegion[,c(14,13, 18,20:28, 1:12, 15, 19, 17)]
+
+outTx_bothRegion = cbind(rowData(rse_tx), outTx_mainEffect)
+colnames(outTx_bothRegion)[c(23,25:28)] = paste0(colnames(outTx_bothRegion)[c(23,25:28)],"_dxEffect")
+outTx_bothRegion = cbind(outTx_bothRegion, outTx_interactionEffect[,-2])
+colnames(outTx_bothRegion)[29:33] = paste0(colnames(outTx_bothRegion)[29:33],"_intEffect")
+outTx_bothRegion = outTx_bothRegion[,c(8,5,23,25:33, 24,1:4, 6:7,9:22)]
+
+save(outGene_bothRegion, outExon_bothRegion, outJxn_bothRegion, outTx_bothRegion,
+	file = "interaction_model_results.rda", compress=TRUE)
+
+### write csv
+dir.create("csv")
+outGene_bothRegion$gencodeTx = NULL
+write.csv(outGene_bothRegion, file = gzfile("csv/geneLevel_jointModeling_lmer.csv.gz"))
+outExon_bothRegion$gencodeTx = NULL
+write.csv(outExon_bothRegion, file = gzfile("csv/exonLevel_jointModeling_lmer.csv.gz"))
+outJxn_bothRegion$gencodeTx = NULL
+write.csv(outJxn_bothRegion, file = gzfile("csv/jxnLevel_jointModeling_lmer.csv.gz"))
+outTx_bothRegion$gencodeTx = NULL
+write.csv(outTx_bothRegion, file = gzfile("csv/txLevel_jointModeling_lmer.csv.gz"))
+
+## plots
+smoothScatter(statOut$logFC_Amyg, statOut$logFC_sACC,pch = 21, bg="grey",
+	xlim = c(-1,1), ylim = c(-1,1))
+gIndex = grep("ENSG", rownames(statOut))
+smoothScatter(statOut$logFC_Amyg[gIndex],
+	statOut$logFC_sACC[gIndex],pch = 21, bg="grey",
+	xlim = c(-1,1), ylim = c(-1,1))
+plot(statOut$logFC_Amyg[gIndex], statOut$logFC_sACC[gIndex],
+	pch = 21, bg="grey",xlim = c(-1,1), ylim = c(-1,1),cex=0.2)
+	
+jIndex = grep("chr", rownames(statOut))
+smoothScatter(statOut$logFC_Amyg[jIndex],
+	statOut$logFC_sACC[jIndex],xlim = c(-1,1), ylim = c(-1,1))

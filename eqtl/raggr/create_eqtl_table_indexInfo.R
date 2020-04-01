@@ -140,26 +140,16 @@ for (i in 1:nrow(riskLoci)) {
 
 ## Is SNP index snp or proxy
 region$Status = ifelse(region$hg19POS %in% riskLoci$hg19POS1, "Index", "Proxy")
+
 ## What is the index snp for each row
-region$IndexSNP = NA
-region$IndexSNP_hg19POS = NA
-for (i in 1:nrow(region)) {
-	proxInd = which(riskLoci$hg19POS2 == region$hg19POS[i]) ## row of proxy
-	region$IndexSNP[i] = riskLoci$SNP1_Name[proxInd]
-	region$IndexSNP_hg19POS[i] = riskLoci$hg19POS1[proxInd]
-}
-## is SNP g.w. significant or suggestive
-region$IndexSNP_genomewideSig = NA
-for (i in 1:nrow(region)) {
-	indexInd = which(indexLoci$hg19POS == region$IndexSNP_hg19POS[i]) ## row of proxy
-	region$IndexSNP_genomewideSig[i] = indexLoci$genomewide[indexInd]
-}
+proxInd = match(region$hg19POS, riskLoci$hg19POS2)
+region$IndexSNP = riskLoci$SNP1_Name[proxInd]
+region$IndexSNP_hg19POS = riskLoci$hg19POS1[proxInd]
+
 ## was index snp checked in eqtl analysis at all
-region$IndexSNP_indata = NA
-for (i in 1:nrow(region)) {
-	indexInd = which(riskLoci_full$hg19POS2 == region$IndexSNP_hg19POS[i]) ## row of proxy
-	region$IndexSNP_indata[i] = riskLoci_full$SNP2_missing[indexInd]
-}
+indexInd = match(region$IndexSNP_hg19POS, riskLoci_full$hg19POS2) ## row of proxy
+region$IndexSNP_indata = riskLoci_full$SNP2_missing[indexInd]
+
 ## does index snp have any significant eqtl result
 region$IndexSNP_fdrSig = "na"
 for (i in 1:nrow(region)) {
@@ -181,6 +171,7 @@ for (i in 1:nrow(region)) {
 		region$IndexSNP_mostSigFeat_gene[i] = as.character(tmp$Symbol[1])
 	}
 }
+
 ## what is the lead variant for each SNP -- index if sig, else highest LD proxy
 region$leadVariant = NA
 for (i in 1:nrow(region)) {
@@ -197,14 +188,18 @@ for (i in 1:nrow(region)) {
 		region$leadVariant[i] = as.character(tmp$SNP2_Name[1])
 		}
 }
-region$leadVariant_indicator = (region$SNP == region$leadVariant)
+## Is the SNP the lead variant? (Check by position)
+leadVarInd = match(region$leadVariant, riskLoci$SNP2_Name)
+leadVarPos = riskLoci$hg19POS1[leadVarInd]
+region$leadVariant_indicator = (region$hg19POS == leadVarPos)
+
 
 amyg = region
 
 
-write.csv(sacc, file="raggr_snps_sacc_eqtls_fdr01.csv")
-write.csv(amyg, file="raggr_snps_amyg_eqtls_fdr01.csv")
-write.csv(dlp, file="raggr_snps_dlpfc_eqtls_fdr01.csv")
+write.csv(sacc, file="raggr_881_snps_sacc_eqtls_fdr01.csv")
+write.csv(amyg, file="raggr_881_snps_amyg_eqtls_fdr01.csv")
+write.csv(dlp, file="raggr_881_snps_dlpfc_eqtls_fdr01.csv")
 
 
 
