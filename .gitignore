@@ -14,3 +14,6 @@ PlexinB1_variantcalling/logs
 Shared-molecular-neuropathology-across-major-psychiatric-disorders-parallels-polygenic-overlap
 eqtl/*/venn*.log
 CSEA_BKB/Data/
+drug_info.tsv
+wgcna/rdas
+leafcutter_output
