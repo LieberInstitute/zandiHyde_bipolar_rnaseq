@@ -34,7 +34,7 @@ stopifnot(opt$region == c("amygdala", "sacc", "dlpfc"))
 print(paste0("Loading ", opt$region,  " genotype..."))
 
 if (opt$region == "amygdala"){
-    load("rda/eQTL_expressed_rse_gene_amygdala.rda", verbose = TRUE)
+    load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_amygdala.rda", verbose = TRUE)
 } else if (opt$region == "sacc"){
     load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_sacc.rda", verbose = TRUE)
 } else if (opt$region == "dlpfc"){
@@ -104,7 +104,7 @@ save(genePCs, file = paste0("rda/", opt$region, "_", opt$feature, "_", "genePCs.
 colData(rse_gene) <- cbind(colData(rse_gene), genePCs)
 
 ## Save for later
-save(rse_gene, file = paste0("rda/amygdala_gene_hg19_rseGene_n", ncol(rse_gene), ".Rdata"))
+save(rse_gene, file = paste0("rda/amygdala_gene_hg38_rseGene_n", ncol(rse_gene), ".RData"))
 
 ## Now extract the genotype data too
 filter_m <- match(brnumerical(rse_gene$BrNum), libd_fam$brnumerical)
@@ -114,7 +114,7 @@ fwrite(
     file = samp_file,
     sep = "\t", col.names = FALSE
 )
-newbfile_root <- paste0("LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg??_filtered_", opt$region, "_", opt$feature)
+newbfile_root <- paste0("LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38_filtered_", opt$region, "_", opt$feature)
 
 dir.create("duplicate_snps_bim", showWarnings = FALSE)
 newbfile <- here::here("dev_twas", "filter_data", "duplicate_snps_bim", paste0(

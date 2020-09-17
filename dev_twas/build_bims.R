@@ -68,13 +68,26 @@ load_rse <- function(feat, reg) {
     message(paste(Sys.time(), "loading expression data"))
 
     # expmnt data
-    load(here("dev_twas", "filter_data", "rda", paste0(opt$region, "_", opt$feature, "_", "hg19_rseGene_n239.Rdata")), verbose = TRUE)
+    load(here("dev_twas", "filter_data", "rda", paste0(opt$region, "_", opt$feature, "_", "hg38_rseGene_n239.RData")), verbose = TRUE)
     ## Could be more complicated later on for exon, jxn, tx
     rse <- rse_gene
     assays(rse)$raw_expr <- assays(rse_gene)$RPKM
 
-    ## Define the main model with effects to remove from the expression
-    load(here("dev_twas", "filter_data", "rda", paste0(opt$region, "_", opt$feature, "_", "genePCs.Rdata")), verbose = TRUE)
+    ## loading all the rse files before running those codes
+    data_dir <- "/users/ylin2/twas/data/"
+    reg_str <- tolower(reg)
+    exp_pc_dir <- paste0(data_dir, "pcs_4features_", reg_str, ".rda")
+    ## loading expression PCs
+    load(exp_pc_dir)
+    if(feat == 'gene') {
+        pcs <- genePCs
+    } else if (feat == 'exon') {
+        pcs <- exonPCs
+    } else if (feat == 'jxn') {
+        pcs <- jxnPCs
+    } else if (feat == 'tx') {
+        pcs <- txPCs
+    }
 
     pd = colData(rse)
     pd$PrimaryDx[pd$PrimaryDx=="Other"] = "Bipolar"
@@ -103,7 +116,7 @@ load_rse <- function(feat, reg) {
 
 }
 
-rse_file <- file.path(paste0(opt$region, "_", opt$feature), 'working_rse.Rdata')
+rse_file <- file.path(paste0(opt$region, "_", opt$feature), 'working_rse.RData')
 
 if (!file.exists(rse_file) == TRUE) {
     message(paste(Sys.time(), "rse file does not already exist, generating now", rse_file))
@@ -162,7 +175,7 @@ table(seqnames(rse))
 print("Final RSE feature dimensions:")
 print(dim(rse))
 
-rse_file_subset <- file.path(paste0(opt$region, "_", opt$feature),"subsetted_rse.Rdata")
+rse_file_subset <- file.path(paste0(opt$region, "_", opt$feature),"subsetted_rse.RData")
 
 if (!file.exists(rse_file_subset)) {
     message(paste(Sys.time(), "saving the subsetted rse file for later at", rse_file_subset))
@@ -202,12 +215,12 @@ brnumerical <- function(x) {
 i <- seq_len(nrow(rse))
 i.names <- rownames(rse)
 
-if (file.exists((file.path("i_info.Rdata")))) {
-    message(Sys.time(), " loading pre-existing i_info.Rdata")
-    load(file.path("i_info.Rdata"), verbose = TRUE)
+if (file.exists((file.path("i_info.RData")))) {
+    message(Sys.time(), " loading pre-existing i_info.RData")
+    load(file.path("i_info.RData"), verbose = TRUE)
 } else {
-    message(Sys.time(), " creating the i_info.Rdata file")
-    save(i, i.names, file = "i_info.Rdata")
+    message(Sys.time(), " creating the i_info.RData file")
+    save(i, i.names, file = "i_info.RData")
 }
 
 message(paste(Sys.time(), "length of i and i.names"))
