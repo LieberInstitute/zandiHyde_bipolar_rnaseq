@@ -17,7 +17,7 @@ dir.create("rda", showWarnings = FALSE)
 data.table::setDTthreads(threads = 1)
 
 spec <- matrix(c(
-    'region', 'r', 1, 'character', 'Either Amygdala, SACC, or DLPFC',
+    'region', 'r', 1, 'character', 'Either Amygdala, SACC',
     'cores', 'c', 1, 'integer', 'Number of cores to use. Use a small number',
     'pgconly', 'p', 1, 'logical', 'Subset to only PGC loci?',
 	'help' , 'h', 0, 'logical', 'Display help'
@@ -29,7 +29,7 @@ opte$feature <- "gene"
 ## Find the samples for this project
 # load("/dcl01/lieber/ajaffe/lab/Nicotine/NAc/RNAseq/paired_end_n239/count_data/NAc_Nicotine_hg38_rseGene_rawCounts_allSamples_n239.rda", verbose = TRUE)
 
-stopifnot(opt$region == c("amygdala", "sacc", "dlpfc"))
+stopifnot(opt$region == c("amygdala", "sacc"))
 
 print(paste0("Loading ", opt$region,  " genotype..."))
 
@@ -37,8 +37,6 @@ if (opt$region == "amygdala"){
     load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_amygdala.rda", verbose = TRUE)
 } else if (opt$region == "sacc"){
     load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_sacc.rda", verbose = TRUE)
-} else if (opt$region == "dlpfc"){
-    load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_dlpfc.rda", verbose = TRUE)
 }
 
 stopifnot(length(unique(rse_gene$BrNum)) == ncol(rse_gene))

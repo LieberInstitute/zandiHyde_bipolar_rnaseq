@@ -24,7 +24,7 @@ setDTthreads(threads = 1)
 ## Specify parameters
 ## Tissues: Amygdala, SACC
 spec <- matrix(c(
-    'region', 'r', 1, 'character', 'Either Amygdala, SACC, or DLPFC',
+    'region', 'r', 1, 'character', 'Either Amygdala, SACC',
     'cores', 'c', 1, 'integer', 'Number of cores to use. Use a small number',
     'pgconly', 'p', 1, 'logical', 'Subset to only PGC loci?',
 	'help' , 'h', 0, 'logical', 'Display help'
@@ -39,7 +39,7 @@ if (FALSE) {
 opt$region <- tolower(opt$region)
 opt$feature <- "gene"
 
-stopifnot(opt$region == c("amygdala", "sacc", "dlpfc"))
+stopifnot(opt$region == c("amygdala", "sacc"))
 
 dir.create(paste0(opt$region, "_", opt$feature), showWarnings = FALSE)
 
