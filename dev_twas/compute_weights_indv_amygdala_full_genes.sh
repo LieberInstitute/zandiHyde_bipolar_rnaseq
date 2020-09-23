@@ -37,7 +37,7 @@ FEATURENUM=$(awk 'BEGIN {FS="\t"} {print $1}' ${FILELIST} | awk "NR==${SGE_TASK_
 FEATUREID=$(awk 'BEGIN {FS="\t"} {print $2}' ${FILELIST} | awk "NR==${SGE_TASK_ID}")
 
 ## Change directories
-cd NAc_gene
+cd amygdala_gene/
 
 ## Define files
 FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/bim_files/amygdala_gene_${FEATURENUM}/filtered_snps_amygdala_gene_${FEATURENUM}"
