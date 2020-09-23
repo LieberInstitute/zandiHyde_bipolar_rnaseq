@@ -1,18 +1,13 @@
 #!/bin/bash
 #$ -cwd
 #$ -l bluejay,mem_free=4G,h_vmem=4G,h_fsize=100G
-#$ -N compute_weights_full_NAc_genes
-#$ -o logs/NAc_genes/compute_weights_indv_full_NAc_genes.$TASK_ID.txt
-#$ -e logs/NAc_genes/compute_weights_indv_full_NAc_genes.$TASK_ID.txt
-#$ -t 1-56888
+#$ -N compute_weights_indv_amygdala_full_genes
+#$ -o logs/amygdala_genes/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
+#$ -e logs/amygdala_genes/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
+#$ -t 1-24886
 #$ -tc 40
 #$ -m a
 
-## Notes on the -t parameter
-# > load("NAc_gene/subsetted_rse.Rdata", verbose = TRUE)
-# > dim(rse)
-# [1] 56888   205
-##
 ## For testing 2 genes by Andrew
 # > which(rownames(rse) %in% c("ENSG00000166435.15", "ENSG00000121716.19"))
 # [1] 21818 31798
@@ -35,7 +30,7 @@ module load conda_R/4.0
 module list
 
 # relative path for FILELIST
-FILELIST=$(echo "/dcl01/lieber/ajaffe/Matt/MNT_thesis/snRNAseq/10x_pilot_FINAL/twas/NAc_gene/input_ids.txt")
+FILELIST=$(echo "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/input_ids.txt")
 
 ## File id and feature name
 FEATURENUM=$(awk 'BEGIN {FS="\t"} {print $1}' ${FILELIST} | awk "NR==${SGE_TASK_ID}")
@@ -45,7 +40,7 @@ FEATUREID=$(awk 'BEGIN {FS="\t"} {print $2}' ${FILELIST} | awk "NR==${SGE_TASK_I
 cd NAc_gene
 
 ## Define files
-FILTBIM="/dcl01/lieber/ajaffe/Matt/MNT_thesis/snRNAseq/10x_pilot_FINAL/twas/NAc_gene/bim_files/NAc_gene_${FEATURENUM}/LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38_filtered_NAc_Nicotine_NAc_gene_${FEATURENUM}"
+FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/bim_files/amygdala_gene_${FEATURENUM}/filtered_snps_amygdala_gene_${FEATURENUM}"
 TMPFILES="tmp_files/genes_${FEATURENUM}"
 OUTFILES="out_files/genes_${FEATURENUM}"
 
