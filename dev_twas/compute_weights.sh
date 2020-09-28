@@ -2,9 +2,9 @@
 #$ -cwd
 #$ -l mem_free=4G,h_vmem=4G,h_fsize=100G
 #$ -pe local 10
-#$ -N compute_weights_full_NAc_genes
+#$ -N compute_weights_full_amygdala_gene
 #$ -j y
-#$ -o logs/compute_weights_full_NAc_genes_$JOB_ID.txt
+#$ -o logs/compute_weights_full_amygdala_gene_$JOB_ID.txt
 
 echo "**** Job starts ****"
 date

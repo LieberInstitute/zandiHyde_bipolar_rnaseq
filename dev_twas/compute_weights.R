@@ -10,14 +10,17 @@ library("BiocParallel")
 
 ## Flags that are supplied with RScript
 spec <- matrix(c(
+    'region', 'r', 1, 'character', 'Either Amygdala, or SACC',
     "cores", "c", 1, "integer", "Number of cores to use. Use a small number",
     "pgconly", "p", 1, "logical", "Subset to only PGC loci?",
     "help", "h", 0, "logical", "Display help"
 ), byrow = TRUE, ncol = 5)
 opt <- getopt(spec)
 
-opt$region <- "NAc"
-opt$feat <- "gene"
+# for testing only, make generalizable later
+opt$region <- "amygdala"
+opt$region <- tolower(opt$region)
+opt$feature <- "gene"
 
 ## if help was asked for print a friendly message
 ## and exit with a non-zero error code
@@ -28,10 +31,10 @@ if (!is.null(opt$help)) {
 ## Not sure what if(FALSE) really does
 if (FALSE) {
     # feat = opt$feature; reg = opt$reg
-    opt <- list(region = "NAc", feature = "gene", cores = 3, "pgconly" = FALSE)
+    opt <- list(region = "amygdala", feature = "gene", cores = 3, "pgconly" = FALSE)
 }
 
-stopifnot(opt$region %in% c("NAc"))
+stopifnot(opt$region %in% c("amygdala"))
 stopifnot(opt$feature %in% c("gene"))
 
 ## Use the rse file from build_bims.R

@@ -2,8 +2,8 @@
 #$ -cwd
 #$ -l bluejay,mem_free=4G,h_vmem=4G,h_fsize=100G
 #$ -N compute_weights_indv_amygdala_full_genes
-#$ -o logs/amygdala_genes/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
-#$ -e logs/amygdala_genes/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
+#$ -o logs/amygdala_gene/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
+#$ -e logs/amygdala_gene/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
 #$ -t 1-24886
 #$ -tc 40
 #$ -m a
