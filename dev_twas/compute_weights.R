@@ -38,17 +38,17 @@ stopifnot(opt$region %in% c("amygdala"))
 stopifnot(opt$feature %in% c("gene"))
 
 ## Use the rse file from build_bims.R
-rse_file <- file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, "_pgconly", "")), "subsetted_rse.Rdata") # can't make .Rdata
+rse_file <- file.path(paste0(opt$region, "_", opt$feature), "subsetted_rse.RData") # can't make .Rdata
 stopifnot(file.exists(rse_file))
 
 
 ## Change to the wd
-setwd(file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, "_pgconly", ""))))
+setwd(file.path(paste0(opt$region, "_", opt$feature)))
 
 
 ## Create the bim files with half the cores used for the later stage
 ## to reduce memory blow up
-load("i_info.Rdata", verbose = TRUE)
+load("i_info.RData", verbose = TRUE)
 
 ## Compute TWAS weights in parallel
 output_status <- bpmapply(function(i, feat_id, clean_bim = FALSE) {
