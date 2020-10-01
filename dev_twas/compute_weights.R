@@ -28,7 +28,7 @@ if (!is.null(opt$help)) {
     cat(getopt(spec, usage = TRUE))
     q(status = 1)
 }
-## Not sure what if(FALSE) really does
+
 if (FALSE) {
     # feat = opt$feature; reg = opt$reg
     opt <- list(region = "amygdala", feature = "gene", cores = 3, "pgconly" = FALSE)
@@ -54,7 +54,7 @@ load("i_info.RData", verbose = TRUE)
 output_status <- bpmapply(function(i, feat_id, clean_bim = FALSE) {
 
     ## Check that the output file exists
-    out_file <- file.path("out_files", paste0(opt$feature, "_", i))
+    out_file <- file.path("out_files", paste0(opt$feature, "_", i, ".hsq"))
 
     ## Clean up
     if (clean_bim) unlink(dirname(filt_bim), recursive = TRUE)
