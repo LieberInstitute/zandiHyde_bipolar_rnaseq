@@ -54,7 +54,7 @@ load("i_info.RData", verbose = TRUE)
 output_status <- bpmapply(function(i, feat_id, clean_bim = FALSE) {
 
     ## Check that the output file exists
-    out_file <- file.path("out_files", paste0(opt$feature, "_", i, ".hsq"))
+    out_file <- file.path("out_files", paste0(opt$feature, "_", i))
 
     ## Clean up
     if (clean_bim) unlink(dirname(filt_bim), recursive = TRUE)

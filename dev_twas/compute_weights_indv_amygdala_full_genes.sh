@@ -41,8 +41,8 @@ cd amygdala_gene/
 
 ## Define files
 FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/bim_files/amygdala_gene_${FEATURENUM}/filtered_snps_amygdala_gene_${FEATURENUM}"
-TMPFILES="tmp_files/genes_${FEATURENUM}"
-OUTFILES="out_files/genes_${FEATURENUM}"
+TMPFILES="tmp_files/gene_${FEATURENUM}"
+OUTFILES="out_files/gene_${FEATURENUM}"
 
 Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R \
     --bfile ${FILTBIM} \
