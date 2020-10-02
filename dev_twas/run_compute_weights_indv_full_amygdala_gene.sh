@@ -22,4 +22,4 @@ mkdir -p amygdala_gene/out_files
 ln -s /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/ amygdala_gene/output
 
 ## For running the main script
-qsub compute_weights_indv_full_NAc_genes.sh
+qsub compute_weights_indv_full_amygdala_gene.sh
