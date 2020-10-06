@@ -5,17 +5,17 @@
 
 mkdir -p logs
 
-for region in DLPFC HIPPO #DentateGyrus
+for region in amygdala #sacc
 do
-    
-    for feature in exon
+
+    for feature in gene
     # for feature in gene exon jxn tx
     do
-        
+
         # set of summary stats
-        for summstats in psycm #pgc2
+        for summstats in pgc
         do
-        
+
             SHORT="apply_weights_full_${region}_${feature}_${summstats}"
 
             # Construct shell file
@@ -47,18 +47,15 @@ module load conda_R/3.6
 module list
 
 ## Choose the correct GWAS summary statistics file
-if [ "${summstats}" == "psycm" ]
+if [ "${summstats}" == "pgc" ]
 then
-    summstatsfile="/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/psycm/clozuk_pgc2.meta.reformatted.sumstats_hg38_ourname"
-elif [ "${summstats}" == "pgc2" ]
-then
-    summstatsfile="/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/PGC2.SCZ.sumstats_hg38_ourname"
+    summstatsfile="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/PGC_BIP_clean.txt"
 else
     echo "Unexpected ${summstats} input"
 fi
 
 ## Apply weights for the given region/feature pair and the given GWAS summary statistics
-mkdir -p ${region}/${feature}/${summstats}
+mkdir -p "${region}_${feature}/${summstats}"
 
 
 for chr in {1..22}
@@ -72,12 +69,11 @@ do
 ## Create summarized analysis
 Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_test.R \
     --sumstats \${summstatsfile} \
-    --weights /dcl01/lieber/ajaffe/lab/twas/bsp2/${region}/${feature}/${region}_${feature}.pos \
-    --weights_dir /dcl01/lieber/ajaffe/lab/twas/bsp2/${region}/${feature} \
-    --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
+    --weights /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/${region}_${feature}.pos \
+    --weights_dir /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/out_files/ \
     --chr \${chr} \
-    --out ${region}/${feature}/${summstats}/${summstats}.\${chr}.dat
-    
+    --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat
+
     echo ""
     echo "making plots for chromosome \${chr}"
     date
@@ -88,8 +84,8 @@ if [ "$feature" == "gene" ]
 then
     Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_process.R \
         --sumstats /\${summstatsfile} \
-        --input ${region}/${feature}/${summstats}/${summstats}.\${chr}.dat \
-        --out ${region}/${feature}/${summstats}/${summstats}.\${chr}.analysis \
+        --input ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat \
+        --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.analysis \
         --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
         --chr \${chr} \
         --plot --locus_win 100000 --verbose 2 --plot_individual --plot_eqtl --plot_corr \
@@ -97,8 +93,8 @@ then
 else
     Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_process.R \
         --sumstats /\${summstatsfile} \
-        --input ${region}/${feature}/${summstats}/${summstats}.\${chr}.dat \
-        --out ${region}/${feature}/${summstats}/${summstats}.\${chr}.analysis \
+        --input ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat \
+        --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.analysis \
         --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
         --chr \${chr} \
         --locus_win 100000 --verbose 2 --plot_corr
