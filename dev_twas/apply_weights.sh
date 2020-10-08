@@ -26,8 +26,8 @@ do
 #$ -cwd
 #$ -l bluejay,mem_free=30G,h_vmem=30G,h_fsize=100G
 #$ -N ${SHORT}
-#$ -o ./logs/${SHORT}.txt
-#$ -e ./logs/${SHORT}.txt
+#$ -o ./logs/${SHORT}_$JOB_ID.txt
+#$ -e ./logs/${SHORT}_$JOB_ID.txt
 #$ -m e
 
 echo "**** Job starts ****"
@@ -41,7 +41,7 @@ echo "Task id: \${TASK_ID}"
 
 ## Load dependencies
 module load fusion_twas/github
-module load conda_R/3.6
+module load conda_R/4.0
 
 ## List current modules
 module list
@@ -49,7 +49,7 @@ module list
 ## Choose the correct GWAS summary statistics file
 if [ "${summstats}" == "pgc" ]
 then
-    summstatsfile="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/PGC_BIP_clean.txt"
+    summstatsfile="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/PGC_BIP_hg38_clean.txt"
 else
     echo "Unexpected ${summstats} input"
 fi
@@ -86,7 +86,6 @@ then
         --sumstats /\${summstatsfile} \
         --input ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat \
         --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.analysis \
-        --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
         --chr \${chr} \
         --plot --locus_win 100000 --verbose 2 --plot_individual --plot_eqtl --plot_corr \
         --glist_path "/jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/glist-hg38"
@@ -95,7 +94,6 @@ else
         --sumstats /\${summstatsfile} \
         --input ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat \
         --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.analysis \
-        --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
         --chr \${chr} \
         --locus_win 100000 --verbose 2 --plot_corr
 fi
