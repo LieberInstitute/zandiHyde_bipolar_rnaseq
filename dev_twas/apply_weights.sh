@@ -26,8 +26,8 @@ do
 #$ -cwd
 #$ -l bluejay,mem_free=30G,h_vmem=30G,h_fsize=100G
 #$ -N ${SHORT}
-#$ -o ./logs/${SHORT}_$JOB_ID.txt
-#$ -e ./logs/${SHORT}_$JOB_ID.txt
+#$ -o ./logs/${SHORT}.txt
+#$ -e ./logs/${SHORT}.txt
 #$ -m e
 
 echo "**** Job starts ****"
@@ -70,7 +70,7 @@ do
 Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_test.R \
     --sumstats \${summstatsfile} \
     --weights /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/${region}_${feature}.pos \
-    --weights_dir /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/out_files/ \
+    --weights_dir /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/ \
     --chr \${chr} \
     --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat
 
