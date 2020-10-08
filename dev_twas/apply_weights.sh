@@ -71,6 +71,7 @@ Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_tes
     --sumstats \${summstatsfile} \
     --weights /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/${region}_${feature}.pos \
     --weights_dir /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/${region}_${feature}/ \
+    --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
     --chr \${chr} \
     --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat
 
@@ -86,6 +87,7 @@ then
         --sumstats /\${summstatsfile} \
         --input ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat \
         --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.analysis \
+        --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
         --chr \${chr} \
         --plot --locus_win 100000 --verbose 2 --plot_individual --plot_eqtl --plot_corr \
         --glist_path "/jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/glist-hg38"
@@ -94,6 +96,7 @@ else
         --sumstats /\${summstatsfile} \
         --input ${region}_${feature}/${summstats}/${summstats}.\${chr}.dat \
         --out ${region}_${feature}/${summstats}/${summstats}.\${chr}.analysis \
+        --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
         --chr \${chr} \
         --locus_win 100000 --verbose 2 --plot_corr
 fi
