@@ -11,8 +11,6 @@ library("sva")
 library("sessioninfo")
 library("getopt")
 
-dir.create("rda", showWarnings = FALSE)
-
 ## To avoid issues with running this code on qsub
 data.table::setDTthreads(threads = 1)
 
@@ -30,6 +28,8 @@ opte$feature <- "gene"
 # load("/dcl01/lieber/ajaffe/lab/Nicotine/NAc/RNAseq/paired_end_n239/count_data/NAc_Nicotine_hg38_rseGene_rawCounts_allSamples_n239.rda", verbose = TRUE)
 
 stopifnot(opt$region == c("amygdala", "sacc"))
+
+dir.create(paste0(opt$region, "_rda"), showWarnings = FALSE)
 
 print(paste0("Loading ", opt$region,  " genotype..."))
 
@@ -102,7 +102,7 @@ save(genePCs, file = paste0("rda/", opt$region, "_", opt$feature, "_", "genePCs.
 colData(rse_gene) <- cbind(colData(rse_gene), genePCs)
 
 ## Save for later
-save(rse_gene, file = paste0("rda/amygdala_gene_hg38_rseGene_n", ncol(rse_gene), ".RData"))
+save(rse_gene, file = paste0("rda/", opt$region, "_gene_hg38_rseGene_n", ncol(rse_gene), ".RData"))
 
 ## Now extract the genotype data too
 filter_m <- match(brnumerical(rse_gene$BrNum), libd_fam$brnumerical)
@@ -114,7 +114,7 @@ fwrite(
 )
 newbfile_root <- paste0("LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38_filtered_", opt$region, "_", opt$feature)
 
-dir.create("duplicate_snps_bim", showWarnings = FALSE)
+dir.create(paste0(opt$region, "_duplicate_snps_bim"), showWarnings = FALSE)
 newbfile <- here::here("dev_twas", "filter_data", "duplicate_snps_bim", paste0(
     newbfile_root,
     "_duplicateSNPs"
@@ -170,7 +170,7 @@ stopifnot(all(!is.na(check_m)))
 
 
 ## Re-run but now make the SNV names unique
-dir.create("unique_snps_bim", showWarnings = FALSE)
+dir.create(paste0(opt$region, "_unique_snps_bim"), showWarnings = FALSE)
 newbfile_unique <- here::here("dev_twas", "filter_data", "unique_snps_bim", paste0(
     newbfile_root,
     "_uniqueSNPs"
