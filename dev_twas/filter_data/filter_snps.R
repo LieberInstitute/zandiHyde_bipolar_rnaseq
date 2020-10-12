@@ -23,11 +23,11 @@ spec <- matrix(c(
 opt <- getopt(spec)
 
 opt$region <- tolower(opt$region)
-opte$feature <- "gene"
+opt$feature <- "gene"
 ## Find the samples for this project
 # load("/dcl01/lieber/ajaffe/lab/Nicotine/NAc/RNAseq/paired_end_n239/count_data/NAc_Nicotine_hg38_rseGene_rawCounts_allSamples_n239.rda", verbose = TRUE)
 
-stopifnot(opt$region == c("amygdala", "sacc"))
+stopifnot(opt$region == "amygdala" | opt$region == "sacc")
 
 dir.create(paste0(opt$region, "_rda"), showWarnings = FALSE)
 
@@ -42,7 +42,7 @@ if (opt$region == "amygdala"){
 stopifnot(length(unique(rse_gene$BrNum)) == ncol(rse_gene))
 ## Note that some rse_gene$BrNums have 0s that the rownames(mds)
 ## don't have
-load("rda/zandiHyde_bipolar_Genotypes_n511.mds", verbose = TRUE)
+load("genotypes/zandiHyde_bipolar_Genotypes_n511.mds", verbose = TRUE)
 
 ## For converting BrNum's into numbers
 brnumerical <- function(x) {
@@ -89,20 +89,20 @@ assays(rse_gene)$RPKM <- getRPKM(rse_gene, "Length")
 ## Compute gene PCs
 message(Sys.time(), " computing gene PCs on log2(RPKM + 1)")
 pcaGene <- prcomp(t(log2(assays(rse_gene)$RPKM + 1)))
-save(pcaGene, file = paste0("rda/", opt$region, "_", opt$feature, "_", "pcaGene.RData"))
+save(pcaGene, file = paste0(opt$region, "_rda/", opt$region, "_", opt$feature, "_", "pcaGene.RData"))
 
 message(Sys.time(), " determine how many gene PCs to adjust for")
 mod <- model.matrix(~ Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5, data = colData(rse_gene))
 kGene <- num.sv(log2(assays(rse_gene)$RPKM + 1), mod)
 stopifnot(kGene > 0)
 genePCs <- pcaGene$x[, seq_len(kGene)]
-save(genePCs, file = paste0("rda/", opt$region, "_", opt$feature, "_", "genePCs.RData"))
+save(genePCs, file = paste0(opt$region, "_rda/", opt$region, "_", opt$feature, "_", "genePCs.RData"))
 
 ## Add gene PCs to rse_gene
 colData(rse_gene) <- cbind(colData(rse_gene), genePCs)
 
 ## Save for later
-save(rse_gene, file = paste0("rda/", opt$region, "_gene_hg38_rseGene_n", ncol(rse_gene), ".RData"))
+save(rse_gene, file = paste0(opt$region, "_rda/", opt$region, "_gene_hg38_rseGene_n", ncol(rse_gene), ".RData"))
 
 ## Now extract the genotype data too
 filter_m <- match(brnumerical(rse_gene$BrNum), libd_fam$brnumerical)

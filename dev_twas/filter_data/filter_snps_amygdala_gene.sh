@@ -2,7 +2,7 @@
 #$ -cwd
 #$ -l mem_free=10G,h_vmem=10G,h_fsize=100G
 #$ -pe local 4
-#$ -N "build_bims_amygdala_gene"
+#$ -N "filter_snps_amygdala_gene"
 #$ -m e
 
 echo "**** Job starts ****"
