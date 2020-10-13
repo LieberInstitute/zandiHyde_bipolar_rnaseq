@@ -71,13 +71,13 @@ load_rse <- function(feat, reg) {
     message(paste(Sys.time(), "loading expression data"))
 
     # expmnt data
-    load(Sys.glob(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(opt$region, "_", opt$feature, "_", "hg38_rseGene_n*.RData"))))
+    load(Sys.glob(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(opt$region, "_", opt$feature, "_", "hg38_rseGene_n*.RData"))), verbose = TRUE)
     ## Could be more complicated later on for exon, jxn, tx
     rse <- rse_gene
     assays(rse)$raw_expr <- assays(rse_gene)$RPKM
 
 
-    load(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(reg, "_", feat, "_", "genePCs.RData"), verbose = TRUE))
+    load(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(reg, "_", feat, "_", "genePCs.RData")), verbose = TRUE)
     pcs <- genePCs
 
     pd = colData(rse)
