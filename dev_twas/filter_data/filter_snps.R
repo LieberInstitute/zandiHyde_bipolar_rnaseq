@@ -14,12 +14,32 @@ library("getopt")
 ## To avoid issues with running this code on qsub
 data.table::setDTthreads(threads = 1)
 
-spec <- matrix(c(
-    'region', 'r', 1, 'character', 'Either Amygdala, SACC',
-    'cores', 'c', 1, 'integer', 'Number of cores to use. Use a small number',
-    'pgconly', 'p', 1, 'logical', 'Subset to only PGC loci?',
-	'help' , 'h', 0, 'logical', 'Display help'
-), byrow=TRUE, ncol=5)
+spec <- matrix(
+    c(
+        'region',
+        'r',
+        1,
+        'character',
+        'Either Amygdala, SACC',
+        'cores',
+        'c',
+        1,
+        'integer',
+        'Number of cores to use. Use a small number',
+        'pgconly',
+        'p',
+        1,
+        'logical',
+        'Subset to only PGC loci?',
+        'help' ,
+        'h',
+        0,
+        'logical',
+        'Display help'
+    ),
+    byrow = TRUE,
+    ncol = 5
+)
 opt <- getopt(spec)
 
 opt$region <- tolower(opt$region)
@@ -33,10 +53,16 @@ dir.create(paste0(opt$region, "_rda"), showWarnings = FALSE)
 
 print(paste0("Loading ", opt$region,  " genotype..."))
 
-if (opt$region == "amygdala"){
-    load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_amygdala.rda", verbose = TRUE)
-} else if (opt$region == "sacc"){
-    load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_sacc.rda", verbose = TRUE)
+if (opt$region == "amygdala") {
+    load(
+        "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_amygdala.rda",
+        verbose = TRUE
+    )
+} else if (opt$region == "sacc") {
+    load(
+        "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_sacc.rda",
+        verbose = TRUE
+    )
 }
 
 stopifnot(length(unique(rse_gene$BrNum)) == ncol(rse_gene))
@@ -49,12 +75,20 @@ brnumerical <- function(x) {
     as.integer(gsub("Br|_.*", "", x))
 }
 
-libd_bfile <- "/dcl01/lieber/ajaffe/Brain/Imputation/Subj_Cleaned/LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38"
+libd_bfile <-
+    "/dcl01/lieber/ajaffe/Brain/Imputation/Subj_Cleaned/LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38"
 
 ## Read the LIBD fam data
 libd_fam <- fread(
     paste0(libd_bfile, ".fam"),
-    col.names = c("famid", "w_famid", "w_famid_fa", "w_famid_mo", "sex_code", "phenotype")
+    col.names = c(
+        "famid",
+        "w_famid",
+        "w_famid_fa",
+        "w_famid_mo",
+        "sex_code",
+        "phenotype"
+    )
 )
 libd_fam$brnumerical <- brnumerical(libd_fam$famid)
 setkey(libd_fam, "brnumerical")
@@ -62,23 +96,26 @@ setkey(libd_fam, "brnumerical")
 ## Filter the LIBD data to the one specific to this project
 # region <- "NAc_Nicotine"
 message(paste(Sys.time(), paste0(opt$region, "_", opt$feature)))
-samp_file <- paste0("samples_to_extract_", paste0(opt$region, "_", opt$feature), ".txt")
+samp_file <-
+    paste0("samples_to_extract_",
+        paste0(opt$region, "_", opt$feature),
+        ".txt")
 
 ## Which NAc samples have genotype data and MDS data?
-samples_in_all <- intersect(
-    intersect(brnumerical(rse_gene$BrNum), libd_fam$brnumerical),
-    brnumerical(rownames(mds))
-)
+samples_in_all <- intersect(intersect(brnumerical(rse_gene$BrNum), libd_fam$brnumerical),
+    brnumerical(rownames(mds)))
 
 ################################
 ## Subset and save all key files
 ################################
-rse_gene <- rse_gene[, brnumerical(rse_gene$BrNum) %in% samples_in_all]
+rse_gene <-
+    rse_gene[, brnumerical(rse_gene$BrNum) %in% samples_in_all]
 
 ## Match rse_gene to mds
-m_to_mds <- match(brnumerical(rse_gene$BrNum), brnumerical(rownames(mds)))
+m_to_mds <-
+    match(brnumerical(rse_gene$BrNum), brnumerical(rownames(mds)))
 stopifnot(all(!is.na(m_to_mds)))
-mds <- mds[m_to_mds, ]
+mds <- mds[m_to_mds,]
 
 ## Append mds to colData
 colData(rse_gene) <- cbind(colData(rse_gene), mds)
@@ -89,44 +126,93 @@ assays(rse_gene)$RPKM <- getRPKM(rse_gene, "Length")
 ## Compute gene PCs
 message(Sys.time(), " computing gene PCs on log2(RPKM + 1)")
 pcaGene <- prcomp(t(log2(assays(rse_gene)$RPKM + 1)))
-save(pcaGene, file = paste0(opt$region, "_rda/", opt$region, "_", opt$feature, "_", "pcaGene.RData"))
+save(
+    pcaGene,
+    file = paste0(
+        opt$region,
+        "_rda/",
+        opt$region,
+        "_",
+        opt$feature,
+        "_",
+        "pcaGene.RData"
+    )
+)
 
 message(Sys.time(), " determine how many gene PCs to adjust for")
-mod <- model.matrix(~ Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5, data = colData(rse_gene))
+mod <-
+    model.matrix( ~ Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5, data = colData(rse_gene))
 kGene <- num.sv(log2(assays(rse_gene)$RPKM + 1), mod)
 stopifnot(kGene > 0)
 genePCs <- pcaGene$x[, seq_len(kGene)]
-save(genePCs, file = paste0(opt$region, "_rda/", opt$region, "_", opt$feature, "_", "genePCs.RData"))
+save(
+    genePCs,
+    file = paste0(
+        opt$region,
+        "_rda/",
+        opt$region,
+        "_",
+        opt$feature,
+        "_",
+        "genePCs.RData"
+    )
+)
 
 ## Add gene PCs to rse_gene
 colData(rse_gene) <- cbind(colData(rse_gene), genePCs)
 
 ## Save for later
-save(rse_gene, file = paste0(opt$region, "_rda/", opt$region, "_gene_hg38_rseGene_n", ncol(rse_gene), ".RData"))
+save(
+    rse_gene,
+    file = paste0(
+        opt$region,
+        "_rda/",
+        opt$region,
+        "_gene_hg38_rseGene_n",
+        ncol(rse_gene),
+        ".RData"
+    )
+)
 
 ## Now extract the genotype data too
 filter_m <- match(brnumerical(rse_gene$BrNum), libd_fam$brnumerical)
 stopifnot(all(!is.na(filter_m)))
-fwrite(
-    libd_fam[filter_m, 1:2], ## can be more involved
+fwrite(libd_fam[filter_m, 1:2],
+    ## can be more involved
     file = samp_file,
-    sep = "\t", col.names = FALSE
-)
-newbfile_root <- paste0("LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38_filtered_", opt$region, "_", opt$feature)
+    sep = "\t",
+    col.names = FALSE)
+newbfile_root <-
+    paste0(
+        "LIBD_merged_h650_1M_Omni5M_Onmi2pt5_Macrogen_QuadsPlus_dropBrains_maf01_hwe6_geno10_hg38_filtered_",
+        opt$region,
+        "_",
+        opt$feature
+    )
 
 dir.create(paste0(opt$region, "_duplicate_snps_bim"), showWarnings = FALSE)
-newbfile <- here::here("dev_twas", "filter_data", "duplicate_snps_bim", paste0(
-    newbfile_root,
-    "_duplicateSNPs"
-))
+newbfile <-
+    here::here(
+        "dev_twas",
+        "filter_data",
+        paste0(opt$region, "_duplicate_snps_bim"),
+        paste0(newbfile_root,
+            "_duplicateSNPs")
+    )
 
 ## Extract
 message(paste(Sys.time(), "running bfile extract for", newbfile))
-system(paste(
-    "plink --bfile", libd_bfile,
-    "--keep", samp_file, "--make-bed --out",
-    newbfile, " --memory 100000 --biallelic-only"
-))
+system(
+    paste(
+        "plink --bfile",
+        libd_bfile,
+        "--keep",
+        samp_file,
+        "--make-bed --out",
+        newbfile,
+        " --memory 100000 --biallelic-only"
+    )
+)
 
 # PLINK v1.90b6.6 64-bit (10 Oct 2018)           www.cog-genomics.org/plink/1.9/
 # (C) 2005-2018 Shaun Purcell, Christopher Chang   GNU General Public License v3
@@ -162,27 +248,47 @@ system(paste(
 
 
 ## Check that we have the right data
-newbfile_fam <- fread(paste0(newbfile, ".fam"),
-    col.names = c("famid", "w_famid", "w_famid_fa", "w_famid_mo", "sex_code", "phenotype")
+newbfile_fam <- fread(
+    paste0(newbfile, ".fam"),
+    col.names = c(
+        "famid",
+        "w_famid",
+        "w_famid_fa",
+        "w_famid_mo",
+        "sex_code",
+        "phenotype"
+    )
 )
-check_m <- match(brnumerical(newbfile_fam$famid), brnumerical(colData(rse_gene)$BrNum))
+check_m <-
+    match(brnumerical(newbfile_fam$famid),
+        brnumerical(colData(rse_gene)$BrNum))
 stopifnot(all(!is.na(check_m)))
 
 
 ## Re-run but now make the SNV names unique
 dir.create(paste0(opt$region, "_unique_snps_bim"), showWarnings = FALSE)
-newbfile_unique <- here::here("dev_twas", "filter_data", "unique_snps_bim", paste0(
-    newbfile_root,
-    "_uniqueSNPs"
-))
+newbfile_unique <-
+    here::here(
+        "dev_twas",
+        "filter_data",
+        paste0(opt$region, "_unique_snps_bim"),
+        paste0(newbfile_root,
+            "_uniqueSNPs")
+    )
 
 ## Extract again (could also copy and rename, but it's fast this way)
 message(paste(Sys.time(), "running bfile extract for", newbfile_unique))
-system(paste(
-    "plink --bfile", libd_bfile,
-    "--keep", samp_file, "--make-bed --out",
-    newbfile_unique, " --memory 100000 --biallelic-only"
-))
+system(
+    paste(
+        "plink --bfile",
+        libd_bfile,
+        "--keep",
+        samp_file,
+        "--make-bed --out",
+        newbfile_unique,
+        " --memory 100000 --biallelic-only"
+    )
+)
 
 
 message(paste(Sys.time(), "reading the bim file", newbfile_unique))
@@ -206,7 +312,12 @@ bim$snp <- make.names(bim$snp, unique = TRUE)
 stopifnot(all(!duplicated(bim$snp)))
 
 ## Ovewrite the PLINK bim file
-fwrite(bim, file = paste0(newbfile_unique, ".bim"), sep = " ", col.names = FALSE)
+fwrite(
+    bim,
+    file = paste0(newbfile_unique, ".bim"),
+    sep = " ",
+    col.names = FALSE
+)
 
 
 ## Reproducibility information
