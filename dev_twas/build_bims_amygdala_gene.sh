@@ -2,10 +2,10 @@
 #$ -cwd
 #$ -l bluejay,mem_free=10G,h_vmem=10G,h_fsize=100G
 #$ -pe local 10
-#$ -N "build_bims_amygdala_genes"
+#$ -N "build_bims_amygdala_gene"
 #$ -m e
 #$ -j y
-#$ -o logs/build_bims_amygdala_genes_$JOB_ID.txt
+#$ -o logs/build_bims_amygdala_gene_$JOB_ID.txt
 
 echo "**** Job starts ****"
 date
@@ -25,7 +25,7 @@ module load conda_R/4.0
 module list
 
 ## Compute weights for the given region/feature pair
-Rscript build_bims.R -c 10 
+Rscript build_bims.R -c 10 -r "amygdala"
 
 echo "**** Job ends ****"
 date
