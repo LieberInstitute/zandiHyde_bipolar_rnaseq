@@ -27,5 +27,7 @@ module list
 ## Compute weights for the given region/feature pair
 Rscript build_bims.R -c 10 -r "sacc"
 
+mkdir -p logs/sacc_gene/
+
 echo "**** Job ends ****"
 date

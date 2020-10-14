@@ -1,9 +1,9 @@
 #!/bin/bash
 #$ -cwd
 #$ -l bluejay,mem_free=4G,h_vmem=4G,h_fsize=100G
-#$ -N compute_weights_indv_amygdala_full_genes
+#$ -N compute_weights_indv_sacc_full_genes
+#$ -j y
 #$ -o logs/sacc_gene/compute_weights_indv_sacc_full_gene.$TASK_ID.txt
-#$ -e logs/sacc_gene/compute_weights_indv_sacc_full_gene.$TASK_ID.txt
 #$ -t 1-24886
 #$ -tc 40
 #$ -m a
