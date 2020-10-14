@@ -218,7 +218,7 @@ brnumerical <- function(x) {
 i <- seq_len(nrow(rse))
 i.names <- rownames(rse)
 
-if (file.exists((file.path("i_info.RData")))) {
+if (file.exists(file.path("i_info.RData"))) {
     message(Sys.time(), " loading pre-existing i_info.RData")
     load(file.path("i_info.RData"), verbose = TRUE)
 } else {

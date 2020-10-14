@@ -2,8 +2,8 @@
 #$ -cwd
 #$ -l bluejay,mem_free=4G,h_vmem=4G,h_fsize=100G
 #$ -N compute_weights_indv_amygdala_full_genes
-#$ -o logs/amygdala_gene/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
-#$ -e logs/amygdala_gene/compute_weights_indv_amygdala_full_genes.$TASK_ID.txt
+#$ -o logs/sacc_gene/compute_weights_indv_sacc_full_gene.$TASK_ID.txt
+#$ -e logs/sacc_gene/compute_weights_indv_sacc_full_gene.$TASK_ID.txt
 #$ -t 1-24886
 #$ -tc 40
 #$ -m a
@@ -30,19 +30,19 @@ module load conda_R/4.0
 module list
 
 # relative path for FILELIST
-FILELIST=$(echo "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/input_ids.txt")
+FILELIST=$(echo "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/sacc_gene/input_ids.txt")
 
 ## File id and feature name
 FEATURENUM=$(awk 'BEGIN {FS="\t"} {print $1}' ${FILELIST} | awk "NR==${SGE_TASK_ID}")
 FEATUREID=$(awk 'BEGIN {FS="\t"} {print $2}' ${FILELIST} | awk "NR==${SGE_TASK_ID}")
 
 ## Change directories
-cd amygdala_gene/
+cd sacc_gene/
 mkdir tmp_files/
 mkdir out_files/
 
 ## Define files
-FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/bim_files/amygdala_gene_${FEATURENUM}/filtered_snps_amygdala_gene_${FEATURENUM}"
+FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/sacc_gene/bim_files/sacc_gene_${FEATURENUM}/filtered_snps_sacc_gene_${FEATURENUM}"
 TMPFILES="tmp_files/gene_${FEATURENUM}"
 OUTFILES="out_files/gene_${FEATURENUM}"
 

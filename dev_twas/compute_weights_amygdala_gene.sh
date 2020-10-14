@@ -24,7 +24,7 @@ module load conda_R/4.0
 module list
 
 ## Compute weights for the given region/feature pair
-Rscript compute_weights.R -c 10
+Rscript compute_weights.R -c 10 -r "amygdala"
 
 echo "**** Job ends ****"
 date

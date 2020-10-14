@@ -5,7 +5,7 @@
 
 mkdir -p logs
 
-for region in amygdala #sacc
+for region in amygdala sacc
 do
 
     for feature in gene
