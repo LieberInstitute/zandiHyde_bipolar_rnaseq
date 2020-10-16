@@ -18,7 +18,6 @@ spec <- matrix(c(
 opt <- getopt(spec)
 
 # for testing only, make generalizable later
-opt$region <- "amygdala"
 opt$region <- tolower(opt$region)
 opt$feature <- "gene"
 
@@ -34,7 +33,7 @@ if (FALSE) {
     opt <- list(region = "amygdala", feature = "gene", cores = 3, "pgconly" = FALSE)
 }
 
-stopifnot(opt$region %in% c("amygdala"))
+stopifnot(opt$region %in% c("amygdala", "sacc"))
 stopifnot(opt$feature %in% c("gene"))
 
 ## Use the rse file from build_bims.R

@@ -36,15 +36,10 @@ FILELIST=$(echo "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amyg
 FEATURENUM=$(awk 'BEGIN {FS="\t"} {print $1}' ${FILELIST} | awk "NR==${SGE_TASK_ID}")
 FEATUREID=$(awk 'BEGIN {FS="\t"} {print $2}' ${FILELIST} | awk "NR==${SGE_TASK_ID}")
 
-## Change directories
-cd amygdala_gene/
-mkdir tmp_files/
-mkdir out_files/
-
 ## Define files
 FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/amygdala_gene/bim_files/amygdala_gene_${FEATURENUM}/filtered_snps_amygdala_gene_${FEATURENUM}"
-TMPFILES="tmp_files/gene_${FEATURENUM}"
-OUTFILES="out_files/gene_${FEATURENUM}"
+TMPFILES="amygdala_gene/tmp_files/gene_${FEATURENUM}"
+OUTFILES="amygdala_gene/out_files/gene_${FEATURENUM}"
 
 Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R \
     --bfile ${FILTBIM} \
