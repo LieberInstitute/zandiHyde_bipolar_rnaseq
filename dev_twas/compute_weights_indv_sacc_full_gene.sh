@@ -1,7 +1,7 @@
 #!/bin/bash
 #$ -cwd
 #$ -l bluejay,mem_free=4G,h_vmem=4G,h_fsize=100G
-#$ -N compute_weights_indv_sacc_full_genes
+#$ -N compute_weights_indv_sacc_full_gene
 #$ -j y
 #$ -o logs/sacc_gene/compute_weights_indv_sacc_full_gene.$TASK_ID.txt
 #$ -t 1-24886
@@ -38,8 +38,10 @@ FEATUREID=$(awk 'BEGIN {FS="\t"} {print $2}' ${FILELIST} | awk "NR==${SGE_TASK_I
 
 ## Define files
 FILTBIM="/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/sacc_gene/bim_files/sacc_gene_${FEATURENUM}/filtered_snps_sacc_gene_${FEATURENUM}"
-TMPFILES="sacc_gene/tmp_files/gene_${FEATURENUM}"
-OUTFILES="sacc_gene/out_files/gene_${FEATURENUM}"
+TMPFILES="tmp_files/gene_${FEATURENUM}"
+OUTFILES="out_files/gene_${FEATURENUM}"
+
+cd sacc_gene/
 
 Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R \
     --bfile ${FILTBIM} \
