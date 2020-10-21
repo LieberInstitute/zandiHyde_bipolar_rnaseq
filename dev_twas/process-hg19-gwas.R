@@ -111,11 +111,11 @@ hg38_gwas <- hg38_gwas[, ..col_order]
 hg38_gwas$effect <- log(hg38_gwas$OR)
 hg38_gwas$Z <- hg38_gwas$effect / hg38_gwas$SE
 
-png(file = "PGC_BIP_hg38_hist.png",
-    width = 1200,
-    height = 720)
+pdf(file = "PGC_BIP_hg38_hist.png.pdf", useDingbats = FALSE)
+
 hist(hg38_gwas$effect, color = "gold")
 hist(hg38_gwas$Z, color = "darkorange")
+
 dev.off()
 
 hg38_gwas_clean <-
