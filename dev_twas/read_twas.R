@@ -15,12 +15,12 @@ library("gplots")
 library("VennDiagram")
 library("RColorBrewer")
 library("readr")
+library("here")
 
 ## Main options to work through
-# regions <- c('DLPFC', 'HIPPO', 'DentateGyrus')
-regions <- c("DLPFC", "HIPPO")
-types <- c("psycm")
-features <- c("gene", "exon", "jxn", "tx")
+regions <- c("amygdala", "sacc")
+types <- c("pgc")
+features <- "gene"
 file_types <- c("all", "included", "dropped")
 
 ## Function for locating the files
@@ -76,9 +76,8 @@ twas <- map(file_types, function(ftype) {
 
         ## Construct the path to the files
         path <- file.path(
-            "/dcl01/lieber/ajaffe/lab/twas/bsp2",
-            region,
-            feature,
+            "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas",
+            paste0(region,"_",feature),
             type
         )
 
@@ -114,60 +113,32 @@ names(twas) <- file_types
 ## Explore the resulting dimensions
 map_dfr(twas, dim)
 # # A tibble: 2 x 3
-#      all included dropped
-#    <int>    <int>   <int>
-# 1 853135     1621  670957
-# 2     24       12      12
+#     all included dropped
+#   <int>    <int>   <int>
+# 1 31609       79   16136
+# 2    24       12      12
 
 ## Save the data for later use
-dir.create("rda", showWarnings = FALSE)
-save(twas, file = "rda/twas.Rdata")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# dir.create("rda", showWarnings = FALSE)
+# save(twas, file = "rda/twas.Rdata")
 
 ## Read in the RSE info
 ## adapted from https://github.com/LieberInstitute/brainseq_phase2/blob/master/development/load_funs.R
 load_rse <- function(type) {
-    load_file <- file.path(
-        "/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/unfiltered/",
-        paste0("rse_", type, "_unfiltered.Rdata")
-    )
+
+    # expmnt data
+    load_file <- Sys.glob(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(opt$region, "_", opt$feature, "_", "hg38_rseGene_n*.RData")))
+
+    # load_file <- file.path(
+    #     "/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/unfiltered/",
+    #     paste0("rse_", type, "_unfiltered.Rdata")
+    # )
+
     stopifnot(file.exists(load_file))
     load(load_file)
 
     ## Get the appropriate object
-    if (type == "gene") {
-        rse <- rse_gene
-    } else if (type == "exon") {
-        ## Drop those 4 exons not present in BrainSpan
-        # rse <- rse_exon[-c(175584, 175585, 175586, 175604), ]
-        rse <- rse_exon
-    } else if (type == "jxn") {
-        rse <- rse_jxn
-    } else if (type == "tx") {
-        rse <- rse_tx
-    }
-    ## Keep controls only
-    # rse <- rse[, colData(rse)$Dx == 'Control']
+    rse <- rse_gene
 
     return(rse)
 }
@@ -227,25 +198,7 @@ names(twas_exp) <- names(twas)
 dir.create("rda", showWarnings = FALSE)
 save(twas_exp, file = "rda/twas_exp.Rdata")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+################################################ end of issue #1
 
 
 source("/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/twas_functions.R")
