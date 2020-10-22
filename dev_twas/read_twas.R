@@ -16,6 +16,22 @@ library("VennDiagram")
 library("RColorBrewer")
 library("readr")
 library("here")
+library("getopt")
+
+spec <- matrix(c(
+    'region', 'r', 1, 'character', 'Either Amygdala or SACC'
+), byrow=TRUE, ncol=5)
+
+opt <- getopt(spec)
+
+# Redundant to do this but just keeping the flag options
+# in here in case it makes a difference which brain
+# subregion we source our rse from
+opt$region <- "sacc"
+
+opt$region <- tolower(opt$region)
+
+stopifnot(opt$region == c("amygdala", "sacc"))
 
 ## Main options to work through
 regions <- c("amygdala", "sacc")
@@ -127,12 +143,7 @@ map_dfr(twas, dim)
 load_rse <- function(type) {
 
     # expmnt data
-    load_file <- Sys.glob(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(opt$region, "_", opt$feature, "_", "hg38_rseGene_n*.RData")))
-
-    # load_file <- file.path(
-    #     "/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/unfiltered/",
-    #     paste0("rse_", type, "_unfiltered.Rdata")
-    # )
+    load_file <- Sys.glob(here("dev_twas", "filter_data", paste0(opt$region, "_rda"), paste0(opt$region, "_", features, "_", "hg38_rseGene_n*.RData")))
 
     stopifnot(file.exists(load_file))
     load(load_file)
