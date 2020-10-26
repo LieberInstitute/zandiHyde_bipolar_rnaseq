@@ -1,9 +1,9 @@
-library(hudson)
 library(ggplot2)
 library(ggrepel)
 library(dplyr)
 library(data.table)
-library(RColorBrewer)
+library(plotly)
+library(htmlwidgets)
 
 load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/rda/twas_exp_ranges.Rdata")
 
@@ -33,8 +33,9 @@ don <- twas_z %>%
 
 axisdf = don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
 
-pdf()
-ggplot(don, aes(x=BPcum, y=TWAS.Z)) +
+pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
+# storing ggplot as an object
+p <- ggplot(don, aes(x=BPcum, y=TWAS.Z)) +
 
     # Show all points
     geom_point( aes(color=as.factor(CHR)), alpha=0.8, size=1.3) +
@@ -51,5 +52,12 @@ ggplot(don, aes(x=BPcum, y=TWAS.Z)) +
       panel.border = element_blank(),
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank()
-    )
+)
+
+p
+
 dev.off()
+
+##### Plotly
+intctv_plot <- ggplotly(p, tooltip = "text")
+saveWidget(intctv_plot, "index.html")
