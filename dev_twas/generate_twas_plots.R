@@ -5,15 +5,15 @@ library(data.table)
 library(plotly)
 library(htmlwidgets)
 
-load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/dev_twas/rda/twas_exp_ranges.Rdata")
+load("rda/twas_exp_ranges.Rdata")
 
-# Filter N/A z scores
+# Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
-twas_z_sacc <- twas_z[twas_z$region == "sacc",]
-
-twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
-
+# Separate tables by region just in case
+# twas_z_sacc <- twas_z[twas_z$region == "sacc",]
+#
+# twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
 
 don <- twas_z %>%
     # Compute chromosome size
@@ -29,30 +29,52 @@ don <- twas_z %>%
 
     # Add a cumulative position of each SNP
     arrange(CHR, twas_mean_dist) %>%
-    mutate(BPcum = twas_mean_dist + tot)
+    mutate(BPcum = twas_mean_dist + tot) %>%
+    # Filter SNP to make the plot lighter
+    filter(-log10(TWAS.P) > 0.5)
 
-axisdf = don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+axisdf = don %>% group_by(CHR) %>% summarize(center = (max(BPcum) + min(BPcum)) / 2)
+
+# Prepare text description for each SNP:
+don$text <-
+    paste0(
+        "Gene: ",
+        don$geneid,
+        "\nBrain Subregion: ",
+        don$region,
+        "\nStart Position: ",
+        don$start,
+        "\nEnd Position: ",
+        don$end,
+        "\nChromosome: ",
+        don$CHR,
+        "\nZ score: ",
+        don$TWAS.Z %>% round(2)
+    )
+
+don_key <- highlight_key(don, ~ geneid, group = "ENSEMBL Gene ID")
 
 pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object
-p <- ggplot(don, aes(x=BPcum, y=TWAS.Z)) +
+p <- ggplot(don_key, aes(x = BPcum, y = TWAS.Z, text = text)) +
 
+    ggtitle("Gene Windows of both sACC and Amygdala TWAS") +
     # Show all points
-    geom_point( aes(color=as.factor(CHR)), alpha=0.8, size=1.3) +
-    scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22 )) +
+    geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
+    scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
 
     # custom X axis:
-    scale_x_continuous( label = axisdf$CHR, breaks= axisdf$center ) +
-    scale_y_continuous(expand = c(0, 0) ) +     # remove space between plot area and x axis
+    scale_x_continuous(label = axisdf$CHR, breaks = axisdf$center) +
+    scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
 
     # Custom the theme:
     theme_bw() +
     theme(
-      legend.position="none",
-      panel.border = element_blank(),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank()
-)
+        legend.position = "none",
+        panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()
+    )
 
 p
 
@@ -60,4 +82,13 @@ dev.off()
 
 ##### Plotly
 intctv_plot <- ggplotly(p, tooltip = "text")
-saveWidget(intctv_plot, "index.html")
+
+fin_plot <- highlight(
+    intctv_plot,
+    on = "plotly_click",
+    off = "plotly_doubleclick",
+    color = "#60D394",
+    selectize = TRUE
+)
+
+saveWidget(fin_plot, "BIP_TWAS_ManhattanPlotly.html")
