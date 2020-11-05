@@ -12,9 +12,9 @@ load("rda/twas_exp_ranges.Rdata")
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
-twas_z_sacc <- twas_z[twas_z$region == "sacc", ]
+twas_z_sacc <- twas_z[twas_z$region == "sacc",]
 
-twas_z_amyg <- twas_z[twas_z$region == "amygdala", ]
+twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
 
 don <- list(twas_z_amyg, twas_z_sacc)
 
@@ -32,23 +32,24 @@ fin_plot <- list()
 # don[[2]]$region
 
 for (i in 1:2) {
-    don[[i]] <-  as.data.table(ifelse(i == 1, twas_z_amyg, twas_z_sacc))%>%
-    # Compute chromosome size
-    group_by(CHR) %>%
-    summarise(chr_len = max(end)) %>%
+    don[[i]] <-
+        ifelse(i == 1, twas_z_amyg, twas_z_sacc) %>%
+        # Compute chromosome size
+        group_by(CHR) %>%
+        summarise(chr_len = max(end)) %>%
 
-    # Calculate cumulative position of each chromosome
-    mutate(tot = cumsum(as.numeric(chr_len)) - chr_len) %>%
-    select(-chr_len) %>%
+        # Calculate cumulative position of each chromosome
+        mutate(tot = cumsum(as.numeric(chr_len)) - chr_len) %>%
+        select(-chr_len) %>%
 
-    # Add this info to the initial dataset
-    left_join(ifelse(i == 1, twas_z_amyg, twas_z_sacc),
-        .,
-        by = c("CHR" = "CHR")) %>%
+        # Add this info to the initial dataset
+        left_join(ifelse(i == 1, twas_z_amyg, twas_z_sacc),
+            .,
+            by = c("CHR" = "CHR")) %>%
 
-    # Add a cumulative position of each SNP
-    arrange(CHR, twas_mean_dist) %>%
-    mutate(BPcum = twas_mean_dist + tot)
+        # Add a cumulative position of each SNP
+        arrange(CHR, twas_mean_dist) %>%
+        mutate(BPcum = twas_mean_dist + tot)
 
 
 # axisdf[[i]] =
