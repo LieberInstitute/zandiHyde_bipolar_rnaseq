@@ -61,31 +61,38 @@ don[[i]]$text <-
 don_key[[i]] <-
     highlight_key(don[[i]], ~ geneid, group = "ENSEMBL Gene ID")
 }
+# # Had to make sure these two were different
+# test_thing_1 <- don_key[[1]]$data()
+# test_thing_2 <- don_key[[2]]$data()
+# md5(stri_paste(test_thing_1, collapse = ''))
+# md5(stri_paste(test_thing_2, collapse = ''))
 
 pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
-# storing ggplot as an object
-p <- ggplot(don_key, aes(x = BPcum, y = TWAS.Z, text = text)) +
+# storing ggplot as an object3
+for (i in 1:2) {
+    p[[i]] <-
+        ggplot(don_key[[i]], aes(x = BPcum, y = TWAS.Z, text = text)) +
 
-    ggtitle("Gene Windows of both sACC and Amygdala TWAS") +
-    # Show all points
-    geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
-    scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
+        ggtitle(paste0("Gene Windows of ", ifelse(i == 1, "Amygdala", "sACC") , " TWAS")) +
+        # Show all points
+        geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
+        scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
 
-    # custom X axis:
-    scale_x_continuous(label = axisdf$CHR, breaks = axisdf$center) +
-    scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+        # custom X axis:
+        scale_x_continuous(label = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
+        scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
 
-    # Custom the theme:
-    theme_bw() +
-    theme(
-        legend.position = "none",
-        panel.border = element_blank(),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank()
-    )
+        # Custom the theme:
+        theme_bw() +
+        theme(
+            legend.position = "none",
+            panel.border = element_blank(),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.x = element_blank()
+        )
 
-p
-
+    print(p[[i]])
+}
 dev.off()
 
 ##### Plotly
