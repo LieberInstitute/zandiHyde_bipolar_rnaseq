@@ -12,10 +12,25 @@ load("rda/twas_exp_ranges.Rdata")
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
-# Separate tables by region just in case
-# twas_z_sacc <- twas_z[twas_z$region == "sacc",]
-#
-# twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
+twas_z_sacc <- twas_z[twas_z$region == "sacc", ]
+
+twas_z_amyg <- twas_z[twas_z$region == "amygdala", ]
+
+don <- list(twas_z_amyg, twas_z_sacc)
+
+axisdf <- list()
+
+don_key <- list()
+
+p <- list()
+
+intctv_plot <- list()
+
+fin_plot <- list()
+
+# don[[1]]$region
+# don[[2]]$region
+
 for (i in 1:2) {
     don[[i]] <-  as.data.table(ifelse(i == 1, twas_z_amyg, twas_z_sacc))%>%
     # Compute chromosome size
