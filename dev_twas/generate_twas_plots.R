@@ -4,6 +4,8 @@ library(dplyr)
 library(data.table)
 library(plotly)
 library(htmlwidgets)
+library(openssl)
+library(stringi)
 
 load("rda/twas_exp_ranges.Rdata")
 
@@ -14,8 +16,8 @@ twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 # twas_z_sacc <- twas_z[twas_z$region == "sacc",]
 #
 # twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
-
-don <- twas_z %>%
+for (i in 1:2) {
+    don[[i]] <-  as.data.table(ifelse(i == 1, twas_z_amyg, twas_z_sacc))%>%
     # Compute chromosome size
     group_by(CHR) %>%
     summarise(chr_len = max(end)) %>%
@@ -25,34 +27,40 @@ don <- twas_z %>%
     select(-chr_len) %>%
 
     # Add this info to the initial dataset
-    left_join(twas_z, ., by = c("CHR" = "CHR")) %>%
+    left_join(ifelse(i == 1, twas_z_amyg, twas_z_sacc),
+        .,
+        by = c("CHR" = "CHR")) %>%
 
     # Add a cumulative position of each SNP
     arrange(CHR, twas_mean_dist) %>%
-    mutate(BPcum = twas_mean_dist + tot) %>%
-    # Filter SNP to make the plot lighter
-    filter(-log10(TWAS.P) > 0.5)
+    mutate(BPcum = twas_mean_dist + tot)
 
-axisdf = don %>% group_by(CHR) %>% summarize(center = (max(BPcum) + min(BPcum)) / 2)
+
+# axisdf[[i]] =
+don[[i]] %>% group_by(CHR) %>% summarise(center = (max(BPcum) + min(BPcum)) / 2)
 
 # Prepare text description for each SNP:
-don$text <-
+don[[i]]$text <-
     paste0(
         "Gene: ",
-        don$geneid,
+        don[[i]]$geneid,
+        "\nGene Symbol: ",
+        don[[i]]$genesymbol,
         "\nBrain Subregion: ",
-        don$region,
+        don[[i]]$region,
         "\nStart Position: ",
-        don$start,
+        don[[i]]$start,
         "\nEnd Position: ",
-        don$end,
+        don[[i]]$end,
         "\nChromosome: ",
-        don$CHR,
+        don[[i]]$CHR,
         "\nZ score: ",
-        don$TWAS.Z %>% round(2)
+        don[[i]]$TWAS.Z %>% round(2)
     )
 
-don_key <- highlight_key(don, ~ geneid, group = "ENSEMBL Gene ID")
+don_key[[i]] <-
+    highlight_key(don[[i]], ~ geneid, group = "ENSEMBL Gene ID")
+}
 
 pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object
