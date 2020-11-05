@@ -95,15 +95,22 @@ for (i in 1:2) {
 }
 dev.off()
 
-##### Plotly
-intctv_plot <- ggplotly(p, tooltip = "text")
+for (i in 1:2) {
+    ##### Plotly
+    intctv_plot[[i]] <- ggplotly(p[[i]], tooltip = "text")
 
-fin_plot <- highlight(
-    intctv_plot,
-    on = "plotly_click",
-    off = "plotly_doubleclick",
-    color = "#60D394",
-    selectize = TRUE
-)
+    fin_plot[[i]] <- highlight(
+        intctv_plot[[i]],
+        on = "plotly_click",
+        off = "plotly_doubleclick",
+        color = "#60D394",
+        selectize = TRUE
+    )
 
-saveWidget(fin_plot, "BIP_TWAS_ManhattanPlotly.html")
+    saveWidget(fin_plot[[i]],
+        paste0(
+            "BIP_TWAS_",
+            ifelse(i == 1, "Amygdala", "sACC"),
+            "ManhattanPlotly.html"
+        ))
+}
