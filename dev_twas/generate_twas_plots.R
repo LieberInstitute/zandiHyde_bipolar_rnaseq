@@ -80,7 +80,7 @@ for (i in 1:2) {
         )
 
     don_key[[i]] <-
-        highlight_key(don[[i]], ~ geneid, group = "ENSEMBL Gene ID")
+        highlight_key(don[[i]], ~ genesymbol, group = "Gene Symbol")
 }
 # # Had to make sure these two were different
 # test_thing_1 <- don_key[[1]]$data()
