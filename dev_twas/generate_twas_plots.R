@@ -16,7 +16,7 @@ twas_z_sacc <- twas_z[twas_z$region == "sacc",]
 
 twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
 
-don <- list(twas_z_amyg, twas_z_sacc)
+don <- list()
 
 axisdf <- list()
 
@@ -31,9 +31,17 @@ fin_plot <- list()
 # don[[1]]$region
 # don[[2]]$region
 
+
+
 for (i in 1:2) {
+    if (i == 1) {
+        twas_var <- twas_z_amyg
+    } else{
+        twas_var <- twas_z_sacc
+    }
+
     don[[i]] <-
-        ifelse(i == 1, twas_z_amyg, twas_z_sacc) %>%
+        twas_var %>%
         # Compute chromosome size
         group_by(CHR) %>%
         summarise(chr_len = max(end)) %>%
@@ -43,7 +51,7 @@ for (i in 1:2) {
         select(-chr_len) %>%
 
         # Add this info to the initial dataset
-        left_join(ifelse(i == 1, twas_z_amyg, twas_z_sacc),
+        left_join(twas_var,
             .,
             by = c("CHR" = "CHR")) %>%
 
@@ -52,30 +60,29 @@ for (i in 1:2) {
         mutate(BPcum = twas_mean_dist + tot)
 
 
-# axisdf[[i]] =
-don[[i]] %>% group_by(CHR) %>% summarise(center = (max(BPcum) + min(BPcum)) / 2)
+    axisdf[[i]] = don[[i]] %>% group_by(CHR) %>% summarise(center = (max(BPcum) + min(BPcum)) / 2)
 
-# Prepare text description for each SNP:
-don[[i]]$text <-
-    paste0(
-        "Gene: ",
-        don[[i]]$geneid,
-        "\nGene Symbol: ",
-        don[[i]]$genesymbol,
-        "\nBrain Subregion: ",
-        don[[i]]$region,
-        "\nStart Position: ",
-        don[[i]]$start,
-        "\nEnd Position: ",
-        don[[i]]$end,
-        "\nChromosome: ",
-        don[[i]]$CHR,
-        "\nZ score: ",
-        don[[i]]$TWAS.Z %>% round(2)
-    )
+    # Prepare text description for each SNP:
+    don[[i]]$text <-
+        paste0(
+            "Gene: ",
+            don[[i]]$geneid,
+            "\nGene Symbol: ",
+            don[[i]]$genesymbol,
+            "\nBrain Subregion: ",
+            don[[i]]$region,
+            "\nStart Position: ",
+            don[[i]]$start,
+            "\nEnd Position: ",
+            don[[i]]$end,
+            "\nChromosome: ",
+            don[[i]]$CHR,
+            "\nZ score: ",
+            don[[i]]$TWAS.Z %>% round(2)
+        )
 
-don_key[[i]] <-
-    highlight_key(don[[i]], ~ geneid, group = "ENSEMBL Gene ID")
+    don_key[[i]] <-
+        highlight_key(don[[i]], ~ geneid, group = "ENSEMBL Gene ID")
 }
 # # Had to make sure these two were different
 # test_thing_1 <- don_key[[1]]$data()
