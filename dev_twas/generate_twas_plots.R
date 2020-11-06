@@ -63,18 +63,18 @@ for (i in 1:2) {
     # Prepare text description for each SNP:
     don[[i]]$text <-
         paste0(
-            "Gene: ",
-            don[[i]]$geneid,
-            "\nGene Symbol: ",
+            "Gene Symbol: ",
             don[[i]]$genesymbol,
+            "\nENSEMBL Gene ID: ",
+            don[[i]]$geneid,
             "\nBrain Subregion: ",
             don[[i]]$region,
+            "\nChromosome: ",
+            don[[i]]$CHR,
             "\nStart Position: ",
             don[[i]]$start,
             "\nEnd Position: ",
             don[[i]]$end,
-            "\nChromosome: ",
-            don[[i]]$CHR,
             "\nZ score: ",
             don[[i]]$TWAS.Z %>% round(2)
         )
