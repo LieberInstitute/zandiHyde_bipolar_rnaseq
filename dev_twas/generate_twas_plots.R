@@ -31,8 +31,6 @@ fin_plot <- list()
 # don[[1]]$region
 # don[[2]]$region
 
-
-
 for (i in 1:2) {
     if (i == 1) {
         twas_var <- twas_z_amyg
@@ -89,7 +87,7 @@ for (i in 1:2) {
 # test_thing_2 <- don_key[[2]]$data()
 # md5(stri_paste(test_thing_1, collapse = ''))
 # md5(stri_paste(test_thing_2, collapse = ''))
-
+# i = 1
 pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object3
 for (i in 1:2) {
@@ -102,7 +100,7 @@ for (i in 1:2) {
         scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
 
         # custom X axis:
-        scale_x_continuous(label = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
+        scale_x_continuous(labels = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
         scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
 
         # Custom the theme:
@@ -134,6 +132,6 @@ for (i in 1:2) {
         paste0(
             "BIP_TWAS_",
             ifelse(i == 1, "Amygdala", "sACC"),
-            "ManhattanPlotly.html"
+            "_ManhattanPlotly.html"
         ))
 }
