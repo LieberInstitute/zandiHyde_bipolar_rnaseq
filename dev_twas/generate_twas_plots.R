@@ -9,6 +9,8 @@ library(sessioninfo)
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
 
+dir.create("analysis/", showWarnings = FALSE)
+
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
@@ -91,7 +93,7 @@ for (i in 1:2) {
 # i = 1
 
 # TWAS Z Manhattan Plot ####
-# pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
+pdf(file = "analysis/BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object3
 
 
@@ -124,7 +126,7 @@ for (i in 1:2) {
 
     print(p[[i]])
 }
-# dev.off()
+dev.off()
 
 # Interactive TWAS Z Manhattan Plots ####
 for (i in 1:2) {
@@ -141,7 +143,7 @@ for (i in 1:2) {
 
     saveWidget(fin_plot[[i]],
         paste0(
-            "BIP_TWAS_",
+            "analysis/BIP_TWAS_",
             ifelse(i == 1, "Amygdala", "sACC"),
             "_ManhattanPlotly.html"
         ))
