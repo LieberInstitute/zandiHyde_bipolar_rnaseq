@@ -6,6 +6,7 @@ library(plotly)
 library(htmlwidgets)
 library(sessioninfo)
 
+# Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
 
 # Filter N/A Z scores
@@ -30,6 +31,7 @@ fin_plot <- list()
 # don[[1]]$region
 # don[[2]]$region
 
+# Preprocessing Data ####
 for (i in 1:2) {
     if (i == 1) {
         twas_var <- twas_z_amyg
@@ -87,13 +89,18 @@ for (i in 1:2) {
 # md5(stri_paste(test_thing_1, collapse = ''))
 # md5(stri_paste(test_thing_2, collapse = ''))
 # i = 1
-pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
+
+# TWAS Z Manhattan Plot ####
+# pdf(file = "BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object3
 
-# Bonferroni Correction?
-# sig <- 0.05 / nrow(twas_exp_fin)
-# i <- 1
+
 for (i in 1:2) {
+
+    # Bonferroni Correction
+    sig <- qnorm(1 - 0.025 / table(twas_exp_fin$region))
+    sig <- sig[[i]]
+
     p[[i]] <-
         ggplot(don_key[[i]], aes(x = BPcum, y = TWAS.Z, text = text)) +
 
@@ -101,9 +108,8 @@ for (i in 1:2) {
         # Show all points
         geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
         scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
-        # geom_hline(yintercept = -log10(sig), color = "grey40", linetype = "dashed") +
-        # geom_hline(yintercept = log10(sig), color = "grey40", linetype = "dashed") +
-        # custom X axis:
+        geom_hline(yintercept = c(sig, -sig), color = "grey40", linetype = "dashed") +
+            # custom X axis:
         scale_x_continuous(labels = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
         scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
 
@@ -118,8 +124,9 @@ for (i in 1:2) {
 
     print(p[[i]])
 }
-dev.off()
+# dev.off()
 
+# Interactive TWAS Z Manhattan Plots ####
 for (i in 1:2) {
     ##### Plotly
     intctv_plot[[i]] <- ggplotly(p[[i]], tooltip = "text")
@@ -139,6 +146,7 @@ for (i in 1:2) {
             "_ManhattanPlotly.html"
         ))
 }
+
 
 ## Reproducibility information
 print("Reproducibility information:")
