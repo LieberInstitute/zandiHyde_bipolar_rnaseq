@@ -147,6 +147,29 @@ for (i in 1:2) {
         ))
 }
 
+# Issue #4 Plots ####
+# https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
+
+pdf('twas_z_gene.pdf', useDingbats = FALSE, width = 10, height = 10)
+ggplot(twas_z,
+    aes(x = amygdala, y = sacc, color = FDR.5perc, shape = in_both)) +
+    geom_point() +
+    # facet_grid(BEST.GWAS.status ~ feature) +
+    coord_fixed() +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS Z by brain region') +
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
+
+ggplot(subset(region_twas_z, feature == 'gene'),
+    aes(x = DLPFC, y = HIPPO, color = Bonf.5perc, shape = in_both)) +
+    geom_point() +
+    # facet_grid(BEST.GWAS.status ~ feature) +
+    coord_fixed() +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS Z by brain region') +
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
+dev.off()
+
 
 ## Reproducibility information
 print("Reproducibility information:")
