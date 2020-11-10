@@ -96,12 +96,11 @@ for (i in 1:2) {
 pdf(file = "analysis/BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object3
 
-
+sig <- qnorm(1 - 0.025 / table(twas_exp_fin$region))
 for (i in 1:2) {
 
     # Bonferroni Correction
-    sig <- qnorm(1 - 0.025 / table(twas_exp_fin$region))
-    sig <- sig[[i]]
+    sig_bonf <- sig[[i]]
 
     p[[i]] <-
         ggplot(don_key[[i]], aes(x = BPcum, y = TWAS.Z, text = text)) +
@@ -110,7 +109,7 @@ for (i in 1:2) {
         # Show all points
         geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
         scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
-        geom_hline(yintercept = c(sig, -sig), color = "grey40", linetype = "dashed") +
+        geom_hline(yintercept = c(sig_bonf, -sig_bonf), color = "grey40", linetype = "dashed") +
             # custom X axis:
         scale_x_continuous(labels = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
         scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
@@ -127,6 +126,25 @@ for (i in 1:2) {
     print(p[[i]])
 }
 dev.off()
+
+# Z scores threshold
+twas_z_amyg_threshold <- twas_z_amyg[TWAS.Z > sig[[1]],]
+twas_z_sacc_threshold <- twas_z_sacc[TWAS.Z > sig[[2]],]
+
+twas_z_sig_tables <- list()
+
+
+for (i in 1:2) {
+    if (i == 1) {
+        twas_z_sig_tables[[i]] <- twas_z_amyg_threshold
+        file_name <- "amygdala"
+    } else{
+        twas_z_sig_tables[[i]] <- twas_z_sacc_threshold
+        file_name <- "sacc"
+    }
+
+    write.csv(twas_z_sig_tables[[i]], file = paste0(file_name, "_twas_significant_genes_zscore.csv"))
+}
 
 # Interactive TWAS Z Manhattan Plots ####
 for (i in 1:2) {
@@ -152,9 +170,13 @@ for (i in 1:2) {
 # Issue #4 Plots ####
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
 
-pdf('twas_z_gene.pdf', useDingbats = FALSE, width = 10, height = 10)
+# pdf('twas_z_gene.pdf', useDingbats = FALSE, width = 10, height = 10)
+
+# logical vector that indicates precense of gene in both subregions
+twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
+
 ggplot(twas_z,
-    aes(x = amygdala, y = sacc, color = FDR.5perc, shape = in_both)) +
+    aes(x = twas_z$amygdala, y = twas_z$sacc, color = FDR.5perc, shape = in_both)) +
     geom_point() +
     # facet_grid(BEST.GWAS.status ~ feature) +
     coord_fixed() +
@@ -170,7 +192,7 @@ ggplot(subset(region_twas_z, feature == 'gene'),
     theme_bw(base_size = 30) +
     ggtitle('TWAS Z by brain region') +
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
-dev.off()
+# dev.off()
 
 
 ## Reproducibility information
