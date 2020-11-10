@@ -9,15 +9,14 @@ library(sessioninfo)
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
 
-dir.create("analysis/plots", showWarnings = FALSE, recursive = TRUE)
-dir.create("analysis/tables", showWarnings = FALSE, recursive = TRUE)
+dir.create("analysis/", showWarnings = FALSE)
 
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
-twas_z_sacc <- twas_z[twas_z$region == "sacc",]
+twas_z_sacc <- twas_z[twas_z$region == "sacc", ]
 
-twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
+twas_z_amyg <- twas_z[twas_z$region == "amygdala", ]
 
 don <- list()
 
@@ -94,12 +93,11 @@ for (i in 1:2) {
 # i = 1
 
 # TWAS Z Manhattan Plot ####
-pdf(file = "analysis/BIP_TWAS_ManhattanPlot.pdf")
+pdf(file = "analysis/plots/BIP_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object3
 
 sig <- qnorm(1 - 0.025 / table(twas_exp_fin$region))
 for (i in 1:2) {
-
     # Bonferroni Correction
     sig_bonf <- sig[[i]]
 
@@ -110,8 +108,23 @@ for (i in 1:2) {
         # Show all points
         geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
         scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
-        geom_hline(yintercept = c(sig_bonf, -sig_bonf), color = "grey40", linetype = "dashed") +
-            # custom X axis:
+        geom_hline(
+            yintercept = c(sig_bonf, -sig_bonf),
+            color = "grey40",
+            linetype = "dashed"
+        ) +
+        # annotate(
+        #     "label",
+        #     x = 400000000,
+        #     y = sig_bonf + .35,
+        #     label = paste0("Z-Score Significance: (+/-) ", signif(sig_bonf, 3)),
+        #     color = "black",
+        #     size = 3 ,
+        #     angle = 0,
+        #     fontface = "bold"
+        # ) +
+
+        # custom X axis:
         scale_x_continuous(labels = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
         scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
 
@@ -129,20 +142,20 @@ for (i in 1:2) {
 dev.off()
 
 # Z scores threshold
-twas_z_amyg_threshold <- rbind(twas_z_amyg[TWAS.Z > sig[[1]],], twas_z_amyg[TWAS.Z < -sig[[1]],])
-twas_z_sacc_threshold <- rbind(twas_z_sacc[TWAS.Z > sig[[2]],], twas_z_sacc[TWAS.Z < -sig[[2]],])
+twas_z_amyg_threshold <-
+    rbind(twas_z_amyg[TWAS.Z > sig[[1]], ], twas_z_amyg[TWAS.Z < -sig[[1]], ])
+twas_z_sacc_threshold <-
+    rbind(twas_z_sacc[TWAS.Z > sig[[2]], ], twas_z_sacc[TWAS.Z < -sig[[2]], ])
 
 twas_z_sig_tables <- list()
 
 
 for (i in 1:2) {
     if (i == 1) {
-        write.csv(twas_z_amyg_threshold, file = "amygdala_twas_significant_genes_zscore.csv")
+        write.csv(twas_z_amyg_threshold, file = "analysis/tables/amygdala_twas_significant_genes_zscore.csv")
     } else {
-        write.csv(twas_z_sacc_threshold, file = "sacc_twas_significant_genes_zscore.csv")
+        write.csv(twas_z_sacc_threshold, file = "analysis/tables/sacc_twas_significant_genes_zscore.csv")
     }
-
-
 }
 
 # Interactive TWAS Z Manhattan Plots ####
@@ -175,7 +188,12 @@ for (i in 1:2) {
 twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
 
 ggplot(twas_z,
-    aes(x = twas_z$amygdala, y = twas_z$sacc, color = FDR.5perc, shape = in_both)) +
+    aes(
+        x = twas_z$amygdala,
+        y = twas_z$sacc,
+        color = FDR.5perc,
+        shape = in_both
+    )) +
     geom_point() +
     # facet_grid(BEST.GWAS.status ~ feature) +
     coord_fixed() +
@@ -183,8 +201,15 @@ ggplot(twas_z,
     ggtitle('TWAS Z by brain region') +
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
 
-ggplot(subset(region_twas_z, feature == 'gene'),
-    aes(x = DLPFC, y = HIPPO, color = Bonf.5perc, shape = in_both)) +
+ggplot(
+    subset(region_twas_z, feature == 'gene'),
+    aes(
+        x = DLPFC,
+        y = HIPPO,
+        color = Bonf.5perc,
+        shape = in_both
+    )
+) +
     geom_point() +
     # facet_grid(BEST.GWAS.status ~ feature) +
     coord_fixed() +
