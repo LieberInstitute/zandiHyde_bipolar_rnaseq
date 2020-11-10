@@ -128,22 +128,20 @@ for (i in 1:2) {
 dev.off()
 
 # Z scores threshold
-twas_z_amyg_threshold <- twas_z_amyg[TWAS.Z > sig[[1]],]
-twas_z_sacc_threshold <- twas_z_sacc[TWAS.Z > sig[[2]],]
+twas_z_amyg_threshold <- rbind(twas_z_amyg[TWAS.Z > sig[[1]],], twas_z_amyg[TWAS.Z < -sig[[1]],])
+twas_z_sacc_threshold <- rbind(twas_z_sacc[TWAS.Z > sig[[2]],], twas_z_sacc[TWAS.Z < -sig[[2]],])
 
 twas_z_sig_tables <- list()
 
 
 for (i in 1:2) {
     if (i == 1) {
-        twas_z_sig_tables[[i]] <- twas_z_amyg_threshold
-        file_name <- "amygdala"
-    } else{
-        twas_z_sig_tables[[i]] <- twas_z_sacc_threshold
-        file_name <- "sacc"
+        write.csv(twas_z_amyg_threshold, file = "amygdala_twas_significant_genes_zscore.csv")
+    } else {
+        write.csv(twas_z_sacc_threshold, file = "sacc_twas_significant_genes_zscore.csv")
     }
 
-    write.csv(twas_z_sig_tables[[i]], file = paste0(file_name, "_twas_significant_genes_zscore.csv"))
+
 }
 
 # Interactive TWAS Z Manhattan Plots ####
