@@ -9,7 +9,8 @@ library(sessioninfo)
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
 
-dir.create("analysis/", showWarnings = FALSE)
+dir.create("analysis/plots", showWarnings = FALSE, recursive = TRUE)
+dir.create("analysis/tables", showWarnings = FALSE, recursive = TRUE)
 
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
@@ -173,7 +174,7 @@ for (i in 1:2) {
 
     saveWidget(fin_plot[[i]],
         paste0(
-            "analysis/BIP_TWAS_",
+            "analysis/plots/BIP_TWAS_",
             ifelse(i == 1, "Amygdala", "sACC"),
             "_ManhattanPlotly.html"
         ))
