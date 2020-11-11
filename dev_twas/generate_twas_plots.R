@@ -9,8 +9,8 @@ library(sessioninfo)
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
 
-dir.create("analysis/plots", showWarnings = FALSE, recursive = TRUE)
-dir.create("analysis/tables", showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path("analysis/plots"), showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path("analysis/tables"), showWarnings = FALSE, recursive = TRUE)
 
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
@@ -173,11 +173,12 @@ for (i in 1:2) {
     )
 
     saveWidget(fin_plot[[i]],
-        paste0(
-            "analysis/plots/BIP_TWAS_",
+        file.path(paste0(
+            # "analysis/plots/",
+            "BIP_TWAS_",
             ifelse(i == 1, "Amygdala", "sACC"),
             "_ManhattanPlotly.html"
-        ))
+        )))
 }
 
 # Issue #4 Plots ####
@@ -188,11 +189,16 @@ for (i in 1:2) {
 # logical vector that indicates precense of gene in both subregions
 twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
 
+# I don't know how I "should" calculate FDR but here's my stab in the dark
+library(fdrtool)
+
+fdr.z <- fdrtool(twas_z$TWAS.Z)
+
 ggplot(twas_z,
     aes(
-        x = twas_z$amygdala,
-        y = twas_z$sacc,
-        color = FDR.5perc,
+        x = twas_z[region == "amygdala",]$TWAS.Z,
+        y = twas_z[region == "sacc"]$TWAS.Z,
+        color = fdr.z$pval,
         shape = in_both
     )) +
     geom_point() +
@@ -203,7 +209,7 @@ ggplot(twas_z,
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
 
 ggplot(
-    subset(region_twas_z, feature == 'gene'),
+    twas_z,
     aes(
         x = DLPFC,
         y = HIPPO,
