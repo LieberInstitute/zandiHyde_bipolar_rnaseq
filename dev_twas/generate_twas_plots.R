@@ -189,40 +189,40 @@ for (i in 1:2) {
 # logical vector that indicates precense of gene in both subregions
 twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
 
-# I don't know how I "should" calculate FDR but here's my stab in the dark
-library(fdrtool)
+# create a column for each subregion where the values are z.score
 
-fdr.z <- fdrtool(twas_z$TWAS.Z)
+twas_z <- twas_z %>% mutate(amygdala = ifelse(region == "amygdala", TWAS.Z, 0),
+                    sacc = ifelse(region == "sacc", TWAS.Z, 0))
 
-ggplot(twas_z,
+twas_z$fdr.z <- p.adjust(twas_z$TWAS.Z, 'fdr')
+
+twas_z$FDR.5perc <- 'None'
+twas_z$FDR.5perc[twas_z[region == "amygdala", ]$TWAS.Z < 0.05] <- 'AMYGDALA'
+twas_z$FDR.5perc[twas_z[region == "sacc",]$TWAS.Z < 0.05] <- 'SACC'
+
+twas_z$FDR.5perc[twas_z[region == "amygdala",]$TWAS.Z < 0.05 & twas_z[region == "sacc",]$TWAS.Z < 0.05] <- 'Both'
+
+twas_z$FDR.5perc <- factor(twas_z$FDR.5perc, levels = c('None', 'AMYGDALA', 'SACC', 'Both'))
+
+twas_z2 <- twas_z[twas_z$in_both == TRUE]
+
+twas_z2[amygdala == 0]$amygdala <- NA
+twas_z2[sacc == 0] <- NA
+
+
+ggplot(twas_z2,
     aes(
-        x = twas_z[region == "amygdala",]$TWAS.Z,
-        y = twas_z[region == "sacc"]$TWAS.Z,
-        color = fdr.z$pval,
+        x = amygdala,
+        y = sacc,
+        color = FDR.5perc, # has four categories
         shape = in_both
-    )) +
-    geom_point() +
-    # facet_grid(BEST.GWAS.status ~ feature) +
+     )) +
+     geom_point() +
     coord_fixed() +
-    theme_bw(base_size = 30) +
+    theme_bw() +
     ggtitle('TWAS Z by brain region') +
-    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple')) # you can define names
 
-ggplot(
-    twas_z,
-    aes(
-        x = DLPFC,
-        y = HIPPO,
-        color = Bonf.5perc,
-        shape = in_both
-    )
-) +
-    geom_point() +
-    # facet_grid(BEST.GWAS.status ~ feature) +
-    coord_fixed() +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS Z by brain region') +
-    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
 # dev.off()
 
 
