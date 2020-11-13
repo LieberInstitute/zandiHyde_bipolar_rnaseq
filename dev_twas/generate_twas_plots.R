@@ -114,16 +114,6 @@ for (i in 1:2) {
             color = "grey40",
             linetype = "dashed"
         ) +
-        # annotate(
-        #     "label",
-        #     x = 400000000,
-        #     y = sig_bonf + .35,
-        #     label = paste0("Z-Score Significance: (+/-) ", signif(sig_bonf, 3)),
-        #     color = "black",
-        #     size = 3 ,
-        #     angle = 0,
-        #     fontface = "bold"
-        # ) +
 
         # custom X axis:
         scale_x_continuous(labels = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
@@ -184,33 +174,33 @@ for (i in 1:2) {
 # Issue #4 Plots ####
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
 
-# pdf('twas_z_gene.pdf', useDingbats = FALSE, width = 10, height = 10)
+pdf('analysis/plots/BIP_TWAS_ScatterPlots.pdf', useDingbats = FALSE, width = 10, height = 10)
+
+# save.image(file = "ggplot_test.RData")
+# load(file = "ggplot_test.RData")
 
 # logical vector that indicates precense of gene in both subregions
 twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
 
 # create a column for each subregion where the values are z.score
 
-twas_z <- twas_z %>% mutate(amygdala = ifelse(region == "amygdala", TWAS.Z, 0),
-                    sacc = ifelse(region == "sacc", TWAS.Z, 0))
-
 twas_z$fdr.z <- p.adjust(twas_z$TWAS.Z, 'fdr')
 
-twas_z$FDR.5perc <- 'None'
-twas_z$FDR.5perc[twas_z[region == "amygdala", ]$TWAS.Z < 0.05] <- 'AMYGDALA'
-twas_z$FDR.5perc[twas_z[region == "sacc",]$TWAS.Z < 0.05] <- 'SACC'
+twas_z <- select(twas_z, geneid, TWAS.Z, region) %>%
+    as.data.table()
 
-twas_z$FDR.5perc[twas_z[region == "amygdala",]$TWAS.Z < 0.05 & twas_z[region == "sacc",]$TWAS.Z < 0.05] <- 'Both'
+twas_z_wide <- dcast(twas_z, geneid ~ region, value.var = "TWAS.Z")
 
-twas_z$FDR.5perc <- factor(twas_z$FDR.5perc, levels = c('None', 'AMYGDALA', 'SACC', 'Both'))
+twas_z_wide$in_both <- ifelse(!is.na(twas_z_wide$amygdala & twas_z_wide$sacc), TRUE, FALSE)
 
-twas_z2 <- twas_z[twas_z$in_both == TRUE]
+twas_z_wide$FDR.5perc <- 'None'
+twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05] <- 'AMYGDALA'
+twas_z_wide$FDR.5perc[twas_z_wide$sacc < 0.05] <- 'SACC'
+twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05 & twas_z_wide$sacc < 0.05] <- 'Both'
 
-twas_z2[amygdala == 0]$amygdala <- NA
-twas_z2[sacc == 0] <- NA
+twas_z_wide$FDR.5perc <- factor(twas_z_wide$FDR.5perc, levels = c('None', 'AMYGDALA', 'SACC', 'Both'))
 
-
-ggplot(twas_z2,
+ggplot(twas_z_wide,
     aes(
         x = amygdala,
         y = sacc,
@@ -223,7 +213,7 @@ ggplot(twas_z2,
     ggtitle('TWAS Z by brain region') +
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple')) # you can define names
 
-# dev.off()
+dev.off()
 
 
 ## Reproducibility information
@@ -233,69 +223,94 @@ proc.time()
 options(width = 120)
 session_info()
 
-# > ## Reproducibility information
 # > print("Reproducibility information:")
 # [1] "Reproducibility information:"
 # > Sys.time()
-# [1] "2020-11-06 12:43:36 EST"
+# [1] "2020-11-13 17:04:12 EST"
 # > proc.time()
-#    user  system elapsed
-#   1.350   2.528   9.457
+#     user   system  elapsed
+#    53.14     9.85 25140.28
 # > options(width = 120)
 # > session_info()
-# ??? Session info ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+# - Session info -------------------------------------------------------------------------------------------------------
 #  setting  value
-#  version  R version 4.0.2 Patched (2020-06-24 r78746)
-#  os       CentOS Linux 7 (Core)
-#  system   x86_64, linux-gnu
-#  ui       X11
+#  version  R version 4.0.3 (2020-10-10)
+#  os       Windows 10 x64
+#  system   x86_64, mingw32
+#  ui       RStudio
 #  language (EN)
-#  collate  en_US.UTF-8
-#  ctype    en_US.UTF-8
-#  tz       US/Eastern
-#  date     2020-11-06
+#  collate  English_United States.1252
+#  ctype    English_United States.1252
+#  tz       America/New_York
+#  date     2020-11-13
 #
-# ??? Packages ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+# - Packages -----------------------------------------------------------------------------------------------------------
 #  package     * version date       lib source
-#  assertthat    0.2.1   2019-03-21 [2] CRAN (R 4.0.0)
-#  cli           2.1.0   2020-10-12 [2] CRAN (R 4.0.2)
-#  colorout    * 1.2-2   2020-09-24 [1] Github (jalvesaq/colorout@726d681)
-#  colorspace    1.4-1   2019-03-18 [2] CRAN (R 4.0.0)
-#  crayon        1.3.4   2017-09-16 [2] CRAN (R 4.0.0)
-#  data.table  * 1.13.2  2020-10-19 [2] CRAN (R 4.0.2)
-#  digest        0.6.26  2020-10-17 [2] CRAN (R 4.0.2)
-#  dplyr       * 1.0.2   2020-08-18 [2] CRAN (R 4.0.2)
-#  ellipsis      0.3.1   2020-05-15 [2] CRAN (R 4.0.0)
-#  fansi         0.4.1   2020-01-08 [2] CRAN (R 4.0.0)
-#  generics      0.0.2   2018-11-29 [2] CRAN (R 4.0.0)
-#  ggplot2     * 3.3.2   2020-06-19 [1] CRAN (R 4.0.2)
-#  ggrepel     * 0.8.2   2020-03-08 [2] CRAN (R 4.0.0)
-#  glue          1.4.2   2020-08-27 [2] CRAN (R 4.0.2)
-#  gtable        0.3.0   2019-03-25 [2] CRAN (R 4.0.0)
-#  htmltools     0.5.0   2020-06-16 [2] CRAN (R 4.0.2)
-#  htmlwidgets * 1.5.2   2020-10-03 [2] CRAN (R 4.0.2)
+#  assertthat    0.2.1   2019-03-21 [1] CRAN (R 4.0.2)
+#  backports     1.1.10  2020-09-15 [1] CRAN (R 4.0.2)
+#  callr         3.5.1   2020-10-13 [1] CRAN (R 4.0.3)
+#  cli           2.1.0   2020-10-12 [1] CRAN (R 4.0.3)
+#  colorspace    1.4-1   2019-03-18 [1] CRAN (R 4.0.2)
+#  crayon        1.3.4   2017-09-16 [1] CRAN (R 4.0.2)
+#  crosstalk     1.1.0.1 2020-03-13 [1] CRAN (R 4.0.3)
+#  data.table  * 1.13.2  2020-10-19 [1] CRAN (R 4.0.3)
+#  desc          1.2.0   2018-05-01 [1] CRAN (R 4.0.2)
+#  devtools    * 2.3.2   2020-09-18 [1] CRAN (R 4.0.3)
+#  digest        0.6.25  2020-02-23 [1] CRAN (R 4.0.2)
+#  dplyr       * 1.0.2   2020-08-18 [1] CRAN (R 4.0.2)
+#  ellipsis      0.3.1   2020-05-15 [1] CRAN (R 4.0.2)
+#  fansi         0.4.1   2020-01-08 [1] CRAN (R 4.0.2)
+#  farver        2.0.3   2020-01-16 [1] CRAN (R 4.0.2)
+#  fastmap       1.0.1   2019-10-08 [1] CRAN (R 4.0.3)
+#  fs            1.5.0   2020-07-31 [1] CRAN (R 4.0.2)
+#  generics      0.1.0   2020-10-31 [1] CRAN (R 4.0.3)
+#  ggplot2     * 3.3.2   2020-06-19 [1] CRAN (R 4.0.3)
+#  ggrepel     * 0.8.2   2020-03-08 [1] CRAN (R 4.0.2)
+#  glue          1.4.2   2020-08-27 [1] CRAN (R 4.0.2)
+#  gtable        0.3.0   2019-03-25 [1] CRAN (R 4.0.2)
+#  htmltools     0.5.0   2020-06-16 [1] CRAN (R 4.0.2)
+#  htmlwidgets * 1.5.2   2020-10-03 [1] CRAN (R 4.0.3)
+#  httpuv        1.5.4   2020-06-06 [1] CRAN (R 4.0.3)
 #  httr          1.4.2   2020-07-20 [1] CRAN (R 4.0.2)
-#  jsonlite      1.7.0   2020-06-25 [1] CRAN (R 4.0.2)
-#  lazyeval      0.2.2   2019-03-15 [2] CRAN (R 4.0.0)
-#  lifecycle     0.2.0   2020-03-06 [2] CRAN (R 4.0.0)
-#  magrittr      1.5     2014-11-22 [2] CRAN (R 4.0.0)
-#  munsell       0.5.0   2018-06-12 [2] CRAN (R 4.0.0)
-#  pillar        1.4.6   2020-07-10 [2] CRAN (R 4.0.2)
-#  pkgconfig     2.0.3   2019-09-22 [2] CRAN (R 4.0.0)
-#  plotly      * 4.9.2.1 2020-04-04 [1] CRAN (R 4.0.2)
-#  purrr         0.3.4   2020-04-17 [2] CRAN (R 4.0.0)
-#  R6            2.4.1   2019-11-12 [2] CRAN (R 4.0.0)
+#  jsonlite      1.7.1   2020-09-07 [1] CRAN (R 4.0.2)
+#  labeling      0.4.2   2020-10-20 [1] CRAN (R 4.0.3)
+#  later         1.1.0.1 2020-06-05 [1] CRAN (R 4.0.2)
+#  lazyeval      0.2.2   2019-03-15 [1] CRAN (R 4.0.2)
+#  lifecycle     0.2.0   2020-03-06 [1] CRAN (R 4.0.2)
+#  magrittr      1.5     2014-11-22 [1] CRAN (R 4.0.2)
+#  memoise       1.1.0   2017-04-21 [1] CRAN (R 4.0.2)
+#  mime          0.9     2020-02-04 [1] CRAN (R 4.0.0)
+#  munsell       0.5.0   2018-06-12 [1] CRAN (R 4.0.2)
+#  pillar        1.4.6   2020-07-10 [1] CRAN (R 4.0.2)
+#  pkgbuild      1.1.0   2020-07-13 [1] CRAN (R 4.0.2)
+#  pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.0.2)
+#  pkgload       1.1.0   2020-05-29 [1] CRAN (R 4.0.2)
+#  plotly      * 4.9.2.1 2020-04-04 [1] CRAN (R 4.0.3)
+#  prettyunits   1.1.1   2020-01-24 [1] CRAN (R 4.0.2)
+#  processx      3.4.4   2020-09-03 [1] CRAN (R 4.0.2)
+#  promises      1.1.1   2020-06-09 [1] CRAN (R 4.0.2)
+#  ps            1.3.4   2020-08-11 [1] CRAN (R 4.0.2)
+#  purrr         0.3.4   2020-04-17 [1] CRAN (R 4.0.2)
+#  R6            2.5.0   2020-10-28 [1] CRAN (R 4.0.3)
 #  Rcpp          1.0.5   2020-07-06 [1] CRAN (R 4.0.2)
-#  rlang         0.4.8   2020-10-08 [1] CRAN (R 4.0.2)
-#  scales        1.1.1   2020-05-11 [2] CRAN (R 4.0.0)
-#  sessioninfo * 1.1.1   2018-11-05 [2] CRAN (R 4.0.0)
-#  tibble        3.0.4   2020-10-12 [2] CRAN (R 4.0.2)
-#  tidyr         1.1.2   2020-08-27 [2] CRAN (R 4.0.2)
-#  tidyselect    1.1.0   2020-05-11 [2] CRAN (R 4.0.0)
-#  vctrs         0.3.4   2020-08-29 [2] CRAN (R 4.0.2)
-#  viridisLite   0.3.0   2018-02-01 [2] CRAN (R 4.0.0)
-#  withr         2.3.0   2020-09-22 [2] CRAN (R 4.0.2)
+#  remotes       2.2.0   2020-07-21 [1] CRAN (R 4.0.2)
+#  rlang         0.4.7   2020-07-09 [1] CRAN (R 4.0.2)
+#  rprojroot     1.3-2   2018-01-03 [1] CRAN (R 4.0.2)
+#  rstudioapi    0.11    2020-02-07 [1] CRAN (R 4.0.2)
+#  scales        1.1.1   2020-05-11 [1] CRAN (R 4.0.2)
+#  sessioninfo * 1.1.1   2018-11-05 [1] CRAN (R 4.0.2)
+#  shiny         1.5.0   2020-06-23 [1] CRAN (R 4.0.3)
+#  testthat    * 2.3.2   2020-03-02 [1] CRAN (R 4.0.2)
+#  tibble        3.0.4   2020-10-12 [1] CRAN (R 4.0.3)
+#  tidyr         1.1.2   2020-08-27 [1] CRAN (R 4.0.2)
+#  tidyselect    1.1.0   2020-05-11 [1] CRAN (R 4.0.2)
+#  usethis     * 1.6.3   2020-09-17 [1] CRAN (R 4.0.2)
+#  utf8          1.1.4   2018-05-24 [1] CRAN (R 4.0.2)
+#  vctrs         0.3.4   2020-08-29 [1] CRAN (R 4.0.2)
+#  viridisLite   0.3.0   2018-02-01 [1] CRAN (R 4.0.2)
+#  withr         2.3.0   2020-09-22 [1] CRAN (R 4.0.3)
+#  xtable        1.8-4   2019-04-21 [1] CRAN (R 4.0.3)
+#  yaml          2.2.1   2020-02-01 [1] CRAN (R 4.0.0)
 #
-# [1] /users/aseyedia/R/4.0
-# [2] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0/R/4.0/lib64/R/site-library
-# [3] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0/R/4.0/lib64/R/library
+# [1] C:/Users/artas/Documents/R/win-library/4.0
+# [2] C:/Program Files/R/R-4.0.3/library
