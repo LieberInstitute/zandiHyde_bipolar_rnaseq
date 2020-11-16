@@ -9,15 +9,19 @@ library(sessioninfo)
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
 
-dir.create(file.path("analysis/plots"), showWarnings = FALSE, recursive = TRUE)
-dir.create(file.path("analysis/tables"), showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path("analysis/plots"),
+    showWarnings = FALSE,
+    recursive = TRUE)
+dir.create(file.path("analysis/tables"),
+    showWarnings = FALSE,
+    recursive = TRUE)
 
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
-twas_z_sacc <- twas_z[twas_z$region == "sacc", ]
+twas_z_sacc <- twas_z[twas_z$region == "sacc",]
 
-twas_z_amyg <- twas_z[twas_z$region == "amygdala", ]
+twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
 
 don <- list()
 
@@ -134,9 +138,9 @@ dev.off()
 
 # Z scores threshold
 twas_z_amyg_threshold <-
-    rbind(twas_z_amyg[TWAS.Z > sig[[1]], ], twas_z_amyg[TWAS.Z < -sig[[1]], ])
+    rbind(twas_z_amyg[TWAS.Z > sig[[1]],], twas_z_amyg[TWAS.Z < -sig[[1]],])
 twas_z_sacc_threshold <-
-    rbind(twas_z_sacc[TWAS.Z > sig[[2]], ], twas_z_sacc[TWAS.Z < -sig[[2]], ])
+    rbind(twas_z_sacc[TWAS.Z > sig[[2]],], twas_z_sacc[TWAS.Z < -sig[[2]],])
 
 twas_z_sig_tables <- list()
 
@@ -174,44 +178,58 @@ for (i in 1:2) {
 # Issue #4 Plots ####
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
 
-pdf('BIP_TWAS_ScatterPlots.pdf', useDingbats = FALSE, width = 10, height = 10)
+pdf(
+    'BIP_TWAS_ScatterPlots.pdf',
+    useDingbats = FALSE,
+    width = 10,
+    height = 10
+)
 
+setwd(file.path("/Users/artas/Desktop/twas_plots"))
 # save.image(file = "ggplot_test.RData")
-# load(file = "ggplot_test.RData")
+load(file = "analysis/plots/ggplot_test.RData")
 
-# logical vector that indicates precense of gene in both subregions
-twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
-
-# create a column for each subregion where the values are z.score
-
-# also include values where one region's z score is 0 for a gene
-
-twas_z$fdr.z <- p.adjust(twas_z$TWAS.Z, 'fdr') # should be done by region not across all results, use this for ggplot
-# Put into a table, csv, add it as a new sheet to the previous table you already made
-
-twas_z <- select(twas_z, geneid, TWAS.Z, region) %>%
+twas_z <- select(twas_z, geneid, TWAS.Z, TWAS.P, region) %>%
     as.data.table()
 
-twas_z_wide <- dcast(twas_z, geneid ~ region, value.var = "TWAS.Z")
+# Render Z scores and P values horizontally by region
+twas_z_wide <- dcast(twas_z, geneid ~ region, value.var = c("TWAS.Z", "TWAS.P"))
 
-twas_z_wide$in_both <- ifelse(!is.na(twas_z_wide$amygdala & twas_z_wide$sacc), TRUE, FALSE)
+# FDR calculation per subregion
+twas_z_wide$amygdala.fdr.p <- p.adjust(twas_z_wide$TWAS.P_amygdala, 'fdr')
+twas_z_wide$sacc.fdr.p <- p.adjust(twas_z_wide$TWAS.P_sacc, 'fdr')
 
-# change this to reflect significant fdr < 0.05 z scores
+# Indicate in both
+twas_z_wide$in_both <-
+    ifelse(!is.na(twas_z_wide$TWAS.Z_amygdala &
+            twas_z_wide$TWAS.Z_sacc), TRUE, FALSE)
+
+# Remove NAs
+twas_z_wide[is.na(twas_z_wide)] <- 0
+
+# FDR cutoffs
 twas_z_wide$FDR.5perc <- 'None'
-twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05] <- 'amygdala'
-twas_z_wide$FDR.5perc[twas_z_wide$sacc < 0.05] <- 'sACC'
-twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05 & twas_z_wide$sacc < 0.05] <- 'Both'
+twas_z_wide$FDR.5perc[twas_z_wide$TWAS.P_amygdala < 0.05] <-
+    'amygdala'
+twas_z_wide$FDR.5perc[twas_z_wide$TWAS.P_sacc < 0.05] <- 'sACC'
+twas_z_wide$FDR.5perc[twas_z_wide$TWAS.P_amygdala < 0.05 &
+        twas_z_wide$TWAS.P_sacc < 0.05] <- 'Both'
 
-twas_z_wide$FDR.5perc <- factor(twas_z_wide$FDR.5perc, levels = c('None', 'amygdala', 'sACC', 'Both'))
+twas_z_wide$FDR.5perc <-
+    factor(twas_z_wide$FDR.5perc,
+        levels = c('None', 'amygdala', 'sACC', 'Both'))
 
 ggplot(twas_z_wide,
     aes(
-        x = amygdala,
-        y = sacc,
-        color = FDR.5perc, # has four categories
+        x = TWAS.Z_amygdala,
+        y = TWAS.Z_sacc,
+        color = FDR.5perc,
+        # has four categories
         shape = in_both
-     )) +
-     geom_point() +
+    )) +
+    xlab("Amygdala") +
+    ylab("sACC") +
+    geom_point() +
     coord_fixed() +
     theme_bw() +
     ggtitle('TWAS Z by brain region') +
@@ -219,6 +237,7 @@ ggplot(twas_z_wide,
 
 dev.off()
 
+write.csv(twas_z_wide, file = "analysis/tables/TWAS_Scatterplot_table.csv")
 
 ## Reproducibility information
 print("Reproducibility information:")
