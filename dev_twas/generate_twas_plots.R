@@ -174,7 +174,7 @@ for (i in 1:2) {
 # Issue #4 Plots ####
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
 
-pdf('analysis/plots/BIP_TWAS_ScatterPlots.pdf', useDingbats = FALSE, width = 10, height = 10)
+pdf('BIP_TWAS_ScatterPlots.pdf', useDingbats = FALSE, width = 10, height = 10)
 
 # save.image(file = "ggplot_test.RData")
 # load(file = "ggplot_test.RData")
@@ -184,7 +184,10 @@ twas_z[, in_both := uniqueN(region) == 2, by = c("start", "end")]
 
 # create a column for each subregion where the values are z.score
 
-twas_z$fdr.z <- p.adjust(twas_z$TWAS.Z, 'fdr')
+# also include values where one region's z score is 0 for a gene
+
+twas_z$fdr.z <- p.adjust(twas_z$TWAS.Z, 'fdr') # should be done by region not across all results, use this for ggplot
+# Put into a table, csv, add it as a new sheet to the previous table you already made
 
 twas_z <- select(twas_z, geneid, TWAS.Z, region) %>%
     as.data.table()
@@ -193,12 +196,13 @@ twas_z_wide <- dcast(twas_z, geneid ~ region, value.var = "TWAS.Z")
 
 twas_z_wide$in_both <- ifelse(!is.na(twas_z_wide$amygdala & twas_z_wide$sacc), TRUE, FALSE)
 
+# change this to reflect significant fdr < 0.05 z scores
 twas_z_wide$FDR.5perc <- 'None'
-twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05] <- 'AMYGDALA'
-twas_z_wide$FDR.5perc[twas_z_wide$sacc < 0.05] <- 'SACC'
+twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05] <- 'amygdala'
+twas_z_wide$FDR.5perc[twas_z_wide$sacc < 0.05] <- 'sACC'
 twas_z_wide$FDR.5perc[twas_z_wide$amygdala < 0.05 & twas_z_wide$sacc < 0.05] <- 'Both'
 
-twas_z_wide$FDR.5perc <- factor(twas_z_wide$FDR.5perc, levels = c('None', 'AMYGDALA', 'SACC', 'Both'))
+twas_z_wide$FDR.5perc <- factor(twas_z_wide$FDR.5perc, levels = c('None', 'amygdala', 'sACC', 'Both'))
 
 ggplot(twas_z_wide,
     aes(
