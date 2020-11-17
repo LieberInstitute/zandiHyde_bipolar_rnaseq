@@ -179,15 +179,15 @@ for (i in 1:2) {
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
 
 pdf(
-    'BIP_TWAS_ScatterPlots.pdf',
+    'analysis/plots/BIP_TWAS_ScatterPlots.pdf',
     useDingbats = FALSE,
     width = 10,
     height = 10
 )
 
-setwd(file.path("/Users/artas/Desktop/twas_plots"))
+# setwd(file.path("/Users/artas/Desktop/twas_plots"))
 # save.image(file = "ggplot_test.RData")
-load(file = "analysis/plots/ggplot_test.RData")
+# load(file = "ggplot_test.RData")
 
 twas_z <- select(twas_z, geneid, TWAS.Z, TWAS.P, region) %>%
     as.data.table()
@@ -204,16 +204,16 @@ twas_z_wide$in_both <-
     ifelse(!is.na(twas_z_wide$TWAS.Z_amygdala &
             twas_z_wide$TWAS.Z_sacc), TRUE, FALSE)
 
-# Remove NAs
-twas_z_wide[is.na(twas_z_wide)] <- 0
-
 # FDR cutoffs
 twas_z_wide$FDR.5perc <- 'None'
-twas_z_wide$FDR.5perc[twas_z_wide$TWAS.P_amygdala < 0.05] <-
+twas_z_wide$FDR.5perc[twas_z_wide$amygdala.fdr.p < 0.05] <-
     'amygdala'
-twas_z_wide$FDR.5perc[twas_z_wide$TWAS.P_sacc < 0.05] <- 'sACC'
-twas_z_wide$FDR.5perc[twas_z_wide$TWAS.P_amygdala < 0.05 &
-        twas_z_wide$TWAS.P_sacc < 0.05] <- 'Both'
+twas_z_wide$FDR.5perc[twas_z_wide$sacc.fdr.p < 0.05] <- 'sACC'
+twas_z_wide$FDR.5perc[twas_z_wide$amygdala.fdr.p < 0.05 &
+        twas_z_wide$sacc.fdr.p < 0.05] <- 'Both'
+
+# Remove NAs
+twas_z_wide[is.na(twas_z_wide)] <- 0
 
 twas_z_wide$FDR.5perc <-
     factor(twas_z_wide$FDR.5perc,
