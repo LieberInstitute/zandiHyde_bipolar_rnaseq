@@ -185,15 +185,15 @@ pdf(
     height = 10
 )
 
-# setwd(file.path("/Users/artas/Desktop/twas_plots"))
+setwd(file.path("/Users/artas/Desktop/twas_plots"))
 # save.image(file = "ggplot_test.RData")
-# load(file = "ggplot_test.RData")
+load(file = "ggplot_test.RData")
 
-twas_z <- select(twas_z, geneid, TWAS.Z, TWAS.P, region) %>%
+twas_z_select_pval <- select(twas_z, geneid, TWAS.Z, TWAS.P, region) %>%
     as.data.table()
 
 # Render Z scores and P values horizontally by region
-twas_z_wide <- dcast(twas_z, geneid ~ region, value.var = c("TWAS.Z", "TWAS.P"))
+twas_z_wide <- dcast(twas_z_select_pval, geneid ~ region, value.var = c("TWAS.Z", "TWAS.P"))
 
 # FDR calculation per subregion
 twas_z_wide$amygdala.fdr.p <- p.adjust(twas_z_wide$TWAS.P_amygdala, 'fdr')
@@ -239,7 +239,25 @@ dev.off()
 
 write.csv(twas_z_wide, file = "analysis/tables/TWAS_Scatterplot_table.csv")
 
-## Reproducibility information
+twas_sig_only <- twas_z_wide[twas_z_wide$FDR.5perc == "Both", ]
+
+print(
+    ggplot(
+        twas_sig_only,
+        aes(
+            x = -log10(TWAS.P),
+            y = -log10(EQTL.P.computed),
+            color = BEST.GWAS.P.computed < 5e-08
+        )
+    ) + geom_point() +
+        facet_wrap(region)
+    +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) vs EQTL p-values')) +
+        labs(caption = 'Risk Loci by EQTL')
+)
+
+## Reproducibility information ####
 print("Reproducibility information:")
 Sys.time()
 proc.time()
