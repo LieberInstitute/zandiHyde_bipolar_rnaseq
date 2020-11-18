@@ -189,11 +189,11 @@ setwd(file.path("/Users/artas/Desktop/twas_plots"))
 # save.image(file = "ggplot_test.RData")
 load(file = "ggplot_test.RData")
 
-twas_z_select_pval <- select(twas_z, geneid, TWAS.Z, TWAS.P, region) %>%
+twas_z_select <- select(twas_z, geneid, TWAS.Z, genesymbol,TWAS.P, region) %>%
     as.data.table()
 
 # Render Z scores and P values horizontally by region
-twas_z_wide <- dcast(twas_z_select_pval, geneid ~ region, value.var = c("TWAS.Z", "TWAS.P"))
+twas_z_wide <- dcast(twas_z_select, geneid + genesymbol ~ region, value.var = c("TWAS.Z", "TWAS.P"))
 
 # FDR calculation per subregion
 twas_z_wide$amygdala.fdr.p <- p.adjust(twas_z_wide$TWAS.P_amygdala, 'fdr')
