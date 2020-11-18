@@ -189,7 +189,7 @@ setwd(file.path("/Users/artas/Desktop/twas_plots"))
 # save.image(file = "ggplot_test.RData")
 load(file = "ggplot_test.RData")
 
-twas_z_select <- select(twas_z, geneid, TWAS.Z, genesymbol,TWAS.P, region) %>%
+twas_z_select <- select(twas_z, geneid, genesymbol, TWAS.Z, TWAS.P, region) %>%
     as.data.table()
 
 # Render Z scores and P values horizontally by region
@@ -239,21 +239,31 @@ dev.off()
 
 write.csv(twas_z_wide, file = "analysis/tables/TWAS_Scatterplot_table.csv")
 
-twas_sig_only <- twas_z_wide[twas_z_wide$FDR.5perc == "Both", ]
+twas_z_scatter <-
+    select(twas_z,
+        geneid,
+        genesymbol,
+        TWAS.Z,
+        TWAS.P,
+        EQTL.Z,
+        BEST.GWAS.Z,
+        region) %>%
+    as.data.table()
+
+twas_z_scatter$region <-
+    factor(twas_z_scatter$region,
+        levels = c('amygdala', 'sacc'))
 
 print(
-    ggplot(
-        twas_sig_only,
+    ggplot(twas_z_scatter,
         aes(
-            x = -log10(TWAS.P),
-            y = -log10(EQTL.P.computed),
-            color = BEST.GWAS.P.computed < 5e-08
-        )
-    ) + geom_point() +
-        facet_wrap(region)
-    +
+            x = TWAS.Z,
+            y = EQTL.Z,
+            color = pnorm(BEST.GWAS.Z) < 5e-08
+        )) + geom_point()
+    + labs("") + facet_grid( ~ region) +
         theme_bw(base_size = 30) +
-        ggtitle(paste0('TWAS (', titleslug, '<5%) vs EQTL p-values')) +
+        scale_color_discrete(name = "Best\nGWAS\nP-value") +
         labs(caption = 'Risk Loci by EQTL')
 )
 
