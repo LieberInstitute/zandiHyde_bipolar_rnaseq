@@ -5,6 +5,9 @@ library(data.table)
 library(plotly)
 library(htmlwidgets)
 library(sessioninfo)
+library(SummarizedExperiment)
+
+data.table::setDTthreads(threads = 1)
 
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
@@ -144,7 +147,6 @@ twas_z_sacc_threshold <-
 
 twas_z_sig_tables <- list()
 
-
 for (i in 1:2) {
     if (i == 1) {
         write.csv(twas_z_amyg_threshold, file = "analysis/tables/amygdala_twas_significant_genes_zscore.csv")
@@ -185,9 +187,7 @@ pdf(
     height = 10
 )
 
-setwd(file.path("/Users/artas/Desktop/twas_plots"))
-# save.image(file = "ggplot_test.RData")
-load(file = "ggplot_test.RData")
+# setwd(file.path("/Users/artas/Desktop/twas_plots"))
 
 twas_z_select <- select(twas_z, geneid, genesymbol, TWAS.Z, TWAS.P, region) %>%
     as.data.table()
@@ -219,6 +219,12 @@ twas_z_wide$FDR.5perc <-
     factor(twas_z_wide$FDR.5perc,
         levels = c('None', 'amygdala', 'sACC', 'Both'))
 
+#B5ADE6 (Lavender)
+#B6D2E6 (Light Blue)
+#FFFF7F (Yellow)
+#B2CCFF (sACC blue)
+#BFBFBF (Gray)
+
 ggplot(twas_z_wide,
     aes(
         x = TWAS.Z_amygdala,
@@ -233,38 +239,44 @@ ggplot(twas_z_wide,
     coord_fixed() +
     theme_bw() +
     ggtitle('TWAS Z by brain region') +
-    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple')) # you can define names
+    scale_color_manual(values = c('#BFBFBF', '#FFFF7F', '#B2CCFF', '#B2CCBF')) # you can define names
 
 dev.off()
 
 write.csv(twas_z_wide, file = "analysis/tables/TWAS_Scatterplot_table.csv")
 
-twas_z_scatter <-
-    select(twas_z,
-        geneid,
-        genesymbol,
-        TWAS.Z,
-        TWAS.P,
-        EQTL.Z,
-        BEST.GWAS.Z,
-        region) %>%
-    as.data.table()
+load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/case_control/bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda", verbose=TRUE)
+statOutGene <- statOut[statOut$Type == "Gene",] %>%
+    as.data.table(keep.rownames = "geneid") %>%
+    select(geneid, t_Amyg, t_sACC)
 
-twas_z_scatter$region <-
-    factor(twas_z_scatter$region,
-        levels = c('amygdala', 'sacc'))
+# twas_z_scatter <-
+#     select(twas_z,
+#         geneid,
+#         genesymbol,
+#         TWAS.Z,
+#         TWAS.P,
+#         EQTL.Z,
+#         BEST.GWAS.Z,
+#         region) %>%
+#     as.data.table()
+#
+# twas_z_scatter$region <-
+#     factor(twas_z_scatter$region,
+#         levels = c('amygdala', 'sacc'))
+
+merged_t <- merge(statOutGene, twas_z_wide, by = "geneid")
+
+# save.image("ggplot_test.RData")
+# load("ggplot_test.RData")
 
 print(
-    ggplot(twas_z_scatter,
-        aes(
-            x = TWAS.Z,
-            y = EQTL.Z,
-            color = pnorm(BEST.GWAS.Z) < 5e-08
-        )) + geom_point()
-    + labs("") + facet_grid( ~ region) +
-        theme_bw(base_size = 30) +
-        scale_color_discrete(name = "Best\nGWAS\nP-value") +
-        labs(caption = 'Risk Loci by EQTL')
+    ggplot(merged_t,
+           aes(
+               x = TWAS.Z_amygdala,
+               y = t_Amyg
+           )) + geom_point() +
+        theme_bw(base_size = 30)
 )
 
 ## Reproducibility information ####
