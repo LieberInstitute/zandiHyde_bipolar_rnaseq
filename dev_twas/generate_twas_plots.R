@@ -13,11 +13,11 @@ data.table::setDTthreads(threads = 1)
 load("rda/twas_exp_ranges.Rdata")
 
 dir.create(file.path("analysis/plots"),
-    showWarnings = FALSE,
-    recursive = TRUE)
+           showWarnings = FALSE,
+           recursive = TRUE)
 dir.create(file.path("analysis/tables"),
-    showWarnings = FALSE,
-    recursive = TRUE)
+           showWarnings = FALSE,
+           recursive = TRUE)
 
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
@@ -61,8 +61,8 @@ for (i in 1:2) {
 
         # Add this info to the initial dataset
         left_join(twas_var,
-            .,
-            by = c("CHR" = "CHR")) %>%
+                  .,
+                  by = c("CHR" = "CHR")) %>%
 
         # Add a cumulative position of each SNP
         arrange(CHR, twas_mean_dist) %>%
@@ -169,13 +169,16 @@ for (i in 1:2) {
     )
 
     saveWidget(fin_plot[[i]],
-        file.path(paste0(
-            # "analysis/plots/",
-            "BIP_TWAS_",
-            ifelse(i == 1, "Amygdala", "sACC"),
-            "_ManhattanPlotly.html"
-        )))
+               file.path(paste0(
+                   # "analysis/plots/",
+                   "BIP_TWAS_",
+                   ifelse(i == 1, "Amygdala", "sACC"),
+                   "_ManhattanPlotly.html"
+               )))
 }
+
+# Plotly cannot save directly to relative path
+system("mv *_ManhattanPlotly.html analysis/plots/")
 
 # Issue #4 Plots ####
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
@@ -189,20 +192,27 @@ pdf(
 
 # setwd(file.path("/Users/artas/Desktop/twas_plots"))
 
-twas_z_select <- select(twas_z, geneid, genesymbol, TWAS.Z, TWAS.P, region) %>%
+twas_z_select <-
+    select(twas_z, geneid, genesymbol, TWAS.Z, TWAS.P, region) %>%
     as.data.table()
 
 # Render Z scores and P values horizontally by region
-twas_z_wide <- dcast(twas_z_select, geneid + genesymbol ~ region, value.var = c("TWAS.Z", "TWAS.P"))
+twas_z_wide <-
+    dcast(twas_z_select,
+          geneid + genesymbol ~ region,
+          value.var = c("TWAS.Z", "TWAS.P"))
 
 # FDR calculation per subregion
-twas_z_wide$amygdala.fdr.p <- p.adjust(twas_z_wide$TWAS.P_amygdala, 'fdr')
+twas_z_wide$amygdala.fdr.p <-
+    p.adjust(twas_z_wide$TWAS.P_amygdala, 'fdr')
 twas_z_wide$sacc.fdr.p <- p.adjust(twas_z_wide$TWAS.P_sacc, 'fdr')
 
 # Indicate in both
 twas_z_wide$in_both <-
     ifelse(!is.na(twas_z_wide$TWAS.Z_amygdala &
-            twas_z_wide$TWAS.Z_sacc), TRUE, FALSE)
+                      twas_z_wide$TWAS.Z_sacc),
+           TRUE,
+           FALSE)
 
 # FDR cutoffs
 twas_z_wide$FDR.5perc <- 'None'
@@ -210,29 +220,23 @@ twas_z_wide$FDR.5perc[twas_z_wide$amygdala.fdr.p < 0.05] <-
     'amygdala'
 twas_z_wide$FDR.5perc[twas_z_wide$sacc.fdr.p < 0.05] <- 'sACC'
 twas_z_wide$FDR.5perc[twas_z_wide$amygdala.fdr.p < 0.05 &
-        twas_z_wide$sacc.fdr.p < 0.05] <- 'Both'
+                          twas_z_wide$sacc.fdr.p < 0.05] <- 'Both'
 
 # Remove NAs
 twas_z_wide[is.na(twas_z_wide)] <- 0
 
 twas_z_wide$FDR.5perc <-
     factor(twas_z_wide$FDR.5perc,
-        levels = c('None', 'amygdala', 'sACC', 'Both'))
-
-#B5ADE6 (Lavender)
-#B6D2E6 (Light Blue)
-#FFFF7F (Yellow)
-#B2CCFF (sACC blue)
-#BFBFBF (Gray)
+           levels = c('None', 'amygdala', 'sACC', 'Both'))
 
 ggplot(twas_z_wide,
-    aes(
-        x = TWAS.Z_amygdala,
-        y = TWAS.Z_sacc,
-        color = FDR.5perc,
-        # has four categories
-        shape = in_both
-    )) +
+       aes(
+           x = TWAS.Z_amygdala,
+           y = TWAS.Z_sacc,
+           color = FDR.5perc,
+           # has four categories
+           shape = in_both
+       )) +
     xlab("Amygdala") +
     ylab("sACC") +
     geom_point() +
@@ -245,39 +249,48 @@ dev.off()
 
 write.csv(twas_z_wide, file = "analysis/tables/TWAS_Scatterplot_table.csv")
 
-load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/case_control/bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda", verbose=TRUE)
+load(
+    "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/case_control/bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda",
+    verbose = TRUE
+)
 statOutGene <- statOut[statOut$Type == "Gene",] %>%
     as.data.table(keep.rownames = "geneid") %>%
     select(geneid, t_Amyg, t_sACC)
 
-# twas_z_scatter <-
-#     select(twas_z,
-#         geneid,
-#         genesymbol,
-#         TWAS.Z,
-#         TWAS.P,
-#         EQTL.Z,
-#         BEST.GWAS.Z,
-#         region) %>%
-#     as.data.table()
-#
-# twas_z_scatter$region <-
-#     factor(twas_z_scatter$region,
-#         levels = c('amygdala', 'sacc'))
 
 merged_t <- merge(statOutGene, twas_z_wide, by = "geneid")
 
 # save.image("ggplot_test.RData")
 # load("ggplot_test.RData")
 
-print(
-    ggplot(merged_t,
-           aes(
-               x = TWAS.Z_amygdala,
-               y = t_Amyg
-           )) + geom_point() +
-        theme_bw(base_size = 30)
+pdf(
+    'analysis/plots/BIP_TWAS_t-stat.pdf',
+    useDingbats = FALSE,
+    width = 10,
+    height = 10
 )
+
+ggplot(merged_t,
+       aes(x = TWAS.Z_amygdala,
+           y = t_Amyg)) + geom_point() + geom_smooth(
+               method = lm,
+               se = FALSE,
+               linetype = "dashed",
+               color = "red"
+           ) + labs(title = "TWAS vs BIP differential expression in Amygdala", x = "TWAS Z score", y = "BIP vs control t-statistic") + scale_y_continuous(breaks = c(-6,-3,0,3,6)) + xlim(-6,6) +
+    theme_bw()
+
+ggplot(merged_t,
+       aes(x = TWAS.Z_sacc,
+           y = t_sACC)) + geom_point() + geom_smooth(
+               method = lm,
+               se = FALSE,
+               linetype = "dashed",
+               color = "red"
+           ) + labs(title = "TWAS vs BIP differential expression in sACC", x = "TWAS Z score", y = "BIP vs control t-statistic") + scale_y_continuous(breaks = c(-6,-3,0,3,6)) +scale_x_continuous(breaks = waiver()) +
+    theme_bw()
+
+dev.off()
 
 ## Reproducibility information ####
 print("Reproducibility information:")
