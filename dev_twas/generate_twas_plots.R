@@ -270,25 +270,19 @@ pdf(
     height = 10
 )
 
+amyg_rho <- format(cor(merged_t$TWAS.Z_amygdala, merged_t$t_Amyg), digits = 3, scientific = TRUE)
+sacc_rho <- format(cor(merged_t$TWAS.Z_sacc, merged_t$t_sACC), digits = 3, scientific = TRUE)
+
 ggplot(merged_t,
        aes(x = TWAS.Z_amygdala,
-           y = t_Amyg)) + geom_point() + geom_smooth(
-               method = lm,
-               se = FALSE,
-               linetype = "dashed",
-               color = "red"
-           ) + labs(title = "TWAS vs BIP differential expression in Amygdala", x = "TWAS Z score", y = "BIP vs control t-statistic") + scale_y_continuous(breaks = c(-6,-3,0,3,6)) + xlim(-6,6) +
-    theme_bw()
+           y = t_Amyg)) + geom_point() + labs(title = "TWAS vs BD differential expression in Amygdala", x = "TWAS Z score", y = "BIP vs control t-statistic") + annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(amyg_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) + xlim(-6, 6) +
+    theme_bw(base_size = 20)
 
 ggplot(merged_t,
        aes(x = TWAS.Z_sacc,
-           y = t_sACC)) + geom_point() + geom_smooth(
-               method = lm,
-               se = FALSE,
-               linetype = "dashed",
-               color = "red"
-           ) + labs(title = "TWAS vs BIP differential expression in sACC", x = "TWAS Z score", y = "BIP vs control t-statistic") + scale_y_continuous(breaks = c(-6,-3,0,3,6)) +scale_x_continuous(breaks = waiver()) +
-    theme_bw()
+           y = t_sACC)) + geom_point() + labs(title = "TWAS vs BD differential expression in sACC", x = "TWAS Z score", y = "BIP vs control t-statistic")+ annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(sacc_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) +
+    scale_x_continuous(breaks = waiver()) +
+    theme_bw(base_size = 20)
 
 dev.off()
 
