@@ -239,9 +239,10 @@ ggplot(twas_z_wide,
        )) +
     xlab("Amygdala") +
     ylab("sACC") +
+    labs(color = "< FDR 5%", shape = "Gene in both regions?") +
     geom_point() +
     coord_fixed() +
-    theme_bw() +
+    theme_bw(base_size = 20) +
     ggtitle('TWAS Z by brain region') +
     scale_color_manual(values = c('#BFBFBF', '#FFFF7F', '#B2CCFF', '#B2CCBF')) # you can define names
 
