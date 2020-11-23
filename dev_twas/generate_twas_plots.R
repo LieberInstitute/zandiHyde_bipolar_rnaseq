@@ -6,6 +6,7 @@ library(plotly)
 library(htmlwidgets)
 library(sessioninfo)
 library(SummarizedExperiment)
+library(xlsx)
 
 data.table::setDTthreads(threads = 1)
 
@@ -37,9 +38,6 @@ p <- list()
 intctv_plot <- list()
 
 fin_plot <- list()
-
-# don[[1]]$region
-# don[[2]]$region
 
 # Preprocessing Data ####
 for (i in 1:2) {
@@ -93,12 +91,6 @@ for (i in 1:2) {
     don_key[[i]] <-
         highlight_key(don[[i]], ~ genesymbol, group = "Gene Symbol")
 }
-# # Had to make sure these two were different
-# test_thing_1 <- don_key[[1]]$data()
-# test_thing_2 <- don_key[[2]]$data()
-# md5(stri_paste(test_thing_1, collapse = ''))
-# md5(stri_paste(test_thing_2, collapse = ''))
-# i = 1
 
 # TWAS Z Manhattan Plot ####
 pdf(file = "analysis/plots/BD_TWAS_ManhattanPlot.pdf")
@@ -147,14 +139,6 @@ twas_z_sacc_threshold <-
 
 twas_z_sig_tables <- list()
 
-for (i in 1:2) {
-    if (i == 1) {
-        write.csv(twas_z_amyg_threshold, file = "analysis/tables/amygdala_twas_significant_genes_zscore.csv")
-    } else {
-        write.csv(twas_z_sacc_threshold, file = "analysis/tables/sacc_twas_significant_genes_zscore.csv")
-    }
-}
-
 # Interactive TWAS Z Manhattan Plots ####
 for (i in 1:2) {
     ##### Plotly
@@ -180,8 +164,7 @@ for (i in 1:2) {
 # Plotly cannot save directly to relative path
 system("mv *_ManhattanPlotly.html analysis/plots/")
 
-# Issue #4 Plots ####
-# https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
+## Scatter plots ####
 
 pdf(
     'analysis/plots/BD_TWAS_ScatterPlots.pdf',
@@ -189,8 +172,6 @@ pdf(
     width = 10,
     height = 10
 )
-
-# setwd(file.path("/Users/artas/Desktop/twas_plots"))
 
 twas_z_select <-
     select(twas_z, geneid, genesymbol, TWAS.Z, TWAS.P, region) %>%
@@ -239,7 +220,7 @@ ggplot(twas_z_wide,
        )) +
     xlab("Amygdala") +
     ylab("sACC") +
-    labs(color = "< FDR 5%", shape = "Gene in both regions?") +
+    labs(color = "< FDR 5%", shape = "Gene in both regions?")
     geom_point() +
     coord_fixed() +
     theme_bw(base_size = 20) +
@@ -247,8 +228,6 @@ ggplot(twas_z_wide,
     scale_color_manual(values = c('#BFBFBF', '#FFFF7F', '#B2CCFF', '#B2CCBF')) # you can define names
 
 dev.off()
-
-write.csv(twas_z_wide, file = "analysis/tables/TWAS_Scatterplot_table.csv")
 
 load(
     "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/case_control/bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda",
@@ -260,9 +239,6 @@ statOutGene <- statOut[statOut$Type == "Gene",] %>%
 
 
 merged_t <- merge(statOutGene, twas_z_wide, by = "geneid")
-
-# save.image("ggplot_test.RData")
-# load("ggplot_test.RData")
 
 pdf(
     'analysis/plots/BD_TWAS_t-stat.pdf',
@@ -286,6 +262,16 @@ ggplot(merged_t,
     theme_bw(base_size = 20)
 
 dev.off()
+
+## XLSX Output ####
+
+write.xlsx2(x = twas_z_amyg_threshold, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "Significant TWAS Z Scores in Amygdala", col.names = TRUE, row.names = FALSE, append = FALSE)
+
+write.xlsx2(x = twas_z_sacc_threshold, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "Significant TWAS Z Scores in sACC", col.names = TRUE, row.names = FALSE, append = TRUE)
+
+write.xlsx2(x = twas_z_wide, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "TWAS Z Scatterplot with FDR and P-Values for Both Regions", col.names = TRUE, row.names = FALSE, append = TRUE)
+
+write.xlsx2(x = merged_t, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "TWAS vs BD Differential Expression in Both Regions", col.names = TRUE, row.names = FALSE, append = TRUE)
 
 ## Reproducibility information ####
 print("Reproducibility information:")
