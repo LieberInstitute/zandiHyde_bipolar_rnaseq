@@ -101,7 +101,7 @@ for (i in 1:2) {
 # i = 1
 
 # TWAS Z Manhattan Plot ####
-pdf(file = "analysis/plots/BIP_TWAS_ManhattanPlot.pdf")
+pdf(file = "analysis/plots/BD_TWAS_ManhattanPlot.pdf")
 # storing ggplot as an object3
 
 sig <- qnorm(1 - 0.025 / table(twas_exp_fin$region))
@@ -171,7 +171,7 @@ for (i in 1:2) {
     saveWidget(fin_plot[[i]],
                file.path(paste0(
                    # "analysis/plots/",
-                   "BIP_TWAS_",
+                   "BD_TWAS_",
                    ifelse(i == 1, "Amygdala", "sACC"),
                    "_ManhattanPlotly.html"
                )))
@@ -184,7 +184,7 @@ system("mv *_ManhattanPlotly.html analysis/plots/")
 # https://github.com/LieberInstitute/zandiHyde_bipolar_rnaseq/issues/4
 
 pdf(
-    'analysis/plots/BIP_TWAS_ScatterPlots.pdf',
+    'analysis/plots/BD_TWAS_ScatterPlots.pdf',
     useDingbats = FALSE,
     width = 10,
     height = 10
@@ -264,7 +264,7 @@ merged_t <- merge(statOutGene, twas_z_wide, by = "geneid")
 # load("ggplot_test.RData")
 
 pdf(
-    'analysis/plots/BIP_TWAS_t-stat.pdf',
+    'analysis/plots/BD_TWAS_t-stat.pdf',
     useDingbats = FALSE,
     width = 10,
     height = 10
@@ -275,12 +275,12 @@ sacc_rho <- format(cor(merged_t$TWAS.Z_sacc, merged_t$t_sACC), digits = 3, scien
 
 ggplot(merged_t,
        aes(x = TWAS.Z_amygdala,
-           y = t_Amyg)) + geom_point() + labs(title = "TWAS vs BD differential expression in Amygdala", x = "TWAS Z score", y = "BIP vs control t-statistic") + annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(amyg_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) + xlim(-6, 6) +
+           y = t_Amyg)) + geom_point() + labs(title = "TWAS vs BD differential expression in Amygdala", x = "TWAS Z score", y = "BD vs control t-statistic") + annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(amyg_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) + xlim(-6, 6) +
     theme_bw(base_size = 20)
 
 ggplot(merged_t,
        aes(x = TWAS.Z_sacc,
-           y = t_sACC)) + geom_point() + labs(title = "TWAS vs BD differential expression in sACC", x = "TWAS Z score", y = "BIP vs control t-statistic")+ annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(sacc_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) +
+           y = t_sACC)) + geom_point() + labs(title = "TWAS vs BD differential expression in sACC", x = "TWAS Z score", y = "BD vs control t-statistic")+ annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(sacc_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) +
     scale_x_continuous(breaks = waiver()) +
     theme_bw(base_size = 20)
 
