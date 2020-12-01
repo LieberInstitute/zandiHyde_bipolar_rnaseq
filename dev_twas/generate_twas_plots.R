@@ -161,7 +161,7 @@ for (i in 1:2) {
                )))
 }
 
-# Plotly cannot save directly to relative path
+# Plotly cannot save directly to relative path for whatever reason
 system("mv *_ManhattanPlotly.html analysis/plots/")
 
 ## Scatter plots ####
@@ -225,7 +225,7 @@ ggplot(twas_z_wide,
     coord_fixed() +
     theme_bw(base_size = 20) +
     ggtitle('TWAS Z by brain region') +
-    scale_color_manual(values = c('#BFBFBF', '#FFFF7F', '#B2CCFF', '#B2CCBF')) # you can define names
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple')) # you can define names
 
 dev.off()
 
