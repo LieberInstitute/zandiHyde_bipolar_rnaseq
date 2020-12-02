@@ -273,6 +273,8 @@ write.xlsx2(x = twas_z_wide, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTab
 
 write.xlsx2(x = merged_t, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "TWAS vs BD Differential Expression in Both Regions", col.names = TRUE, row.names = FALSE, append = TRUE)
 
+save.image("generate_plots_data.RData")
+
 ## Reproducibility information ####
 print("Reproducibility information:")
 Sys.time()
