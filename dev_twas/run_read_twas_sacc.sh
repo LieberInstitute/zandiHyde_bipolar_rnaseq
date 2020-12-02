@@ -3,7 +3,7 @@
 #$ -l bluejay,mem_free=4G,h_vmem=4G,h_fsize=100G
 #$ -N read_twas
 #$ -j y
-#$ -o logs/read_twas.txt
+#$ -o logs/read_twas_sacc.txt
 
 echo "**** Job starts ****"
 date
