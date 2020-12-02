@@ -137,8 +137,6 @@ twas_z_amyg_threshold <-
 twas_z_sacc_threshold <-
     rbind(twas_z_sacc[TWAS.Z > sig[[2]],], twas_z_sacc[TWAS.Z < -sig[[2]],])
 
-twas_z_sig_tables <- list()
-
 # Interactive TWAS Z Manhattan Plots ####
 for (i in 1:2) {
     ##### Plotly
