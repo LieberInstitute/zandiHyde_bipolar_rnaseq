@@ -16,7 +16,7 @@ echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SGE_TASK_ID}"
 
 ## Load dependencies
-module load conda_R
+module load conda_R/4.0.x
 
 ## List current modules
 module list

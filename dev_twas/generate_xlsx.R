@@ -1,7 +1,7 @@
 library(xlsx)
 library(data.table)
 
-load("xlsx_output.RData")
+load(file = "xlsx_output.RData")
 
 write.xlsx2(x = twas_z_amyg_threshold, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "Significant TWAS Z Scores in Amygdala", col.names = TRUE, row.names = FALSE, append = FALSE)
 
