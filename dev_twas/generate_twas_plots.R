@@ -6,7 +6,6 @@ library(plotly)
 library(htmlwidgets)
 library(sessioninfo)
 library(SummarizedExperiment)
-# library(xlsx)
 
 data.table::setDTthreads(threads = 1)
 
@@ -263,14 +262,10 @@ dev.off()
 
 ## XLSX Output ####
 
-# write.xlsx2(x = twas_z_amyg_threshold, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "Significant TWAS Z Scores in Amygdala", col.names = TRUE, row.names = FALSE, append = FALSE)
-#
-# write.xlsx2(x = twas_z_sacc_threshold, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "Significant TWAS Z Scores in sACC", col.names = TRUE, row.names = FALSE, append = TRUE)
-#
-# write.xlsx2(x = twas_z_wide, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "TWAS Z Scatterplot with FDR and P-Values for Both Regions", col.names = TRUE, row.names = FALSE, append = TRUE)
-#
-# write.xlsx2(x = merged_t, file = "analysis/tables/BD_Amyg_sACC_FinalOutputTable.xlsx", sheetName = "TWAS vs BD Differential Expression in Both Regions", col.names = TRUE, row.names = FALSE, append = TRUE)
+# xlsx does not work with conda_R/4.0, needs 4.0.x
+save(twas_z_amyg_threshold, twas_z_sacc_threshold, twas_z_wide, merged_t, "xlsx_output.RData")
 
+# for enrichment test
 save.image("generate_plots_data.RData")
 
 ## Reproducibility information ####
