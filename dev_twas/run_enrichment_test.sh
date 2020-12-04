@@ -4,6 +4,7 @@
 #$ -N enrichment_test
 #$ -j y
 #$ -o logs/enrichment_test.txt
+#$ -m e
 
 echo "**** Job starts ****"
 date
