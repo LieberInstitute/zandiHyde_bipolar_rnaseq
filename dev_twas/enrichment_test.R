@@ -77,15 +77,15 @@ twas_z_sacc_fdr <- twas_z_sacc[fdr.p < 0.05,]
 
 # compareCluster
 
-go_both <- compareCluster(twas_z_both_fdr$fdr, univ = twas_z_both$fdr,
+go_both <- compareCluster(twas_z_both_fdr$fdr.p, univ = twas_z_both$fdr.p,
 	OrgDb = "org.Hs.eg.db", ont = "ALL",
 	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
 
-go_amyg <- compareCluster(twas_z_amyg_fdr$fdr, univ = twas_z_amyg$fdr,
+go_amyg <- compareCluster(twas_z_amyg_fdr$fdr.p, univ = twas_z_amyg$fdr.p,
 	OrgDb = "org.Hs.eg.db", ont = "ALL",
 	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
 
-go_sacc <- compareCluster(twas_z_sacc_fdr$fdr, univ = twas_z_sacc$fdr,
+go_sacc <- compareCluster(twas_z_sacc_fdr$fdr.p, univ = twas_z_sacc$fdr.p,
 	OrgDb = "org.Hs.eg.db", ont = "ALL",
 	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
 
