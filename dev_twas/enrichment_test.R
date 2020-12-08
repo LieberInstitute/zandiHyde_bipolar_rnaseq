@@ -2,6 +2,7 @@ library(tidyverse)
 library(data.table)
 library(SummarizedExperiment)
 library(clusterProfiler)
+library(org.Hs.eg.db)
 
 data.table::setDTthreads(threads = 1)
 
@@ -77,15 +78,15 @@ twas_z_sacc_fdr <- twas_z_sacc[fdr.p < 0.05,]
 
 # compareCluster
 
-go_both <- compareCluster(twas_z_both_fdr$fdr.p, univ = twas_z_both$fdr.p,
+go_both <- compareCluster(twas_z_both_fdr$EntrezID, univ = twas_z_both$EntrezID,
 	OrgDb = "org.Hs.eg.db", ont = "ALL",
 	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
 
-go_amyg <- compareCluster(twas_z_amyg_fdr$fdr.p, univ = twas_z_amyg$fdr.p,
+go_amyg <- compareCluster(twas_z_amyg_fdr$EntrezID, univ = twas_z_amyg$EntrezID,
 	OrgDb = "org.Hs.eg.db", ont = "ALL",
 	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
 
-go_sacc <- compareCluster(twas_z_sacc_fdr$fdr.p, univ = twas_z_sacc$fdr.p,
+go_sacc <- compareCluster(twas_z_sacc_fdr$EntrezID, univ = twas_z_sacc$EntrezID,
 	OrgDb = "org.Hs.eg.db", ont = "ALL",
 	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
 
