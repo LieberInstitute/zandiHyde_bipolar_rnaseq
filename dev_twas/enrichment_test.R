@@ -101,8 +101,8 @@ go_sacc <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
          pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
          qvalueCutoff = 1, readable = TRUE)
 
-save(go_both, file = "go_both_enrichment.rda")
-save(go_amyg, file = "go_amyg_enrichment.rda")
-save(go_sacc, file = "go_sacc_enrichment.rda")
+save(go_both, file = "rda/go_both_enrichment.rda")
+save(go_amyg, file = "rda/go_amyg_enrichment.rda")
+save(go_sacc, file = "rda/go_sacc_enrichment.rda")
 
 session_info()
