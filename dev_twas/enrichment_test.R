@@ -4,6 +4,7 @@ library(SummarizedExperiment)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(devtools)
+library(xlsx)
 
 data.table::setDTthreads(threads = 1)
 
@@ -105,5 +106,19 @@ go_sacc <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
 save(go_both, file = "rda/go_both_enrichment.rda")
 save(go_amyg, file = "rda/go_amyg_enrichment.rda")
 save(go_sacc, file = "rda/go_sacc_enrichment.rda")
+
+## Save as XLSX ####
+go_both_dt <- as.data.table(go_both)
+go_both_dt <- go_both_dt[order(qvalue),]
+
+go_amyg_dt <- as.data.table(go_amyg)
+go_amyg_dt <- go_amyg_dt[order(qvalue),]
+
+go_sacc_dt <- as.data.table(go_sacc)
+go_sacc_dt <- go_sacc_dt[order(qvalue),]
+
+write.xlsx2(go_both, "analysis/tables/BD_EnrichmentTest.xlsx", sheetName="GO_Both", col.names=TRUE, row.names=TRUE, append=FALSE)
+write.xlsx2(go_amyg, "analysis/tables/BD_EnrichmentTest.xlsx", sheetName="GO_Amyg", col.names=TRUE, row.names=TRUE, append=TRUE)
+write.xlsx2(go_sacc, "analysis/tables/BD_EnrichmentTest.xlsx", sheetName="GO_sACC", col.names=TRUE, row.names=TRUE, append=TRUE)
 
 session_info()
