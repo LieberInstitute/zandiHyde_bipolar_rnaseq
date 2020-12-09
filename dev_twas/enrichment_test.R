@@ -78,18 +78,31 @@ twas_z_sacc_fdr <- twas_z_sacc[fdr.p < 0.05,]
 
 # compareCluster
 
-go_both <- compareCluster(twas_z_both_fdr$EntrezID, univ = twas_z_both$EntrezID,
-	OrgDb = "org.Hs.eg.db", ont = "ALL",
-	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
+# test_twas_z_both_fdr <- twas_z_both_fdr[1:100]
+# test_twas_z_both <- twas_z_both[1:100]
+#
+# go_test_both <- enrichGO(gene = test_twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+#          keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
+#          pAdjustMethod = "fdr", universe = test_twas_z_both$EntrezID,
+#          qvalueCutoff = 1, readable = TRUE)
 
-go_amyg <- compareCluster(twas_z_amyg_fdr$EntrezID, univ = twas_z_amyg$EntrezID,
-	OrgDb = "org.Hs.eg.db", ont = "ALL",
-	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
+go_both <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+         keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
+         pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
+         qvalueCutoff = 1, readable = TRUE)
 
-go_sacc <- compareCluster(twas_z_sacc_fdr$EntrezID, univ = twas_z_sacc$EntrezID,
-	OrgDb = "org.Hs.eg.db", ont = "ALL",
-	readable = TRUE, pvalueCutoff = 1, qvalueCutoff = 1)
+go_amyg <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+         keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
+         pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
+         qvalueCutoff = 1, readable = TRUE)
+
+go_sacc <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+         keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
+         pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
+         qvalueCutoff = 1, readable = TRUE)
 
 save(go_both, file = "go_both_enrichment.rda")
 save(go_amyg, file = "go_amyg_enrichment.rda")
 save(go_sacc, file = "go_sacc_enrichment.rda")
+
+session_info()
