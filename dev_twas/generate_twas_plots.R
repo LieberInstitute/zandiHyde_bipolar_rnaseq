@@ -263,10 +263,10 @@ dev.off()
 ## XLSX Output ####
 
 # xlsx does not work with conda_R/4.0, needs 4.0.x
-save(twas_z_amyg_threshold, twas_z_sacc_threshold, twas_z_wide, merged_t, "xlsx_output.RData")
+save(twas_z_amyg_threshold, twas_z_sacc_threshold, twas_z_wide, merged_t, "rda/xlsx_output.RData")
 
 # for enrichment test
-save.image("generate_plots_data.RData")
+save.image("rda/generate_plots_data.RData")
 
 ## Reproducibility information ####
 print("Reproducibility information:")
