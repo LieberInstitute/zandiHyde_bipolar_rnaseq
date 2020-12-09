@@ -93,14 +93,14 @@ go_both <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
          pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
          qvalueCutoff = 1, readable = TRUE)
 
-go_amyg <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+go_amyg <- enrichGO(gene = twas_z_amyg_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
          keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
-         pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
+         pAdjustMethod = "fdr", universe = twas_z_amyg$EntrezID,
          qvalueCutoff = 1, readable = TRUE)
 
-go_sacc <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+go_sacc <- enrichGO(gene = twas_z_sacc_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
          keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
-         pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
+         pAdjustMethod = "fdr", universe = twas_z_sacc$EntrezID,
          qvalueCutoff = 1, readable = TRUE)
 
 save(go_both, file = "rda/go_both_enrichment.rda")
