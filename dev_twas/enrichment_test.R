@@ -3,12 +3,13 @@ library(data.table)
 library(SummarizedExperiment)
 library(clusterProfiler)
 library(org.Hs.eg.db)
+library(devtools)
 
 data.table::setDTthreads(threads = 1)
 
 ## Define background universe of genes ####
 
-load("generate_plots_data.RData")
+load("rda/generate_plots_data.RData")
 
 load("amygdala_gene/working_rse.RData",
      verbose = TRUE)
