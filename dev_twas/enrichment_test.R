@@ -110,12 +110,15 @@ save(go_sacc, file = "rda/go_sacc_enrichment.rda")
 ## Save as XLSX ####
 go_both_dt <- as.data.table(go_both)
 go_both_dt <- go_both_dt[order(qvalue),]
+go_both_dt$GeneRatio = paste0(" ", go_both_dt$GeneRatio)
 
 go_amyg_dt <- as.data.table(go_amyg)
 go_amyg_dt <- go_amyg_dt[order(qvalue),]
+go_amyg_dt$GeneRatio = paste0(" ", go_amyg_dt$GeneRatio)
 
 go_sacc_dt <- as.data.table(go_sacc)
 go_sacc_dt <- go_sacc_dt[order(qvalue),]
+go_sacc_dt$GeneRatio = paste0(" ", go_sacc_dt$GeneRatio)
 
 write.xlsx2(go_both, "analysis/tables/BD_EnrichmentTest.xlsx", sheetName="GO_Both", col.names=TRUE, row.names=TRUE, append=FALSE)
 write.xlsx2(go_amyg, "analysis/tables/BD_EnrichmentTest.xlsx", sheetName="GO_Amyg", col.names=TRUE, row.names=TRUE, append=TRUE)
