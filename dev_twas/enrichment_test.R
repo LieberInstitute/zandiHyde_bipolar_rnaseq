@@ -72,6 +72,21 @@ twas_z_both$fdr.p <- p.adjust(twas_z_both$TWAS.P, 'fdr')
 twas_z_amyg$fdr.p <- p.adjust(twas_z_amyg$TWAS.P, 'fdr')
 twas_z_sacc$fdr.p <- p.adjust(twas_z_sacc$TWAS.P, 'fdr')
 
+# length(twas_z_both$fdr.p)
+# # [1] 13683
+# length(twas_z_both[ifelse(twas_z_both$fdr.p < 0.5, TRUE, FALSE),]$fdr.p)
+# # [1] 2748
+#
+# length(twas_z_amyg$fdr.p)
+# # [1] 6437
+# length(twas_z_amyg[ifelse(twas_z_amyg$fdr.p < 0.5, TRUE, FALSE),]$fdr.p)
+# # [1] 1352
+#
+# length(twas_z_sacc$fdr.p)
+# # [1] 7246
+# length(twas_z_sacc[ifelse(twas_z_sacc$fdr.p < 0.5, TRUE, FALSE),]$fdr.p)
+# # [1] 1440
+
 twas_z_both_fdr <- twas_z_both[fdr.p < 0.05,]
 twas_z_amyg_fdr <- twas_z_amyg[fdr.p < 0.05,]
 twas_z_sacc_fdr <- twas_z_sacc[fdr.p < 0.05,]
