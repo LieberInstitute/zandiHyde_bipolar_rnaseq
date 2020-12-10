@@ -58,50 +58,38 @@ twas_z_amyg[, EntrezID := rowData(amygdala_rse)[match(twas_z_amyg$geneid, rowDat
 #    Mode   FALSE    TRUE
 # logical    6437    2538
 
-## Remove NAs ####
-
-twas_z_amyg <- twas_z_amyg[!is.na(twas_z_amyg$EntrezID),]
-twas_z_sacc <- twas_z_sacc[!is.na(twas_z_sacc$EntrezID),]
+## Calculate FDR < 5% ####
 
 twas_z_both <- rbind(twas_z_amyg, twas_z_sacc)
-twas_z_both <- twas_z_both[!is.na(twas_z_both$EntrezID),]
-
-## Calculate FDR < 5% ####
 
 twas_z_both$fdr.p <- p.adjust(twas_z_both$TWAS.P, 'fdr')
 twas_z_amyg$fdr.p <- p.adjust(twas_z_amyg$TWAS.P, 'fdr')
 twas_z_sacc$fdr.p <- p.adjust(twas_z_sacc$TWAS.P, 'fdr')
 
-# length(twas_z_both$fdr.p)
-# # [1] 13683
-# length(twas_z_both[ifelse(twas_z_both$fdr.p < 0.5, TRUE, FALSE),]$fdr.p)
-# # [1] 2748
-#
-# length(twas_z_amyg$fdr.p)
-# # [1] 6437
-# length(twas_z_amyg[ifelse(twas_z_amyg$fdr.p < 0.5, TRUE, FALSE),]$fdr.p)
-# # [1] 1352
-#
-# length(twas_z_sacc$fdr.p)
-# # [1] 7246
-# length(twas_z_sacc[ifelse(twas_z_sacc$fdr.p < 0.5, TRUE, FALSE),]$fdr.p)
-# # [1] 1440
+# # with(twas_z_sacc, addmargins(table(is.na(EntrezID), fdr.p < 0.05, deparse.level = 2)))
+#                fdr.p < 0.05
+# is.na(EntrezID) FALSE  TRUE   Sum
+#           FALSE  7122   124  7246
+#           TRUE   2722    32  2754
+#           Sum    9844   156 10000
+# # with(twas_z_amyg, addmargins(table(is.na(EntrezID), fdr.p < 0.05, deparse.level = 2)))
+#                fdr.p < 0.05
+# is.na(EntrezID) FALSE TRUE  Sum
+#           FALSE  6343   94 6437
+#           TRUE   2507   31 2538
+#           Sum    8850  125 8975
+
+## Remove NAs ####
+
+twas_z_amyg <- twas_z_amyg[!is.na(twas_z_amyg$EntrezID),]
+twas_z_sacc <- twas_z_sacc[!is.na(twas_z_sacc$EntrezID),]
+twas_z_both <- twas_z_both[!is.na(twas_z_both$EntrezID),]
 
 twas_z_both_fdr <- twas_z_both[fdr.p < 0.05,]
 twas_z_amyg_fdr <- twas_z_amyg[fdr.p < 0.05,]
 twas_z_sacc_fdr <- twas_z_sacc[fdr.p < 0.05,]
 
 ## clusterProfiler ####
-
-# compareCluster
-
-# test_twas_z_both_fdr <- twas_z_both_fdr[1:100]
-# test_twas_z_both <- twas_z_both[1:100]
-#
-# go_test_both <- enrichGO(gene = test_twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
-#          keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
-#          pAdjustMethod = "fdr", universe = test_twas_z_both$EntrezID,
-#          qvalueCutoff = 1, readable = TRUE)
 
 go_both <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
          keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
