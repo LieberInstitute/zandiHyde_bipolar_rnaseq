@@ -91,9 +91,9 @@ twas_z_sacc_fdr <- twas_z_sacc[fdr.p < 0.05,]
 
 ## clusterProfiler ####
 
-go_both <- enrichGO(gene = twas_z_both_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
+go_both <- enrichGO(gene = unique(twas_z_both_fdr$EntrezID), OrgDb = "org.Hs.eg.db",
          keyType = "ENTREZID", ont = "ALL", pvalueCutoff = 1,
-         pAdjustMethod = "fdr", universe = twas_z_both$EntrezID,
+         pAdjustMethod = "fdr", universe = unique(twas_z_both$EntrezID),
          qvalueCutoff = 1, readable = TRUE)
 
 go_amyg <- enrichGO(gene = twas_z_amyg_fdr$EntrezID, OrgDb = "org.Hs.eg.db",
