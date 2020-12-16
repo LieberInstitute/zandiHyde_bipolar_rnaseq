@@ -7,7 +7,6 @@ library(htmlwidgets)
 library(sessioninfo)
 library(SummarizedExperiment)
 library(ggpubr)
-library(dplyr)
 library(tools)
 
 data.table::setDTthreads(threads = 1)
@@ -234,7 +233,6 @@ both_genes_amyg <- twas_z_amyg[twas_z_amyg$geneid %in% twas_z_sacc$geneid]
 
 z_score_cor <- cor.test(both_genes_sacc$TWAS.Z, both_genes_amyg$TWAS.Z, method = "pearson")
 z_score_cor
-library(dplyr)
 
 both_z_scores <- both_genes_sacc %>%
     select(TWAS.Z) %>%
