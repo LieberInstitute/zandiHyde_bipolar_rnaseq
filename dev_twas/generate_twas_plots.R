@@ -246,22 +246,21 @@ pdf(
     height = 10
 )
 
-ggscatter(both_z_scores, x = "amyg_TWAS_Z_both", y = "sacc_TWAS_Z_both",
-          add = "reg.line", conf.int = TRUE,
-          cor.coef = TRUE, cor.method = "pearson",
-          alpha = 0.5,
-          xlab = toTitleCase("TWAS Z-Scores for amygdala genes"), ylab = toTitleCase("TWAS Z-Scores for sACC genes")) +
+
+ggscatter(
+    both_z_scores,
+    x = "amyg_TWAS_Z_both",
+    y = "sacc_TWAS_Z_both",
+    add = "reg.line",
+    add.params = list(color = "red", fill = "orangered1"),
+    conf.int = TRUE,
+    cor.coef = TRUE,
+    cor.method = "pearson",
+    alpha = 0.5,
+    xlab = toTitleCase("TWAS Z-Scores for amygdala genes"),
+    ylab = toTitleCase("TWAS Z-Scores for sACC genes")
+) +
     grids(size = 1) + bgcolor("gray90") + border("gray90")
-
-
-# ggplot(both_z_scores, aes(x = amyg_TWAS_Z_both, y = sacc_TWAS_Z_both)) +
-#     geom_point(alpha = 0.5, color = "black") +
-#     stat_smooth(method = "lm") +
-#     labs(
-#         x = toTitleCase("TWAS Z-Scores for amygdala genes"),
-#         y = toTitleCase("TWAS Z-Scores for sACC genes")
-#     )
-
 
 dev.off()
 
