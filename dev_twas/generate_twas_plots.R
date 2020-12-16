@@ -6,11 +6,15 @@ library(plotly)
 library(htmlwidgets)
 library(sessioninfo)
 library(SummarizedExperiment)
+library(ggpubr)
+library(dplyr)
+library(tools)
 
 data.table::setDTthreads(threads = 1)
 
 # Sourcing Data/Inst. Vars. ####
 load("rda/twas_exp_ranges.Rdata")
+# load("twas_exp_ranges.Rdata")
 
 dir.create(file.path("analysis/plots"),
            showWarnings = FALSE,
@@ -161,7 +165,7 @@ for (i in 1:2) {
 # Plotly cannot save directly to relative path for whatever reason
 system("mv *_ManhattanPlotly.html analysis/plots/")
 
-## Scatter plots ####
+# Scatter plots ####
 
 pdf(
     'analysis/plots/BD_TWAS_ScatterPlots.pdf',
@@ -213,8 +217,8 @@ ggplot(twas_z_wide,
            y = TWAS.Z_sacc,
            color = FDR.5perc
        )) +
-    xlab("Amygdala Z-score") +
-    ylab("sACC Z-score") +
+    xlab("Amygdala Z-Score") +
+    ylab("sACC Z-Score") +
     labs(color = "FDR < 5%") +
     geom_point() +
     coord_fixed() +
@@ -223,6 +227,47 @@ ggplot(twas_z_wide,
 
 dev.off()
 
+## Z-Score Correlation Test ####
+
+both_genes_sacc <- twas_z_sacc[twas_z_sacc$geneid %in% twas_z_amyg$geneid]
+both_genes_amyg <- twas_z_amyg[twas_z_amyg$geneid %in% twas_z_sacc$geneid]
+
+z_score_cor <- cor.test(both_genes_sacc$TWAS.Z, both_genes_amyg$TWAS.Z, method = "pearson")
+z_score_cor
+library(dplyr)
+
+both_z_scores <- both_genes_sacc %>%
+    select(TWAS.Z) %>%
+    mutate(sacc_TWAS_Z_both = TWAS.Z,
+       amyg_TWAS_Z_both = both_genes_amyg$TWAS.Z, .keep = "unused")
+
+pdf(
+    'analysis/plots/BD_TWAS_Z_Correlation.pdf',
+    useDingbats = FALSE,
+    width = 10,
+    height = 10
+)
+
+ggscatter(both_z_scores, x = "amyg_TWAS_Z_both", y = "sacc_TWAS_Z_both",
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "pearson",
+          alpha = 0.5,
+          xlab = toTitleCase("TWAS Z-Scores for amygdala genes"), ylab = toTitleCase("TWAS Z-Scores for sACC genes")) +
+    grids(size = 1) + bgcolor("gray90") + border("gray90")
+
+
+# ggplot(both_z_scores, aes(x = amyg_TWAS_Z_both, y = sacc_TWAS_Z_both)) +
+#     geom_point(alpha = 0.5, color = "black") +
+#     stat_smooth(method = "lm") +
+#     labs(
+#         x = toTitleCase("TWAS Z-Scores for amygdala genes"),
+#         y = toTitleCase("TWAS Z-Scores for sACC genes")
+#     )
+
+
+dev.off()
+
+# Differential Expression ####
 load(
     "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/case_control/bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda",
     verbose = TRUE
@@ -247,18 +292,18 @@ sacc_rho <- format(cor(merged_t$TWAS.Z_sacc, merged_t$t_sACC), digits = 3, scien
 
 ggplot(merged_t,
        aes(x = TWAS.Z_amygdala,
-           y = t_Amyg)) + geom_point() + labs(title = "TWAS vs BD differential expression in Amygdala", x = "TWAS Z score", y = "BD vs control t-statistic") + annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(amyg_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) + xlim(-6, 6) +
+           y = t_Amyg)) + geom_point() + labs(title = toTitleCase("TWAS vs BD differential expression in Amygdala"), x = "TWAS Z-Score", y = "BD vs Control t-Statistic") + annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(amyg_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) + xlim(-6, 6) +
     theme_bw(base_size = 20)
 
 ggplot(merged_t,
        aes(x = TWAS.Z_sacc,
-           y = t_sACC)) + geom_point() + labs(title = "TWAS vs BD differential expression in sACC", x = "TWAS Z score", y = "BD vs control t-statistic")+ annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(sacc_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) +
+           y = t_sACC)) + geom_point() + labs(title = toTitleCase("TWAS vs BD differential expression in sACC"), x = "TWAS Z-Score", y = "BD vs Control t-Statistic")+ annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(sacc_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) +
     scale_x_continuous(breaks = waiver()) +
     theme_bw(base_size = 20)
 
 dev.off()
 
-## XLSX Output ####
+# XLSX Output ####
 
 # xlsx does not work with conda_R/4.0, needs 4.0.x
 save(twas_z_amyg_threshold, twas_z_sacc_threshold, twas_z_wide, merged_t, "rda/xlsx_output.RData")
