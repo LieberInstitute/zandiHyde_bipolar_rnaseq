@@ -211,17 +211,14 @@ ggplot(twas_z_wide,
        aes(
            x = TWAS.Z_amygdala,
            y = TWAS.Z_sacc,
-           color = FDR.5perc,
-           # has four categories
-           shape = in_both
+           color = FDR.5perc
        )) +
-    xlab("Amygdala") +
-    ylab("sACC") +
-    labs(color = "< FDR 5%", shape = "Gene in both regions?") +
+    xlab("Amygdala Z-score") +
+    ylab("sACC Z-score") +
+    labs(color = "FDR < 5%") +
     geom_point() +
     coord_fixed() +
     theme_bw(base_size = 20) +
-    ggtitle('TWAS Z by brain region') +
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple')) # you can define names
 
 dev.off()
@@ -230,6 +227,7 @@ load(
     "/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/case_control/bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda",
     verbose = TRUE
 )
+
 statOutGene <- statOut[statOut$Type == "Gene",] %>%
     as.data.table(keep.rownames = "geneid") %>%
     select(geneid, t_Amyg, t_sACC)
