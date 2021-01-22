@@ -45,7 +45,14 @@ qsub run_process-hg19-gwas.sh
 
 The GWAS file sourced from PGC is converted from an hg19 to an hg38 coordinate map and saved in the working directory as `PGC_BIP_hg38_clean.txt`.
 
-## 6) TWAS results into a single Rdata file
+## 6) Apply Weights
+```
+sh apply_weights.sh
+```
+
+The weights generated in step #4 are used to perform expression imputation. `FUSION.assoc_test.R` is called, followed by `FUSION.post_process.R`, which conducts joint/conditiional tests and produces corresponding plots. See more [here](http://gusevlab.org/projects/fusion/#typical-analysis-and-output) and [here](http://gusevlab.org/projects/fusion/#jointconditional-tests-and-plots).
+
+## 7) TWAS results into a single Rdata file
 ```
 qsub run_read_twas_amygdala.sh
 # and/or
@@ -54,14 +61,14 @@ qsub run_read_twas_sacc.sh
 
 All of the TWAS results from both the sACC and amygdala subregions are combined into a single Rdata file that is used for downstream analysis.
 
-## 7) TWAS plot generation
+## 8) TWAS plot generation
 ```
 qsub run_generate_twas_plots.sh
 ```
 
 This script generates a number of different plots and outputs their corresponding tables into `analysis/plots/` and `analysis/tables/`, respectively.
 
-## 8) Enrichment tests on TWAS FDR < 5% genes
+## 9) Enrichment tests on TWAS FDR < 5% genes
 ```
 qsub run_enrichment_test.sh
 ```
