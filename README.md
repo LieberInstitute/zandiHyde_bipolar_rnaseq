@@ -1,4 +1,18 @@
 # zandiHyde_bipolar_rnaseq
-RNA-seq analysis for psychENCODE R01
+
+This GitHub repository contains the code for analyzing the RNA-seq data from the BipSeq project available through PsychENCODE at https://psychencode.synapse.org/Explore/Studies/DetailsPage?study=syn5844980. 
+
+In order to cite this project, please cite:
+
+* Zandi PP,+, Jaffe AE, Goes F, Burke EE, Collado-Torres L, Barry BK, Seyedian A, Lin Y, Seifuddin F, Pirooznia M, Ross CA, Kleinman JE, Weinberger DR, Hyde TM,+, _bioRxiv_, 2020
+
++ Correspondence to: pzandi1@jhu.edu or thomas.hyde@libd.org
+
+
+## Files
+
+This GitHub repository follows a similar file structure to the one from [BrainSEQ Phase II](https://github.com/LieberInstitute/brainseq_phase2). In general, each directory contains the scripts for a given analysis. If you have any questions about specific scripts, please use the issues and we'll try our best to respond your queries.
+
+## Internal
 
 JHPCE location: `/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq`
