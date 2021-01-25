@@ -1,4 +1,4 @@
-# zandiHyde_bipolar_rnaseq
+# zandiHyde_bipolar_rnaseq [![DOI](https://zenodo.org/badge/88870656.svg)](https://zenodo.org/badge/latestdoi/88870656)
 
 This GitHub repository contains the code for analyzing the RNA-seq data from the BipSeq project available through PsychENCODE at https://psychencode.synapse.org/Explore/Studies/DetailsPage?study=syn5844980. 
 
