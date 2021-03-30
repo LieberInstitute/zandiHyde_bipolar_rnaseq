@@ -254,37 +254,45 @@ geneOut_deconvo <- geneOut
 save(geneOut_deconvo, file = "bipolarControl_deStats_byRegion_qSVAjoint_deconvo.rda")
 # ######################################
 # ##### interaction/cross-region #######
-# 
-# ## overall model
-# mod = cbind(modJoint, qSV_mat)
-# 
+
+## overall model
+mod = cbind(modJoint, qSV_mat)
+
+mod_prop <- cbind(mod ,est_prop_bisque$bulk.props[,c("Astro","Micro","Oligo","OPC","Excit")])
+mod_ilr <- cbind(mod ,est_prop_bisque$ilr)
+
+mod_deconvo <- list(prop = modSep_prop, ilr = modSep_ilr)
 # ###########
 # ## Gene ###
 # ###########
-# 
-# dge = DGEList(counts = assays(rse_gene)$counts, 
-# 	genes = rowData(rse_gene))
-# dge = calcNormFactors(dge)
-# vGene = voom(dge,mod, plot=TRUE)
-# 
-# ## do duplicate correlation
-# gene_dupCorr = duplicateCorrelation(vGene$E, mod, block=colData(rse_gene)$BrNum)
-# save(gene_dupCorr, file = "geneLevel_duplicateCorrelation_limma_forDE.rda")
-# load("geneLevel_duplicateCorrelation_limma_forDE.rda")
-# 
-# # and then fit
-# fitGene = lmFit(vGene, mod, 
-# 	correlation=gene_dupCorr$consensus.correlation, 
-# 	block=colData(rse_gene)$BrNum)
-# eBGene = eBayes(fitGene)
-# outGene_mainEffect = topTable(eBGene,coef=2,
-# 	p.value = 1,number=nrow(rse_gene), sort="none")
-# outGene_interactionEffect = topTable(eBGene,coef=ncol(modJoint),
-# 	p.value = 1,number=nrow(rse_gene), sort="none")
-# 
-# sum(outGene_mainEffect$adj.P.Val < 0.05)
-# sum(outGene_interactionEffect$adj.P.Val < 0.05)
-# 
+
+dge = DGEList(counts = assays(rse_gene)$counts,
+	genes = rowData(rse_gene))
+dge = calcNormFactors(dge)
+
+eBGene <- map(mod_deconvo,function(mod){
+  vGene = voom(dge,mod, plot=FALSE)
+  
+  ## do duplicate correlation
+  gene_dupCorr = duplicateCorrelation(vGene$E, mod, block=colData(rse_gene)$BrNum)
+  save(gene_dupCorr, file = "geneLevel_duplicateCorrelation_limma_forDE.rda")
+  load("geneLevel_duplicateCorrelation_limma_forDE.rda")
+  
+  # and then fit
+  fitGene = lmFit(vGene, mod,
+                  correlation=gene_dupCorr$consensus.correlation,
+                  block=colData(rse_gene)$BrNum)
+  eBGene = eBayes(fitGene)
+  return(eBGene)
+})
+
+outGene_mainEffect = map(eBGene, ~topTable(.x,coef=2, p.value = 1,number=nrow(rse_gene), sort="none"))
+
+outGene_interactionEffect = map(eBGene, ~topTable(.x, coef=ncol(modJoint),p.value = 1,number=nrow(rse_gene), sort="none"))
+
+map_int(outGene_mainEffect, ~sum(.x$adj.P.Val < 0.05))
+map_int(outGene_interactionEffect, ~sum(.x$adj.P.Val < 0.05))
+
 # ###########
 # ## Exon ###
 # ###########
