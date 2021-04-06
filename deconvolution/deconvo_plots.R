@@ -21,9 +21,6 @@ region_colors <- list(Amyg = "#ffff1f",
                       sACC = "#8eb0f6")
 region_colors <- toupper(region_colors)
 
-# region_colors <- list(Amyg = "orange", 
-#                       sACC = "blue")
-
 ## Load MuSiC results & res data
 load(here("deconvolution","est_prop_Bisque.Rdata"),verbose = TRUE)
 load(here("data", "zandiHypde_bipolar_rseGene_n511.rda"), verbose = TRUE)
@@ -53,15 +50,21 @@ region_boxplot <- long_prop_pd %>%
   ggplot(aes(x = cell_type, y = prop, fill = BrainRegion)) +
   geom_boxplot() +
   scale_fill_manual(values = region_colors) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  labs(x = "Cell Type", y = "Proportion", fill ='Brain Region') +
+  theme_bw(
+    # axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        base_size = 15)
 
 ggsave(region_boxplot, filename = here("deconvolution","plots","cellType_boxplots_region.pdf"))
 
 dx_boxPlot_all <- long_prop_pd %>%
   ggplot(aes(x = cell_type, y = prop, fill = PrimaryDx)) +
   geom_boxplot() +
-  facet_wrap(~BrainRegion)+ 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  facet_wrap(~BrainRegion)+
+  labs(x = "Cell Type", y = "Proportion", fill ='Primary Dx') +
+  theme_bw(
+    # axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+    base_size = 15)
 
 ggsave(dx_boxPlot_all, filename = here("deconvolution","plots","cellType_boxplots_dx.pdf"), width = 10)
 
@@ -74,7 +77,7 @@ mean_prop_sce <- sce_pd %>%
   group_by(BrainRegion) %>%
   mutate(region_n_cells = sum(n_cells),
          mean_prop = n_cells/region_n_cells,
-         data = "sce pan",
+         data = "Single Cell Reference",
          BrainRegion = case_when(BrainRegion == "sacc" ~"sACC",
                                  BrainRegion == "amy"~ "Amygdala",
                                  TRUE ~ BrainRegion)) %>%
@@ -83,7 +86,7 @@ mean_prop_sce <- sce_pd %>%
 mean_est_prop <- long_prop_pd %>%
   group_by(cell_type, BrainRegion) %>%
   summarize(mean_prop = mean(prop)) %>%
-  mutate(data = "bulk rnaSeq")
+  mutate(data = "Bulk RNA-seq")
   
 mean_prop <- rbind(mean_prop_sce, mean_est_prop) %>%
   arrange(cell_type) %>%
@@ -94,12 +97,13 @@ comp_barplot <- mean_prop %>% ggplot(aes(x = BrainRegion, y = mean_prop, fill = 
   geom_bar(stat = "identity") +
   facet_wrap(~data) +
   scale_fill_manual(values = cell_colors)+
-  geom_text(aes(y = anno_y, label = round(mean_prop,3)))
+  geom_text(aes(y = anno_y, label = round(mean_prop,3)))+
+  labs(x = "Brain Region", y = "Mean Proportion", fill ='Cell Type') +
+  theme_bw(base_size = 15)
 
 ggsave(comp_barplot, filename = here("deconvolution","plots","composition_barplot.pdf"))
 
 #### Cor with qSV ####
-
 load(here("case_control","qSV_mat.Rdata"), verbose = TRUE)
 dim(qSV_mat)
 
@@ -110,7 +114,6 @@ est_prop_qsv <- left_join(long_prop_pd, qSV_long, by = "sample")
 levels(est_prop_qsv$cell_type)
 
 #### Calculate p-values ####
-
 prop_qSV_fit <- est_prop_qsv %>% group_by(cell_type, qSV, BrainRegion) %>%
   do(fitQSV = tidy(lm(prop ~ qSV_value-1, data = .))) %>% 
   unnest(fitQSV) %>%
@@ -118,7 +121,7 @@ prop_qSV_fit <- est_prop_qsv %>% group_by(cell_type, qSV, BrainRegion) %>%
          p.bonf.sig = p.bonf < 0.05,
          p.bonf.cat = cut(p.bonf, 
                           breaks = c(1,0.05, 0.01, 0.005, 0),
-                          labels = c("< 0.005","< 0.01", "< 0.05", "> 0.05")
+                          labels = c("<= 0.005","<= 0.01", "<= 0.05", "> 0.05")
                           ),
          p.fdr = p.adjust(p.value, "fdr"))
 
@@ -126,56 +129,49 @@ levels(prop_qSV_fit$p.bonf.cat)
 prop_qSV_fit %>% count(BrainRegion, p.bonf.cat)
 # BrainRegion p.bonf.cat     n
 # <fct>       <fct>      <int>
-#   1 Amygdala    < 0.005       28
-# 2 Amygdala    < 0.01         3
-# 3 Amygdala    < 0.05         3
+# 1 Amygdala    <= 0.005      28
+# 2 Amygdala    <= 0.01        3
+# 3 Amygdala    <= 0.05        3
 # 4 Amygdala    > 0.05        74
-# 5 sACC        < 0.005       31
-# 6 sACC        < 0.05         6
+# 5 sACC        <= 0.005      31
+# 6 sACC        <= 0.05        6
 # 7 sACC        > 0.05        71
 
 #### Save results ###
 save(prop_qSV_fit, file = here("deconvolution","prop_qSV_fit.Rdata"))
 
 #### Tile plots ####
+prop_qSV_fit1 <- prop_qSV_fit %>%
+  mutate(log.p.bonf = -log10(p.bonf))
+
 my_breaks <- c(0.05, 0.01, 0.005, 0)
 
 sig_colors <- c(rev(viridis_pal(option = "magma")(3)),NA)
 names(sig_colors) <- levels(prop_qSV_fit$p.bonf.cat)
 
-tile_plot_sig <- prop_qSV_fit %>%
-  ggplot(aes(x = cell_type, y = qSV, fill = p.bonf)) +
-  geom_tile(color = "grey") +
-  labs(title ="p-values cell-type prop~qSV") +
-  geom_text(aes(label = p.bonf.cat, color = p.bonf.cat),size = 3)+
-  scale_color_manual(values = sig_colors) +
-  scale_fill_viridis(name = "p-value bonf", trans = "log10", option = "magma") +
-  facet_wrap(~BrainRegion)+ 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-ggsave(plot = tile_plot_sig,
-       filename = here("deconvolution","plots","qSV_prop_fit_tileSig.pdf"), 
-       width = 10)
-
-tile_plot_val <-prop_qSV_fit %>%
-  ggplot(aes(x = cell_type, y = qSV, fill = p.bonf)) +
+tile_plot_val <-prop_qSV_fit1 %>%
+  ggplot(aes(x = cell_type, y = qSV, fill = log.p.bonf)) +
   geom_tile(color = "grey") +
-  labs(title ="p-values cell-type prop~qSV") +
-  geom_text(aes(label = round(log10(p.bonf),3), color = p.bonf.cat),size = 3)+
+  geom_text(aes(label = format(round(log10(p.bonf),1), nsmall = 1),
+                color = p.bonf.cat), size = 3, fontface = "bold")+
   scale_color_manual(values = sig_colors) +
-  scale_fill_viridis(name = "p-value bonf", trans = "log10", option = "magma")+
+  scale_fill_viridis(name = "-log10(p-value Bonf)", option = "magma", direction = -1) +
   facet_wrap(~BrainRegion)+ 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  labs(title ="p-values cell-type prop~qSV", x = 'Cell Type', color = "p-value Bonf\nsignificance") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  theme_bw(base_size = 15)
 
 ggsave(plot = tile_plot_val,
        filename = here("deconvolution","plots","qSV_prop_fit_tileVal.pdf"), 
        width = 10)
 
 #### Create scatter plots ####
-sig_colors2 <- c(brewer.pal(3, "Set1"),"black")
+# sig_colors2 <- c(brewer.pal(3, "Set1"),"black")
+sig_colors2 <- c("#440154","#31688E", "#35B779","black")
 names(sig_colors2) <- levels(prop_qSV_fit$p.bonf.cat)
 
-regions =list(sacc = "sACC", amyg = "Amygdala")
+regions <- list(sacc = "sACC", amyg = "Amygdala")
 
 est_prop_qsv_fit <- left_join(est_prop_qsv, prop_qSV_fit)
 
