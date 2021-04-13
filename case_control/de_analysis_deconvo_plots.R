@@ -140,3 +140,13 @@ t_stat_scatter <- t_stats2 %>% filter(term == "prop") %>%
   theme_bw()
 
 ggsave(t_stat_scatter, filename = paste0(plot_fn, "_t_stat_scatter.pdf"), width = 10 )
+
+t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
+  ggplot(aes(no_deconvo.t, deconvo.t))+
+  geom_point(size = 0.5, alpha = 0.5) +
+  facet_wrap(~ BrainRegion, nrow = 1) +
+  scale_color_manual(values = signif_colors) +
+  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution")+
+  theme_bw()
+
+ggsave(t_stat_scatter_simple, filename = paste0(plot_fn, "_t_stat_scatter_simple.pdf"), width = 10 )
