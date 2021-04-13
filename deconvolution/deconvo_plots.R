@@ -97,7 +97,7 @@ comp_barplot <- mean_prop %>% ggplot(aes(x = BrainRegion, y = mean_prop, fill = 
   geom_bar(stat = "identity") +
   facet_wrap(~data) +
   scale_fill_manual(values = cell_colors)+
-  geom_text(aes(y = anno_y, label = round(mean_prop,3)))+
+  geom_text(aes(y = anno_y, label = format(round(mean_prop,3),3)))+
   labs(x = "Brain Region", y = "Mean Proportion", fill ='Cell Type') +
   theme_bw(base_size = 15)
 
@@ -138,7 +138,7 @@ prop_qSV_fit %>% count(BrainRegion, p.bonf.cat)
 # 7 sACC        > 0.05        71
 
 #### Save results ###
-save(prop_qSV_fit, file = here("deconvolution","prop_qSV_fit.Rdata"))
+# save(prop_qSV_fit, file = here("deconvolution","prop_qSV_fit.Rdata"))
 
 #### Tile plots ####
 prop_qSV_fit1 <- prop_qSV_fit %>%
@@ -149,12 +149,12 @@ my_breaks <- c(0.05, 0.01, 0.005, 0)
 sig_colors <- c(rev(viridis_pal(option = "magma")(3)),NA)
 names(sig_colors) <- levels(prop_qSV_fit$p.bonf.cat)
 
-
 tile_plot_val <-prop_qSV_fit1 %>%
   ggplot(aes(x = cell_type, y = qSV, fill = log.p.bonf)) +
   geom_tile(color = "grey") +
-  geom_text(aes(label = format(round(log10(p.bonf),1), nsmall = 1),
-                color = p.bonf.cat), size = 3, fontface = "bold")+
+  geom_text(aes(label = format(round(-log10(p.bonf),1), nsmall = 1),
+                color = p.bonf.cat), size = 3, fontface = "bold", 
+            show.legend = F)+
   scale_color_manual(values = sig_colors) +
   scale_fill_viridis(name = "-log10(p-value Bonf)", option = "magma", direction = -1) +
   facet_wrap(~BrainRegion)+ 
