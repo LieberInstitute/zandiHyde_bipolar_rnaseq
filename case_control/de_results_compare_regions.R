@@ -14,11 +14,12 @@ statOut <- as.data.frame(statOut) %>%
                                   adj.P.Val_Amyg < 0.05 ~ "Amygdala",
                                   TRUE ~ "None"))
 
-table(statOut$`FDR < 0.05`)
-# Amygdala     Both     None     sACC 
-#     253       67   759277     1768
-
 statOut$Type <- factor(statOut$Type, levels = c("Gene", "Exon", "Junction", "Transcript"))
+statOut$`FDR < 0.05` <- factor(statOut$`FDR < 0.05`, levels = c("Both", "Amygdala", "sACC", "None"))
+
+table(statOut$`FDR < 0.05`)
+# Both Amygdala     sACC     None 
+# 67      253     1768   759277 
 
 fdr_colors <- c(None = "gray", sACC = "skyblue3", Amygdala = "orange", Both = "purple")
 
@@ -32,7 +33,7 @@ t_stat_scatter <- ggplot(statOut, aes(x = t_Amyg, y = t_sACC, color = `FDR < 0.0
 ggsave(t_stat_scatter, filename = here("case_control","deStats_region_t_plots.pdf"))
 ggsave(t_stat_scatter, filename = here("case_control","deStats_region_t_plots.png"))
 
-# sgejobs::job_single('de_results_compare_regions', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript de_results_compare_regions.R")
+# sgejobs::job_single('de_results_compare_regions', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript de_results_compare_regions.R")
 ## Reproducibility information
 print("Reproducibility information:")
 Sys.time()
