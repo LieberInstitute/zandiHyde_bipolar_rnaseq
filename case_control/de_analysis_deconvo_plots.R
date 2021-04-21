@@ -56,6 +56,7 @@ all_geneOut_long %>% count(BrainRegion, term, signif)
 # 3 sACC        <= 0.01    83        169    61
 # 4 sACC        <= 0.05   296        497   257
 
+
 #### ggpairs plots ####
 t_wide <- all_geneOut_long %>% 
   select(Gene, BrainRegion, term, t) %>%
@@ -85,7 +86,13 @@ t_stats <- all_geneOut_long %>%
               filter(term == "no_deconvo") %>%
               select(Gene, BrainRegion, t) %>%
               rename(no_deconvo.t = t) )
-  
+
+## spearman cor
+t_cor <- t_stats %>% 
+  group_by(BrainRegion) %>%
+  summarize(cor = cor(no_deconvo.t, deconvo.t, method = "spearman")) %>%
+  mutate(cor_anno = paste0("rho==", format(round(cor, 2), nsmall = 2)))
+
 p_vals <- all_geneOut_long %>%
   select(Gene, term, BrainRegion, adj.P.Val) %>%
   filter(term != "no_deconvo") %>%
@@ -112,6 +119,7 @@ signif_colors <- list(None = 'grey80',
                       sig_deconvo = 'dark orange', 
                       `sig_no-deconvo` = 'skyblue3', 
                       sig_Both = 'purple')
+
 
 t_lims_deconvo <- t_limits %>% filter(term != "no_deconvo")%>% ungroup()
 t_lims_no_deconvo <- t_limits %>% filter(term == "no_deconvo")%>% ungroup() %>% select(-term) 
@@ -146,6 +154,7 @@ t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
   geom_point(size = 0.5, alpha = 0.5) +
   facet_wrap(~ BrainRegion, nrow = 1) +
   scale_color_manual(values = signif_colors) +
+  geom_text(data = t_cor, aes(x = -4, y = 5, label = cor_anno), parse = TRUE) +
   labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution")+
   theme_bw()
 
