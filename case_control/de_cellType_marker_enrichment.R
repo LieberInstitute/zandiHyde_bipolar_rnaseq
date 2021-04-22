@@ -1,11 +1,15 @@
 
 library(tidyverse)
 library(spatialLIBD)
+library(SummarizedExperiment)
 library(jaffelab)
 library(here)
+library(sessioninfo)
 
-
+## Load Data
+# load(here("data","zandiHypde_bipolar_rseGene_n511.rda"), verbose = TRUE)
 load(here("case_control","bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda"), verbose = TRUE)
+
 statOut <- statOut %>% 
   as.data.frame() %>% 
   filter(Type == "Gene") %>%
@@ -27,18 +31,27 @@ tstats <- statOut[, grep("[f|t]_", colnames(statOut))]
 fdrs <- statOut[, grep("adj.P.Val_", colnames(statOut))]
 fdr_cut <- 0.05
 
-geneList_present <- marker_stats_50 %>% 
+marker_gene_list <- marker_stats_50 %>% 
   group_map(~pull(.x, gene))
 names(geneList_present) <- levels(marker_stats_50$cellType.target)
 
 
 source("gene_set_enrichment.R") 
 
-gse <- gene_set_enrichment(gene_list = geneList_present, modeling_results = statOut)
+gse <- gene_set_enrichment(gene_list = marker_gene_list, modeling_results = statOut)
 gse %>% filter(Pval < 0.05)
 #         OR         Pval   test Group direction fdr_cut
 # 1 24.79029 3.073203e-14 t_sACC Micro      down    0.05
 
 png("gene_set_erichment.png")
 gene_set_enrichment_plot(gse)
+title("Top 50 Cell Type Markers & FDR < 0.05")
 dev.off()
+
+# sgejobs::job_single('de_cellType_marker_enrichment', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript de_cellType_marker_enrichment.R")
+## Reproducibility information
+print("Reproducibility information:")
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
