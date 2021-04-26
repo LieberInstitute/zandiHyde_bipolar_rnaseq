@@ -6,6 +6,7 @@ library(recount)
 library(here)
 library(sessioninfo)
 library(VennDiagram)
+library(RColorBrewer)
 
 source("leveneFast.R")
 ## load data
@@ -63,17 +64,22 @@ table(levene_test_region$adj.pval < 0.05)
 # FALSE  TRUE 
 # 20503  4633 
 
+myCol <- brewer.pal(3, "Pastel2")
 
 venn.diagram(
   x = list(
     rownames(levene_test_regionXdx)[levene_test_regionXdx$adj.pval < 0.05],
     rownames(levene_test_dx)[levene_test_dx$adj.pval < 0.05],
     rownames(levene_test_region)[levene_test_region$adj.pval < 0.05]),
-  category.names = c("Region x Dx", 'Dx',"Region"),
+  category.names = c("Region + Dx", 'Dx',"Region"),
+  
+  # Circles
+  lwd = 2,
+  fill = myCol,
+  
   filename = here("case_control","levene_test.png"),
   output = TRUE
 )
-
 
 load(here("case_control","bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda"), verbose = TRUE)
 statOut_gene <- statOut[statOut$Type == "Gene",]
@@ -95,7 +101,32 @@ venn.diagram(
     rownames(levene_test_regionXdx)[levene_test_regionXdx$adj.pval < 0.05],
     rownames(statOut_gene)[statOut_gene$adj.P.Val_Amyg < 0.05],
     rownames(statOut_gene)[statOut_gene$adj.P.Val_sACC < 0.05]),
-  category.names = c("Reg. x Dx LT", "DE Amyg","DE sACC"),
+  category.names = c("Reg. + Dx LT", "DE Amyg","DE sACC"),
+  
+  # Circles
+  lwd = 2,
+  fill = myCol,
+  
   filename = here("case_control","levene_test_DE.png"),
   output = TRUE
 )
+
+# venn.diagram(
+#   x = list(
+#     rownames(levene_test_regionXdx)[levene_test_regionXdx$adj.pval < 0.05],
+#     rownames(levene_test_region)[levene_test_region$adj.pval < 0.05],
+#     rownames(statOut_gene)[statOut_gene$adj.P.Val_Amyg < 0.05],
+#     rownames(statOut_gene)[statOut_gene$adj.P.Val_sACC < 0.05]),
+#   category.names = c("Reg. + Dx LT","Region LT","DE Amyg","DE sACC"),
+#   filename = here("case_control","levene_test_DE_region.png"),
+#   output = TRUE
+# )
+
+
+# sgejobs::job_single('region_levene_test', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript region_levene_test.R")
+## Reproducibility information
+print("Reproducibility information:")
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
