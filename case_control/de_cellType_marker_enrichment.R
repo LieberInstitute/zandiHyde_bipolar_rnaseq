@@ -33,7 +33,7 @@ fdr_cut <- 0.05
 
 marker_gene_list <- marker_stats_50 %>% 
   group_map(~pull(.x, gene))
-names(geneList_present) <- levels(marker_stats_50$cellType.target)
+names(marker_gene_list) <- levels(marker_stats_50$cellType.target)
 
 
 source("gene_set_enrichment.R") 
@@ -43,9 +43,18 @@ gse %>% filter(Pval < 0.05)
 #         OR         Pval   test Group direction fdr_cut
 # 1 24.79029 3.073203e-14 t_sACC Micro      down    0.05
 
-png("gene_set_erichment.png")
-gene_set_enrichment_plot(gse)
-title("Top 50 Cell Type Markers & FDR < 0.05")
+gse %>% filter(Pval < .99) %>% summarize(max(Pval))
+
+gse$ID <- gsub("_"," ",gsub("t_","",gse$ID))
+
+png("gene_set_enrichment.png")
+gene_set_enrichment_plot(gse, ORcut = .2)
+title("OR: Top 50 Cell Type Markers & FDR < 0.05")
+dev.off()
+
+pdf("gene_set_enrichment.pdf")
+gene_set_enrichment_plot(gse, ORcut = .2)
+title("OR: Top 50 Cell Type Markers & FDR < 0.05")
 dev.off()
 
 # sgejobs::job_single('de_cellType_marker_enrichment', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript de_cellType_marker_enrichment.R")

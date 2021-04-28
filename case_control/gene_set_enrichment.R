@@ -12,7 +12,7 @@ gene_set_enrichment <- function(gene_list,
                      down = tstats[, i] < 0 & fdrs[, i] < fdr_cut)
       
       enrichList <- lapply(layer, function(l){
-        lapply(geneList_present, function(g) {
+        lapply(gene_list, function(g) {
           tt <-
             table(
               Set = factor(statOut$ensembl %in% g, c(FALSE, TRUE)),
