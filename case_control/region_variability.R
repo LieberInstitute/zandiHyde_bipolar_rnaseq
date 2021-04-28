@@ -7,6 +7,7 @@ library(here)
 library(sessioninfo)
 library(VennDiagram)
 library(RColorBrewer)
+library(tidyverse)
 
 source("leveneFast.R")
 ## load data
@@ -36,7 +37,7 @@ modJoint = model.matrix(~Dx*BrainRegion + AgeDeath + Sex + snpPC1 + snpPC2 + snp
 modJoint <- modJoint[,c(1:3,14,4:13)]
 colnames(modJoint)
 
-##fix coef
+##Run cleaningY
 expr <- cleaningY(log2(assays(rse_gene)$rpkm + 1), mod = modJoint, P = 4)
 
 #### Levene Test ####
@@ -81,49 +82,70 @@ venn.diagram(
   output = TRUE
 )
 
-load(here("case_control","bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda"), verbose = TRUE)
-statOut_gene <- statOut[statOut$Type == "Gene",]
-dim(statOut_gene)
-
-
-table(levene_test_regionXdx$adj.pval < 0.05, statOut_gene$adj.P.Val_sACC < 0.05)
-#       FALSE  TRUE
-# FALSE 20480   429
-# TRUE   3990   237
-
-table(levene_test_regionXdx$adj.pval < 0.05, statOut_gene$adj.P.Val_Amyg < 0.05)
-#       FALSE  TRUE
-# FALSE 20844    65
-# TRUE   4188    39
-
-venn.diagram(
-  x = list(
-    rownames(levene_test_regionXdx)[levene_test_regionXdx$adj.pval < 0.05],
-    rownames(statOut_gene)[statOut_gene$adj.P.Val_Amyg < 0.05],
-    rownames(statOut_gene)[statOut_gene$adj.P.Val_sACC < 0.05]),
-  category.names = c("Reg. + Dx LT", "DE Amyg","DE sACC"),
-  
-  # Circles
-  lwd = 2,
-  fill = myCol,
-  
-  filename = here("case_control","levene_test_DE.png"),
-  output = TRUE
-)
-
+# load(here("case_control","bipolarControl_deStats_byRegion_qSVAjoint_withAnnotation.rda"), verbose = TRUE)
+# statOut_gene <- statOut[statOut$Type == "Gene",]
+# dim(statOut_gene)
+# 
+# 
+# table(levene_test_regionXdx$adj.pval < 0.05, statOut_gene$adj.P.Val_sACC < 0.05)
+# #       FALSE  TRUE
+# # FALSE 20480   429
+# # TRUE   3990   237
+# 
+# table(levene_test_regionXdx$adj.pval < 0.05, statOut_gene$adj.P.Val_Amyg < 0.05)
+# #       FALSE  TRUE
+# # FALSE 20844    65
+# # TRUE   4188    39
+# 
 # venn.diagram(
 #   x = list(
 #     rownames(levene_test_regionXdx)[levene_test_regionXdx$adj.pval < 0.05],
-#     rownames(levene_test_region)[levene_test_region$adj.pval < 0.05],
 #     rownames(statOut_gene)[statOut_gene$adj.P.Val_Amyg < 0.05],
 #     rownames(statOut_gene)[statOut_gene$adj.P.Val_sACC < 0.05]),
-#   category.names = c("Reg. + Dx LT","Region LT","DE Amyg","DE sACC"),
-#   filename = here("case_control","levene_test_DE_region.png"),
+#   category.names = c("Reg. + Dx LT", "DE Amyg","DE sACC"),
+#   
+#   # Circles
+#   lwd = 2,
+#   fill = myCol,
+#   
+#   filename = here("case_control","levene_test_DE.png"),
 #   output = TRUE
 # )
 
 
-# sgejobs::job_single('region_levene_test', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript region_levene_test.R")
+#### Box Plots ####
+# it’s going to be 4 boxes (region * Dx), with the rowSds() output from the 
+# cleaningY(log2(RPKM + 1)) keeping Dx and Region effects and removing everything else (except the intercept)
+
+regionXdx <- cross2(levels(rse_gene$BrainRegion),levels(rse_gene$Dx))
+names(regionXdx) <- map(regionXdx, ~paste(.x[[1]],.x[[2]]))
+
+table(rse_gene$BrainRegion, rse_gene$Dx)
+
+gene_sd <- map_dfc(regionXdx, function(rXd){
+  expr_subset <- expr[,rse_gene$BrainRegion == rXd[[1]] & rse_gene$Dx == rXd[[2]]]
+  return(rowSds(expr_subset))
+})
+
+gene_sd_long <- gene_sd %>% 
+  add_column(gene = rownames(expr)) %>%
+  pivot_longer(!gene, names_to = "regionXdx", values_to = "gene_sd") %>%
+  mutate(regionXdx2 = regionXdx) %>%
+  separate(regionXdx2, into = c("BrainRegion","Dx"))
+
+region_colors <- list(Amyg = "#ffff1f",
+                      sACC = "#8eb0f6")
+region_colors <- toupper(region_colors)
+
+gene_sd_boxplot <- ggplot(gene_sd_long, aes(x = regionXdx, y = gene_sd, fill = BrainRegion)) +
+  geom_boxplot() +
+  theme_bw(base_size = 10) +
+  scale_fill_manual(values = region_colors)+
+  labs(x = "Region + Dx", y = "sd Gene Expr")
+
+ggsave(here("case_control","region_var_boxplot.png"))
+
+# sgejobs::job_single('region_variability', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript region_variabilityt.R")
 ## Reproducibility information
 print("Reproducibility information:")
 Sys.time()
