@@ -42,9 +42,24 @@ en_volcano <-  EnhancedVolcano(statOut_long,
                                  y = 'adj.P.Val',
                                pCutoff = 0.05) +
   facet_grid(Region~Type) +
-  xlim(-2, 2)
+  xlim(-1.7, 1.7)+
+  ylim(0, 5)+
+  theme_bw(base_size = 10)
 
 ggsave(en_volcano, filename = here("case_control","volcano_en.png"), width = 20, height = 10)
+ggsave(en_volcano, filename = here("case_control","volcano_en.pdf"), width = 20, height = 10)
+
+#### Simple Volcano ####
+
+simple_volcano <- ggplot(statOut_long, aes(x = logFC, y = -log10(adj.P.Val))) +
+  geom_point(size = 0.05) + 
+  facet_grid(Region~Type)+
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "lightskyblue3")+
+  theme_bw(base_size = 10) +
+  labs(x = "log2 Fold Change", y = "-log10 adj. P Value")
+
+ggsave(simple_volcano, filename = here("case_control","volcano_simple.png"), width = 10, height = 5)
+ggsave(simple_volcano, filename = here("case_control","volcano_simple.pdf"), width = 10, height = 5)
 
 # sgejobs::job_single('volcano_plots', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript volcano_plots.R")
 ## Reproducibility information
