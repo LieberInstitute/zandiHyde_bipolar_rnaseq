@@ -47,12 +47,12 @@ gse %>% filter(Pval < .99) %>% summarize(max(Pval))
 
 gse$ID <- gsub("_"," ",gsub("t_","",gse$ID))
 
-png("gene_set_enrichment.png")
+png(here("case_control","plots","gene_set_enrichment.png"))
 gene_set_enrichment_plot(gse, ORcut = .2)
 title("OR: Top 50 Cell Type Markers & FDR < 0.05")
 dev.off()
 
-pdf("gene_set_enrichment.pdf")
+pdf(here("case_control","plots","gene_set_enrichment.pdf"))
 gene_set_enrichment_plot(gse, ORcut = .2)
 title("OR: Top 50 Cell Type Markers & FDR < 0.05")
 dev.off()

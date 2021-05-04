@@ -1,9 +1,9 @@
 #!/bin/bash
 #$ -cwd
 #$ -l bluejay,mem_free=50G,h_vmem=50G,h_fsize=100G
-#$ -N region_variability
-#$ -o logs/region_variability.txt
-#$ -e logs/region_variability.txt
+#$ -N de_analysis_deconvo_plots
+#$ -o logs/de_analysis_deconvo_plots.txt
+#$ -e logs/de_analysis_deconvo_plots.txt
 #$ -m e
 
 echo "**** Job starts ****"
@@ -23,7 +23,7 @@ module load conda_R
 module list
 
 ## Edit with your job command
-Rscript region_variability.R
+Rscript de_analysis_deconvo_plots.R
 
 echo "**** Job ends ****"
 date

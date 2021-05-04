@@ -38,8 +38,8 @@ t_stat_scatter <- ggplot(statOut, aes(x = t_Amyg, y = t_sACC)) +
   theme_bw(base_size = 15) +
   NULL
 
-ggsave(t_stat_scatter, filename = here("case_control","deStats_region_t_plots.png"))
-ggsave(t_stat_scatter, filename = here("case_control","deStats_region_t_plots.pdf"))
+ggsave(t_stat_scatter, filename = here("case_control","plots","deStats_region_t_plots.png"))
+ggsave(t_stat_scatter, filename = here("case_control","plots","deStats_region_t_plots.pdf"))
 
 # sgejobs::job_single('de_results_compare_regions', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript de_results_compare_regions.R")
 ## Reproducibility information

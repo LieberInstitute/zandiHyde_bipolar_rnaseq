@@ -9,7 +9,7 @@ library(here)
 load(here("case_control","bipolarControl_deStats_byRegion_qSVAjoint_deconvo.rda"), verbose = TRUE)
 load(here("case_control","bipolarControl_deStats_byRegion_qSVAjoint.rda"), verbose = TRUE)
 
-geneOut_deconvo2 <- geneOut_deconvo %>% 
+geneOut_deconvo2 <- geneOut_deconvo %>%
   rownames_to_column("Gene") %>%
   as_tibble() %>%
   separate(Gene, into = c("term","Gene"), extra = "merge") %>%
@@ -31,7 +31,7 @@ all_geneOut_sep <- map(c("Amyg", "sACC"), function(x){
   geneOut_region <- all_geneOut %>%
     select(Gene,term, ends_with(x)) %>%
     mutate(BrainRegion = x)
-  
+
   colnames(geneOut_region) <- ss(colnames(geneOut_region),"_")
   return(geneOut_region)
 })
@@ -58,7 +58,7 @@ all_geneOut_long %>% count(BrainRegion, term, signif)
 
 
 #### ggpairs plots ####
-t_wide <- all_geneOut_long %>% 
+t_wide <- all_geneOut_long %>%
   select(Gene, BrainRegion, term, t) %>%
   pivot_wider(values_from = "t", names_from = "term")
 
@@ -72,12 +72,12 @@ names(t_ggpairs) <- t_wide %>%
   count() %>%
   pull(BrainRegion)
 
-plot_fn <- here("deconvolution","plots","DE")
+plot_fn <- here("case_control","plots","deStats_deconvo")
 
 walk2(t_ggpairs, names(t_ggpairs), ~ggsave(.x + labs(title = .y),
-                                          filename = paste0(plot_fn, "_ggpairs_tstats-",.y ,".png")))
+                                          filename = paste0(plot_fn, "_ggpairs_",.y ,".png")))
 
-## plot t-stats deconvo vs. no-deconvo 
+## plot t-stats deconvo vs. no-deconvo
 t_stats <- all_geneOut_long %>%
   select(Gene, term, BrainRegion, t) %>%
   filter(term != "no_deconvo") %>%
@@ -88,7 +88,7 @@ t_stats <- all_geneOut_long %>%
               rename(no_deconvo.t = t) )
 
 ## spearman cor
-t_cor <- t_stats %>% 
+t_cor <- t_stats %>%
   group_by(BrainRegion) %>%
   summarize(cor = cor(no_deconvo.t, deconvo.t, method = "spearman")) %>%
   mutate(cor_anno = paste0("rho==", format(round(cor, 2), nsmall = 2)))
@@ -115,14 +115,14 @@ t_limits <- all_geneOut_long %>%
 
 t_stats2 <- left_join(t_stats, p_vals)
 
-signif_colors <- list(None = 'grey80', 
-                      sig_deconvo = 'dark orange', 
-                      `sig_no-deconvo` = 'skyblue3', 
+signif_colors <- list(None = 'grey80',
+                      sig_deconvo = 'dark orange',
+                      `sig_no-deconvo` = 'skyblue3',
                       sig_Both = 'purple')
 
 
 t_lims_deconvo <- t_limits %>% filter(term != "no_deconvo")%>% ungroup()
-t_lims_no_deconvo <- t_limits %>% filter(term == "no_deconvo")%>% ungroup() %>% select(-term) 
+t_lims_no_deconvo <- t_limits %>% filter(term == "no_deconvo")%>% ungroup() %>% select(-term)
 
 t_stat_scatter_both <- ggplot(t_stats2, aes(no_deconvo.t, deconvo.t, color = Signif))+
   geom_hline(data = t_lims_deconvo, aes(yintercept = min_t, linetype = signif))+
@@ -130,11 +130,11 @@ t_stat_scatter_both <- ggplot(t_stats2, aes(no_deconvo.t, deconvo.t, color = Sig
   geom_point(size = 0.5, alpha = 0.5) +
   facet_grid(term ~ BrainRegion) +
   scale_color_manual(values = signif_colors) +
-  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution", 
+  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution",
        color = "FDR <= 0.05", linetype = "FDR <= 0.01")+
   theme_bw()
 
-ggsave(t_stat_scatter_both, filename = paste0(plot_fn, "_t_stat_scatter_both.png"), width = 10 )
+ggsave(t_stat_scatter_both, filename = paste0(plot_fn, "_scatter_both.png"), width = 10 )
 
 t_stat_scatter <- t_stats2 %>% filter(term == "prop") %>%
   ggplot(aes(no_deconvo.t, deconvo.t, color = Signif))+
@@ -143,11 +143,11 @@ t_stat_scatter <- t_stats2 %>% filter(term == "prop") %>%
   geom_point(size = 0.5, alpha = 0.5) +
   facet_wrap(~ BrainRegion, nrow = 1) +
   scale_color_manual(values = signif_colors) +
-  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution", 
+  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution",
        color = "FDR <= 0.05", linetype = "FDR <= 0.01")+
   theme_bw()
 
-ggsave(t_stat_scatter, filename = paste0(plot_fn, "_t_stat_scatter.pdf"), width = 10 )
+ggsave(t_stat_scatter, filename = paste0(plot_fn, "_scatter.pdf"), width = 10 )
 
 t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
   ggplot(aes(no_deconvo.t, deconvo.t))+
@@ -158,4 +158,13 @@ t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
   labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution")+
   theme_bw()
 
-ggsave(t_stat_scatter_simple, filename = paste0(plot_fn, "_t_stat_scatter_simple.pdf"), width = 10 )
+ggsave(t_stat_scatter_simple, filename = paste0(plot_fn, "_scatter_simple.pdf"), width = 10 )
+
+# sgejobs::job_single('de_analysis_deconvo_plots.R', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript de_analysis_deconvo_plots.R")
+
+## Reproducibility information
+print('Reproducibility information:')
+Sys.time()
+proc.time()
+options(width = 120)
+sessioninfo::session_info()
