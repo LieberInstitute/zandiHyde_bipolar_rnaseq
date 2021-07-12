@@ -130,23 +130,26 @@ t_stat_scatter_both <- ggplot(t_stats2, aes(no_deconvo.t, deconvo.t, color = Sig
   geom_point(size = 0.5, alpha = 0.5) +
   facet_grid(term ~ BrainRegion) +
   scale_color_manual(values = signif_colors) +
-  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution",
+  labs(x = "T-statistic no deconvolution", y = "T-statistic with deconvolution",
        color = "FDR <= 0.05", linetype = "FDR <= 0.01")+
   theme_bw()
 
 ggsave(t_stat_scatter_both, filename = paste0(plot_fn, "_scatter_both.png"), width = 10 )
 
-t_stat_scatter <- t_stats2 %>% filter(term == "prop") %>%
-  ggplot(aes(no_deconvo.t, deconvo.t, color = Signif))+
+t_stat_scatter <- t_stats2 %>%
+  filter(term == "prop") %>%
+  ggplot(aes(x = no_deconvo.t, y = deconvo.t))+
+  geom_point(aes(color = Signif), size = 0.5, alpha = 0.5) +
   geom_hline(data = t_lims_deconvo %>% filter(term == "prop"), aes(yintercept = min_t, linetype = signif))+
   geom_vline(data = t_lims_no_deconvo, aes(xintercept = min_t, linetype = signif))+
-  geom_point(size = 0.5, alpha = 0.5) +
   facet_wrap(~ BrainRegion, nrow = 1) +
   scale_color_manual(values = signif_colors) +
-  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution",
+  geom_text(data = t_cor, aes(x = 0, y = 5, label = cor_anno), parse = TRUE) +
+  labs(x = "T-statistic no deconvolution", y = "T-statistic with deconvolution",
        color = "FDR <= 0.05", linetype = "FDR <= 0.01")+
-  theme_bw()
+  theme_bw(base_size = 13)
 
+ggsave(t_stat_scatter, filename = paste0(plot_fn, "_scatter.png"), width = 12 )
 ggsave(t_stat_scatter, filename = paste0(plot_fn, "_scatter.pdf"), width = 10 )
 
 t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
@@ -155,7 +158,7 @@ t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
   facet_wrap(~ BrainRegion, nrow = 1) +
   scale_color_manual(values = signif_colors) +
   geom_text(data = t_cor, aes(x = -4, y = 5, label = cor_anno), parse = TRUE) +
-  labs(x = "t-stat no deconvolution", y = "t-stat with deconvolution")+
+  labs(x = "T-statistic no deconvolution", y = "T-statistic with deconvolution")+
   theme_bw()
 
 ggsave(t_stat_scatter_simple, filename = paste0(plot_fn, "_scatter_simple.pdf"), width = 10 )
