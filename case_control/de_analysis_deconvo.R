@@ -55,7 +55,7 @@ modSep = model.matrix(~Dx + AgeDeath + Sex + snpPC1 + snpPC2 + snpPC3 +
 	mitoRate + rRNA_rate + totalAssignedGene + RIN + ERCCsumLogErr, 
 	data=colData(rse_gene))
 
-modSep_prop <- cbind(modSep,est_prop_bisque$bulk.props[,c("Astro","Micro","Oligo","OPC","Excit")])
+modSep_prop <- cbind(modSep,est_prop_bisque$bulk.props[,c("Astro","Endo","Micro","Mural","Oligo","OPC","Tcell","Excit")])
 modSep_ilr <- cbind(modSep,est_prop_bisque$ilr)
 
 modSep_deconvo <- list(prop = modSep_prop, ilr = modSep_ilr)
