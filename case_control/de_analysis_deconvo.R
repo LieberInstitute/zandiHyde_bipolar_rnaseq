@@ -131,7 +131,7 @@ geneOut_deconvo <- geneOut
 
 save(geneOut_deconvo, file = "bipolarControl_deStats_byRegion_qSVAjoint_deconvo.rda")
 
-# sgejobs::job_single('de_analysis_deconvo.R', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript de_analysis_deconvo.R")
+# sgejobs::job_single('de_analysis_deconvo', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript de_analysis_deconvo.R")
 
 ## Reproducibility information
 print('Reproducibility information:')
@@ -141,6 +141,10 @@ options(width = 120)
 sessioninfo::session_info()
 
 
+# [1] "Reproducibility information:"
+# [1] "2021-07-12 17:26:58 EDT"
+# user  system elapsed 
+# 289.244   4.990 301.307 
 # ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
 # setting  value                                 
 # version  R version 4.0.4 RC (2021-02-08 r79975)
@@ -151,7 +155,7 @@ sessioninfo::session_info()
 # collate  en_US.UTF-8                           
 # ctype    en_US.UTF-8                           
 # tz       US/Eastern                            
-# date     2021-04-12                            
+# date     2021-07-12                            
 # 
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 # package              * version  date       lib source                                   
@@ -163,22 +167,21 @@ sessioninfo::session_info()
 # base64enc              0.1-3    2015-07-28 [2] CRAN (R 4.0.3)                           
 # Biobase              * 2.50.0   2020-10-27 [2] Bioconductor                             
 # BiocFileCache          1.14.0   2020-10-27 [2] Bioconductor                             
-# BiocGenerics         * 0.36.0   2020-10-27 [2] Bioconductor                             
+# BiocGenerics         * 0.36.1   2021-04-16 [2] Bioconductor                             
 # BiocParallel         * 1.24.1   2020-11-06 [2] Bioconductor                             
 # biomaRt                2.46.3   2021-02-09 [2] Bioconductor                             
 # Biostrings             2.58.0   2020-10-27 [2] Bioconductor                             
 # bit                    4.0.4    2020-08-04 [2] CRAN (R 4.0.3)                           
 # bit64                  4.0.5    2020-08-30 [2] CRAN (R 4.0.3)                           
-# bitops                 1.0-6    2013-08-17 [2] CRAN (R 4.0.3)                           
+# bitops                 1.0-7    2021-04-24 [2] CRAN (R 4.0.4)                           
 # blob                   1.2.1    2020-01-20 [2] CRAN (R 4.0.3)                           
 # BSgenome               1.58.0   2020-10-27 [2] Bioconductor                             
 # bumphunter             1.32.0   2020-10-27 [2] Bioconductor                             
 # cachem                 1.0.4    2021-02-13 [2] CRAN (R 4.0.4)                           
 # checkmate              2.0.0    2020-02-06 [2] CRAN (R 4.0.3)                           
-# cli                    2.3.1    2021-02-23 [1] CRAN (R 4.0.4)                           
-# cluster                2.1.1    2021-02-14 [3] CRAN (R 4.0.4)                           
+# cli                    2.5.0    2021-04-26 [1] CRAN (R 4.0.4)                           
+# cluster                2.1.2    2021-04-17 [3] CRAN (R 4.0.4)                           
 # codetools              0.2-18   2020-11-04 [3] CRAN (R 4.0.4)                           
-# colorout             * 1.2-2    2020-11-02 [1] Github (jalvesaq/colorout@726d681)       
 # colorspace             2.0-0    2020-11-11 [2] CRAN (R 4.0.3)                           
 # crayon                 1.4.1    2021-02-08 [2] CRAN (R 4.0.3)                           
 # curl                   4.3      2019-12-02 [2] CRAN (R 4.0.3)                           
@@ -193,7 +196,7 @@ sessioninfo::session_info()
 # downloader             0.4      2015-07-09 [2] CRAN (R 4.0.3)                           
 # dplyr                  1.0.5    2021-03-05 [1] CRAN (R 4.0.4)                           
 # edgeR                * 3.32.1   2021-01-14 [2] Bioconductor                             
-# ellipsis               0.3.1    2020-05-15 [2] CRAN (R 4.0.3)                           
+# ellipsis               0.3.2    2021-04-29 [2] CRAN (R 4.0.4)                           
 # fansi                  0.4.2    2021-01-15 [2] CRAN (R 4.0.3)                           
 # fastmap                1.1.0    2021-01-25 [2] CRAN (R 4.0.3)                           
 # foreach                1.5.1    2020-10-15 [2] CRAN (R 4.0.3)                           
@@ -225,7 +228,7 @@ sessioninfo::session_info()
 # jaffelab             * 0.99.30  2020-11-02 [1] Github (LieberInstitute/jaffelab@42637ff)
 # jpeg                   0.1-8.1  2019-10-24 [2] CRAN (R 4.0.3)                           
 # jsonlite               1.7.2    2020-12-09 [1] CRAN (R 4.0.3)                           
-# knitr                  1.31     2021-01-27 [1] CRAN (R 4.0.4)                           
+# knitr                  1.33     2021-04-24 [1] CRAN (R 4.0.4)                           
 # lattice                0.20-41  2020-04-02 [3] CRAN (R 4.0.4)                           
 # latticeExtra           0.6-29   2019-12-19 [2] CRAN (R 4.0.3)                           
 # lifecycle              1.0.0    2021-02-15 [1] CRAN (R 4.0.4)                           
@@ -236,12 +239,12 @@ sessioninfo::session_info()
 # MatrixGenerics       * 1.2.1    2021-01-30 [2] Bioconductor                             
 # matrixStats          * 0.58.0   2021-01-29 [2] CRAN (R 4.0.3)                           
 # memoise                2.0.0    2021-01-26 [2] CRAN (R 4.0.3)                           
-# mgcv                 * 1.8-34   2021-02-16 [3] CRAN (R 4.0.4)                           
+# mgcv                 * 1.8-35   2021-04-18 [3] CRAN (R 4.0.4)                           
 # munsell                0.5.0    2018-06-12 [2] CRAN (R 4.0.3)                           
 # nlme                 * 3.1-152  2021-02-04 [3] CRAN (R 4.0.4)                           
 # nnet                   7.3-15   2021-01-24 [3] CRAN (R 4.0.4)                           
-# openssl                1.4.3    2020-09-18 [1] CRAN (R 4.0.3)                           
-# pillar                 1.5.1    2021-03-05 [1] CRAN (R 4.0.4)                           
+# openssl                1.4.4    2021-04-30 [1] CRAN (R 4.0.4)                           
+# pillar                 1.6.0    2021-04-13 [1] CRAN (R 4.0.4)                           
 # pkgconfig              2.0.3    2019-09-22 [2] CRAN (R 4.0.3)                           
 # plyr                   1.8.6    2020-03-03 [2] CRAN (R 4.0.3)                           
 # png                    0.1-7    2013-12-03 [2] CRAN (R 4.0.3)                           
@@ -259,31 +262,31 @@ sessioninfo::session_info()
 # recount              * 1.16.1   2020-12-18 [2] Bioconductor                             
 # rentrez                1.2.3    2020-11-10 [2] CRAN (R 4.0.3)                           
 # reshape2               1.4.4    2020-04-09 [2] CRAN (R 4.0.3)                           
-# rJava                  0.9-13   2020-07-06 [2] CRAN (R 4.0.3)                           
-# rlang                  0.4.10   2020-12-30 [1] CRAN (R 4.0.4)                           
+# rJava                  1.0-4    2021-04-29 [2] CRAN (R 4.0.4)                           
+# rlang                  0.4.11   2021-04-30 [1] CRAN (R 4.0.4)                           
 # rngtools               1.5      2020-01-23 [2] CRAN (R 4.0.3)                           
 # rpart                  4.1-15   2019-04-12 [3] CRAN (R 4.0.4)                           
 # rprojroot              2.0.2    2020-11-15 [2] CRAN (R 4.0.3)                           
 # Rsamtools              2.6.0    2020-10-27 [2] Bioconductor                             
-# RSQLite                2.2.6    2021-04-11 [2] CRAN (R 4.0.4)                           
+# RSQLite                2.2.7    2021-04-22 [2] CRAN (R 4.0.4)                           
 # rstudioapi             0.13     2020-11-12 [2] CRAN (R 4.0.3)                           
 # rtracklayer            1.50.0   2020-10-27 [2] Bioconductor                             
 # S4Vectors            * 0.28.1   2020-12-09 [2] Bioconductor                             
 # scales                 1.1.1    2020-05-11 [2] CRAN (R 4.0.3)                           
-# segmented              1.3-3    2021-03-08 [1] CRAN (R 4.0.4)                           
+# segmented              1.3-4    2021-04-22 [1] CRAN (R 4.0.4)                           
 # sessioninfo            1.1.1    2018-11-05 [2] CRAN (R 4.0.3)                           
 # stringi                1.5.3    2020-09-09 [1] CRAN (R 4.0.3)                           
 # stringr                1.4.0    2019-02-10 [2] CRAN (R 4.0.3)                           
 # SummarizedExperiment * 1.20.0   2020-10-27 [2] Bioconductor                             
 # survival               3.2-9    2021-03-14 [3] CRAN (R 4.0.4)                           
 # sva                  * 3.38.0   2020-10-27 [2] Bioconductor                             
-# tibble                 3.1.0    2021-02-25 [1] CRAN (R 4.0.4)                           
+# tibble                 3.1.1    2021-04-18 [1] CRAN (R 4.0.4)                           
 # tidyr                  1.1.3    2021-03-03 [2] CRAN (R 4.0.4)                           
-# tidyselect             1.1.0    2020-05-11 [2] CRAN (R 4.0.3)                           
+# tidyselect             1.1.1    2021-04-30 [2] CRAN (R 4.0.4)                           
 # utf8                   1.2.1    2021-03-12 [2] CRAN (R 4.0.4)                           
 # VariantAnnotation      1.36.0   2020-10-27 [2] Bioconductor                             
-# vctrs                  0.3.6    2020-12-17 [1] CRAN (R 4.0.4)                           
-# withr                  2.4.1    2021-01-26 [1] CRAN (R 4.0.3)                           
+# vctrs                  0.3.8    2021-04-29 [1] CRAN (R 4.0.4)                           
+# withr                  2.4.2    2021-04-18 [1] CRAN (R 4.0.4)                           
 # xfun                   0.22     2021-03-11 [1] CRAN (R 4.0.4)                           
 # xlsx                 * 0.6.5    2020-11-10 [2] CRAN (R 4.0.3)                           
 # xlsxjars               0.6.1    2014-08-22 [2] CRAN (R 4.0.3)                           
@@ -296,4 +299,5 @@ sessioninfo::session_info()
 # [1] /users/lhuuki/R/4.0.x
 # [2] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0.x/R/4.0.x/lib64/R/site-library
 # [3] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0.x/R/4.0.x/lib64/R/library
-# 
+# **** Job ends ****
+#   Mon Jul 12 17:26:59 EDT 2021
