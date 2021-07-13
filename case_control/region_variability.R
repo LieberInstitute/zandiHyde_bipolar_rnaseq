@@ -11,6 +11,9 @@ library(tidyverse)
 
 ## load data
 load(here("data","zandiHypde_bipolar_rseGene_n511.rda"), verbose = TRUE)
+load(here("data","zandiHypde_bipolar_rseExon_n511.rda"), verbose = TRUE)
+load(here("data","zandiHypde_bipolar_rseJxn_n511.rda"), verbose = TRUE)
+load(here("data","zandiHypde_bipolar_rseTx_n511.rda"), verbose = TRUE)
 
 rse_gene$Dx = factor(ifelse(rse_gene$PrimaryDx == "Control", "Control","Bipolar"),
                      levels = c("Control", "Bipolar"))
@@ -36,67 +39,83 @@ modJoint = model.matrix(~Dx*BrainRegion + AgeDeath + Sex + snpPC1 + snpPC2 + snp
 modJoint <- modJoint[,c(1:3,14,4:13)]
 colnames(modJoint)
 
+assays(rse_exon)$rpkm <- getRPKM(rse_exon)
+assays(rse_jxn)$rpm <- getRPM(rse_jxn)
+
+data <- list(Gene = rse_gene, Exon = rse_exon, Jxn = rse_jxn, Tx = rse_tx)
 ##Run cleaningY
 # cleaningY(log2(RPKM + 1)) keeping Dx and Region effects and removing everything else (except the intercept)
-expr <- cleaningY(log2(assays(rse_gene)$rpkm + 1), mod = modJoint, P = 4)
+expr_gene <- cleaningY(log2(assays(rse_gene)$rpkm + 1), mod = modJoint, P = 4)
+expr_exon <- cleaningY(log2(assays(rse_exon)$rpkm + 1), mod = modJoint, P = 4)
+expr_jxn <- cleaningY(log2(assays(rse_jxn)$rpm + 1), mod = modJoint, P = 4)
+expr_tx <- cleaningY(log2(assays(rse_tx)$tpm + 1), mod = modJoint, P = 4)
 
+expr <- list(Gene = expr_gene, Exon = expr_exon, Jxn = expr_jxn, Tx = expr_tx)
 
 #### Box Plots ####
-region_colors <- list(Amyg = "#FFFF1F",
+region_colors <- list(Amygdala = "#FFFF1F",
                       sACC = "#8EB0F6")
 
 # it’s going to be 4 boxes (region * Dx), with the rowSds() output from the
 
-regionXdx <- cross2(levels(rse_gene$BrainRegion),levels(rse_gene$Dx))
-names(regionXdx) <- map(regionXdx, ~paste(.x[[1]],.x[[2]]))
-
-table(rse_gene$BrainRegion, rse_gene$Dx)
-
-gene_sd <- map_dfc(regionXdx, function(rXd){
-  expr_subset <- expr[,rse_gene$BrainRegion == rXd[[1]] & rse_gene$Dx == rXd[[2]]]
-  return(rowSds(expr_subset))
-})
-
-gene_sd_long <- gene_sd %>%
-  add_column(gene = rownames(expr)) %>%
-  pivot_longer(!gene, names_to = "regionXdx", values_to = "gene_sd") %>%
-  mutate(regionXdx2 = regionXdx) %>%
-  separate(regionXdx2, into = c("BrainRegion","Dx"))
-
-
-
-gene_sd_boxplot <- ggplot(gene_sd_long, aes(x = regionXdx, y = gene_sd, fill = BrainRegion)) +
-  geom_boxplot() +
-  theme_bw(base_size = 15) +
-  scale_fill_manual(values = region_colors)+
-  labs(x = "Region + Dx", y = "sd Gene Expr")
-
-ggsave(here("case_control","plots","regionDx_var_boxplot.png"), width = 10)
-ggsave(here("case_control","plots","regionDx_var_boxplot.pdf"), width = 10)
+# regionXdx <- cross2(levels(rse_gene$BrainRegion),levels(rse_gene$Dx))
+# names(regionXdx) <- map(regionXdx, ~paste(.x[[1]],.x[[2]]))
+# 
+# table(rse_gene$BrainRegion, rse_gene$Dx)
+# 
+# gene_sd <- map_dfc(regionXdx, function(rXd){
+#   expr_gene_subset <- expr_gene[,rse_gene$BrainRegion == rXd[[1]] & rse_gene$Dx == rXd[[2]]]
+#   return(rowSds(expr_gene_subset))
+# })
+# 
+# gene_sd_long <- gene_sd %>%
+#   add_column(gene = rownames(expr_gene)) %>%
+#   pivot_longer(!gene, names_to = "regionXdx", values_to = "gene_sd") %>%
+#   mutate(regionXdx2 = regionXdx) %>%
+#   separate(regionXdx2, into = c("BrainRegion","Dx"))
+# 
+# 
+# 
+# gene_sd_boxplot <- ggplot(gene_sd_long, aes(x = regionXdx, y = gene_sd, fill = BrainRegion)) +
+#   geom_boxplot() +
+#   theme_bw(base_size = 15) +
+#   scale_fill_manual(values = region_colors)+
+#   labs(x = "Region + Dx", y = "sd Gene expr_gene")
+# 
+# ggsave(here("case_control","plots","regionDx_var_boxplot.png"), width = 10)
+# ggsave(here("case_control","plots","regionDx_var_boxplot.pdf"), width = 10)
 
 
 #### Region Only ####
 region <- levels(rse_gene$BrainRegion)
 names(region) <- levels(rse_gene$BrainRegion)
 
-gene_sd <- map_dfc(region, function(r){
-  expr_subset <- expr[,rse_gene$BrainRegion == r[[1]]]
-  return(rowSds(expr_subset))
+region_sd <- map(expr, ~map_dfc(region, function(r){
+  expr_gene_subset <- .x[,rse_gene$BrainRegion == r[[1]]]
+  return(rowSds(expr_gene_subset))
+}))
+
+map(region_sd, head)
+
+region_sd_long <- map2(region_sd, data, ~.x %>%
+  add_column(transcript = rownames(.y)) %>%
+  pivot_longer(!transcript, names_to = "region", values_to = "SD"))
+
+walk2(region_sd_long, names(region_sd_long), function(sd, n){
+  
+  gene_sd_boxplot <- ggplot(sd, aes(x = region, y = SD, fill = region)) +
+    geom_boxplot() +
+    theme_bw(base_size = 15) +
+    scale_fill_manual(values = region_colors)+
+    labs(x = "Region", y = paste("Standard Deviation",n,"Expression"))+ 
+    theme(legend.position = "none")
+  
+  fn = here("case_control","plots",paste0("region_var_boxplot-",tolower(n)))
+  
+  ggsave(gene_sd_boxplot, filename = paste0(fn, ".png"))
+  ggsave(gene_sd_boxplot, filename = paste0(fn, ".pdf"))
+  
 })
-
-gene_sd_long <- gene_sd %>%
-  add_column(gene = rownames(expr)) %>%
-  pivot_longer(!gene, names_to = "region", values_to = "gene_sd")
-
-gene_sd_boxplot <- ggplot(gene_sd_long, aes(x = region, y = gene_sd, fill = region)) +
-  geom_boxplot() +
-  theme_bw(base_size = 15) +
-  scale_fill_manual(values = region_colors)+
-  labs(x = "Region", y = "Standard Deviation Gene Expression")+ 
-  theme(legend.position = "none")
-
-ggsave(gene_sd_boxplot, filename = here("case_control","plots","region_var_boxplot.png"))
-ggsave(gene_sd_boxplot, filename = here("case_control","plots","region_var_boxplot.pdf"))
 
 
 # sgejobs::job_single('region_variability', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript region_variability.R")
