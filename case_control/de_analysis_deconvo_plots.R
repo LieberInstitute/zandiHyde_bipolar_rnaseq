@@ -161,6 +161,7 @@ t_stat_scatter_simple <- t_stats2 %>% filter(term == "prop") %>%
   labs(x = "T-statistic no deconvolution", y = "T-statistic with deconvolution")+
   theme_bw()
 
+ggsave(t_stat_scatter_simple, filename = paste0(plot_fn, "_scatter_simple.png"), width = 10 )
 ggsave(t_stat_scatter_simple, filename = paste0(plot_fn, "_scatter_simple.pdf"), width = 10 )
 
 # sgejobs::job_single('de_analysis_deconvo_plots.R', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript de_analysis_deconvo_plots.R")
