@@ -32,7 +32,7 @@ fdr_colors <- c(None = "gray", sACC = "skyblue3", Amygdala = "orange", Both = "p
 t_stat_scatter <- ggplot(statOut, aes(x = t_Amyg, y = t_sACC)) +
   geom_point(aes(color = `FDR < 0.05`), size = 0.5, alpha = 0.5) +
   facet_wrap(~Type) +
-  labs(x = "t-stat Amygdala", y = "t-stat sACC") +
+  labs(x = "T-statistic Amygdala", y = "T-statistic sACC") +
   scale_color_manual(values = fdr_colors) +
   geom_text(data = region_cor, aes(x = -4.25, y = 6, label = cor_anno), parse = TRUE) +
   theme_bw(base_size = 15) +
