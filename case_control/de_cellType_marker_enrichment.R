@@ -20,66 +20,65 @@ dim(statOut)
 ## marker data
 load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/marker_stats_pan.Rdata", verbose = TRUE)
 
-marker_stats_50 <- marker_stats %>% 
+n_genes <- list(`25` = 25, `50` = 50)
+
+marker_stats <- map(n_genes, ~marker_stats %>% 
   filter(gene %in% statOut$ensemblID) %>%
   arrange(rank_ratio) %>%
   group_by(cellType.target) %>%
-  dplyr::slice(1:50)
+  dplyr::slice(1:.x))
 
-marker_stats_50 %>% summarise(max(rank_ratio))
-# A tibble: 9 x 2
-# cellType.target `max(rank_ratio)`
-# <fct>                       <int>
-#   1 Astro                          50
-# 2 Endo                           53
-# 3 Micro                          52
-# 4 Mural                          53
-# 5 Oligo                          51
-# 6 OPC                            53
-# 7 Tcell                          59
-# 8 Excit                          50
-# 9 Inhib                          52
-
-all(marker_stats_50$gene %in% statOut$ensemblID)
-# [1] TRUE
+map(marker_stats, ~.x%>% summarise(max(rank_ratio)))
 
 tstats <- statOut[, grep("[f|t]_", colnames(statOut))]
 fdrs <- statOut[, grep("adj.P.Val_", colnames(statOut))]
 fdr_cut <- 0.05
 
-marker_gene_list <- marker_stats_50 %>% 
-  group_map(~pull(.x, gene))
-names(marker_gene_list) <- levels(marker_stats_50$cellType.target)
-
+marker_gene_list <- map(marker_stats,  function(ms){
+  gene_list <- group_map(ms, ~pull(.x, gene))
+  names(gene_list) <- levels(ms$cellType.target)
+  return(gene_list)
+})
 
 source("gene_set_enrichment.R") 
 
-gse <- gene_set_enrichment(gene_list = marker_gene_list, modeling_results = statOut)
-gse %>% filter(Pval < 0.05)
-#          OR         Pval          ID  test fdr_cut
-# 1 19.293256 5.576193e-03   t_Amyg_up  Endo    0.05
-# 2 22.671134 4.125948e-03 t_Amyg_down Micro    0.05
-# 3  5.406839 8.245427e-03 t_sACC_down  Endo    0.05
-# 4 24.790286 3.073203e-14 t_sACC_down Micro    0.05
-# 5  5.406839 8.245427e-03 t_sACC_down Mural    0.05
+gse <- map(marker_gene_list, ~gene_set_enrichment(gene_list = .x, modeling_results = statOut))
+map(gse, ~.x %>% filter(Pval < 0.05))
+# $`25`
+#          OR         Pval        ID  test fdr_cut
+# 1 47.263969 1.041614e-03 Amyg down Micro    0.05
+# 2 22.204811 4.668394e-02 Amyg down Mural    0.05
+# 3 22.204811 4.668394e-02 Amyg down Tcell    0.05
+# 4 24.372437 9.364650e-08 sACC down Micro    0.05
+# 5  8.465015 7.142635e-03 sACC down Mural    0.05
+# 
+# $`50`
+#          OR         Pval        ID  test fdr_cut
+# 1 19.293256 5.576193e-03   Amyg up  Endo    0.05
+# 2 22.671134 4.125948e-03 Amyg down Micro    0.05
+# 3  5.406839 8.245427e-03 sACC down  Endo    0.05
+# 4 24.790286 3.073203e-14 sACC down Micro    0.05
+# 5  5.406839 8.245427e-03 sACC down Mural    0.05
 
-
-
-gse %>% filter(Pval < .99) %>% summarize(max(Pval))
-
-gse$ID <- gsub("_"," ",gsub("t_","",gse$ID))
 ## save all values
-write.csv(gse, file = here("case_control","cellType_marker_enrichment.csv"))
+walk2(gse, names(gse), ~write.csv(.x, file = here("case_control",paste0("gene_set_enrichment_cellType_markers",.y,".csv")), row.names = FALSE))
 
-png(here("case_control","plots","gene_set_enrichment_cellType_markers.png"))
-gene_set_enrichment_plot(gse, ORcut = .2)
-title("OR: Top 50 Cell Type Markers & FDR < 0.05")
-dev.off()
+walk2(gse, names(gse), function(g, n){
+  name <- here("case_control","plots",paste0("gene_set_enrichment_cellType_markers",n))
+  t <- paste("OR: Top",n,"Cell Type Markers & FDR < 0.05")
+  
+  png(paste0(name,".png"))
+  gene_set_enrichment_plot(g, ORcut = .2)
+  title(t)
+  dev.off()
+  
+  pdf(paste0(name, ".pdf"))
+  gene_set_enrichment_plot(g, ORcut = .2)
+  title(t)
+  dev.off()
+  
+})
 
-pdf(here("case_control","plots","gene_set_enrichment_cellType_markers.pdf"))
-gene_set_enrichment_plot(gse, ORcut = .2)
-title("OR: Top 50 Cell Type Markers & FDR < 0.05")
-dev.off()
 
 # sgejobs::job_single('de_cellType_marker_enrichment', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript de_cellType_marker_enrichment.R")
 ## Reproducibility information
