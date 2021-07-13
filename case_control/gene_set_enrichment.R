@@ -15,7 +15,7 @@ gene_set_enrichment <- function(gene_list,
         lapply(gene_list, function(g) {
           tt <-
             table(
-              Set = factor(statOut$ensembl %in% g, c(FALSE, TRUE)),
+              Set = factor(modeling_results$ensembl %in% g, c(FALSE, TRUE)),
               Layer = factor(l, c(FALSE, TRUE))
             )
           fisher.test(tt)
@@ -38,5 +38,6 @@ gene_set_enrichment <- function(gene_list,
   
   rownames(enrichTab) <- NULL
   enrichTab$fdr_cut <- fdr_cut
+  enrichTab$ID <- gsub("_"," ",gsub("t_","",enrichTab$ID))
   return(enrichTab)
 }
