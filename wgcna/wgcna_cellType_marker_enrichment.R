@@ -13,17 +13,24 @@ geneIndex = rowMeans(assays(rse_gene)$rpkm) > 0.25  ## both regions
 rse_gene = rse_gene[geneIndex,]
 
 load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/marker_stats_pan.Rdata", verbose = TRUE)
-marker_stats_filter <- marker_stats %>%
+
+n_genes <- list(`25` = 25, `50` = 50)
+
+marker_stats_filter <- map(n_genes, ~marker_stats %>%
   filter(gene %in% rowData(rse_gene)$ensemblID) %>%
   arrange(rank_ratio) %>%
   group_by(cellType.target) %>%
-  dplyr::slice(1:25)
+  dplyr::slice(1:.x))
 
-marker_gene_list <- group_map(marker_stats_filter, ~pull(.x, gene))
-names(marker_gene_list) <- levels(marker_stats_filter$cellType.target)
+marker_gene_list <- map(marker_stats_filter,  function(ms){
+  gene_list <- group_map(ms, ~pull(.x, gene))
+  names(gene_list) <- levels(ms$cellType.target)
+  return(gene_list)
+})
 
-marker_stats_filter %>% summarise(max(rank_ratio))
+map(marker_stats_filter, ~.x %>% summarise(max(rank_ratio)))
 
+## Load wgcna data
 load(here("wgcna","rdas","constructed_network_signed_bicor.rda"), verbose = TRUE)
 # net_list
 # net
@@ -63,45 +70,26 @@ colorDat
 # 153   19  lightyellow  ME19       65
 # 654   20    royalblue  ME20       59
 
-table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker_gene_list$Astro)
-table(net$colorsLab == "red",rowData(rse_gene)$ensemblID %in% marker_gene_list$Micro)
+
+table(net$colorsLab == "red",rowData(rse_gene)$ensemblID %in% marker_gene_list$`25`$Micro)
 #       FALSE  TRUE
 # FALSE 24556     1
 # TRUE    555    24
-table(net$colorsLab == "pink",rowData(rse_gene)$ensemblID %in% marker_gene_list$Micro)
+table(net$colorsLab == "pink",rowData(rse_gene)$ensemblID %in% marker_gene_list$`25`$Micro)
 #       FALSE  TRUE
 # FALSE 24887    25
 # TRUE    224     0
 
-table(net$colorsLab == "yellow",rowData(rse_gene)$ensemblID %in% marker_gene_list$Oligo)
-#       FALSE  TRUE
-# FALSE 23696     0
-# TRUE   1415    25
-
-chisq.test(table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker_gene_list$Oligo))
-#       FALSE  TRUE
-# FALSE 11938    25
-# TRUE  13173     0
-chisq.test(table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker_gene_list$Oligo))
-# Pearson's Chi-squared test with Yates' continuity correction
-# 
-# data:  table(net$colorsLab == "grey", rowData(rse_gene)$ensemblID %in%     marker_gene_list$Oligo)
-# X-squared = 25.493, df = 1, p-value = 4.44e-07
-fisher.test(table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker_gene_list$Oligo))
-# p-value = 8.568e-09
-
-deModEnrich_markers <- map(marker_gene_list, function(markers) {
+deModEnrich_markers <- map(marker_gene_list, ~map(.x, function(markers) {
   deModEnrich = as.data.frame(t(sapply(colorDat$col, function(cc) {
     tab = table(net$colorsLab == cc,rowData(rse_gene)$ensemblID %in% markers)
     c(fisher.test(tab)$p.value, getOR(tab))
   })))
   colnames(deModEnrich) = c("Pvalue", "OR")
   return(deModEnrich)
-})
+}))
 
-deModEnrich_table <- do.call("cbind", deModEnrich_markers)
-
-deModEnrich_long <- deModEnrich_table %>% 
+deModEnrich_long <- map(deModEnrich_markers, ~do.call("cbind", .x)  %>% 
   rownames_to_column("ID") %>%
   pivot_longer(!ID, names_to = "stat") %>%
   separate(stat, into = c("test", "stat")) %>%
@@ -110,9 +98,10 @@ deModEnrich_long <- deModEnrich_table %>%
   filter(ID != "grey") %>%
   mutate(fdr = p.adjust(Pval, "fdr"),
          Pval.bonf = p.adjust(Pval, "bonferroni")) %>%
-  as.data.frame()
+  as.data.frame())
 
-deModEnrich_long %>% filter(fdr < 0.05) %>% arrange(fdr)
+map(deModEnrich_long, ~.x %>% filter(fdr < 0.05) %>% arrange(fdr))
+# $`25`
 #            OR         Pval        ID  test          fdr    Pval.bonf
 # 1 1061.881081 7.597905e-39       red Micro 1.367623e-36 1.367623e-36
 # 2         Inf 7.342561e-32    yellow Oligo 6.608305e-30 1.321661e-29
@@ -123,9 +112,47 @@ deModEnrich_long %>% filter(fdr < 0.05) %>% arrange(fdr)
 # 7  116.004630 3.070244e-09 royalblue  Endo 7.894913e-08 5.526439e-07
 # 8   15.643486 1.319499e-03   magenta  Endo 2.968873e-02 2.375099e-01
 # 9    8.127867 2.399039e-03       red Tcell 4.798079e-02 4.318271e-01
+# 
+# $`50`
+#            OR         Pval         ID  test          fdr    Pval.bonf
+# 1  281.356610 6.900566e-64        red Micro 1.242102e-61 1.242102e-61
+# 2  834.690870 3.030843e-60     yellow Oligo 2.727759e-58 5.455517e-58
+# 3   68.617203 2.308999e-29      black Astro 1.385399e-27 4.156198e-27
+# 4   69.293317 6.321133e-25    magenta Mural 2.844510e-23 1.137804e-22
+# 5   11.902242 2.555910e-16  turquoise Excit 9.201277e-15 4.600638e-14
+# 6  109.914146 2.653745e-15  royalblue  Endo 7.961235e-14 4.776741e-13
+# 7   10.347520 1.858113e-14       blue Inhib 4.778005e-13 3.344604e-12
+# 8   10.771968 1.745819e-07        red Tcell 3.928092e-06 3.142474e-05
+# 9   12.616438 8.215243e-05       pink Excit 1.478744e-03 1.478744e-02
+# 10  12.853230 7.546134e-05    magenta  Endo 1.478744e-03 1.358304e-02
+# 11  25.352584 3.102631e-04 lightgreen Excit 5.077033e-03 5.584736e-02
+# 12  16.110251 1.107091e-03     salmon Excit 1.660636e-02 1.992763e-01
+# 13   4.118167 1.511838e-03      green Inhib 2.093314e-02 2.721308e-01
 
-png(here("wgcna","gene_set_enrichment_cellType_markers.png"),
-    width = 800, height = 600)
-gene_set_enrichment_plot(deModEnrich_long)
-title("OR: Top 25 Cell Type Markers & WGCNA Module")
-dev.off()
+## save all values
+walk2(deModEnrich_long, names(deModEnrich_long), ~write.csv(.x, file = here("wgcna",paste0("wgcna_gene_set_enrichment_cellType_markers",.y,".csv")), row.names = FALSE))
+
+walk2(deModEnrich_long, names(deModEnrich_long), function(g, n){
+  name <- here("wgcna","plots",paste0("wgcna_gene_set_enrichment_cellType_markers",n))
+  t <- paste("OR: Top",n,"Cell Type Markers & FDR < 0.05")
+  
+  png(paste0(name,".png"), width = 800)
+  gene_set_enrichment_plot(g)
+  title(t)
+  dev.off()
+  
+  pdf(paste0(name, ".pdf"), width = 11)
+  gene_set_enrichment_plot(g)
+  title(t)
+  dev.off()
+  
+})
+
+# sgejobs::job_single('wgcna_cellType_marker_enrichment', create_shell = TRUE, queue= 'bluejay', memory = '10G', command = "Rscript wgcna_cellType_marker_enrichment.R")
+## Reproducibility information
+print("Reproducibility information:")
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
+
