@@ -22,7 +22,6 @@ marker_stats_filter <- marker_stats %>%
 marker_gene_list <- group_map(marker_stats_filter, ~pull(.x, gene))
 names(marker_gene_list) <- levels(marker_stats_filter$cellType.target)
 
-# what if its not same markers as we used for deconvo?
 marker_stats_filter %>% summarise(max(rank_ratio))
 
 load(here("wgcna","rdas","constructed_network_signed_bicor.rda"), verbose = TRUE)
@@ -83,15 +82,22 @@ chisq.test(table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker
 #       FALSE  TRUE
 # FALSE 11938    25
 # TRUE  13173     0
+chisq.test(table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker_gene_list$Oligo))
+# Pearson's Chi-squared test with Yates' continuity correction
+# 
+# data:  table(net$colorsLab == "grey", rowData(rse_gene)$ensemblID %in%     marker_gene_list$Oligo)
+# X-squared = 25.493, df = 1, p-value = 4.44e-07
+fisher.test(table(net$colorsLab == "grey",rowData(rse_gene)$ensemblID %in% marker_gene_list$Oligo))
+# p-value = 8.568e-09
 
 deModEnrich_markers <- map(marker_gene_list, function(markers) {
   deModEnrich = as.data.frame(t(sapply(colorDat$col, function(cc) {
     tab = table(net$colorsLab == cc,rowData(rse_gene)$ensemblID %in% markers)
-    c(chisq.test(tab)$p.value, getOR(tab))
+    c(fisher.test(tab)$p.value, getOR(tab))
   })))
   colnames(deModEnrich) = c("Pvalue", "OR")
   return(deModEnrich)
-  })
+})
 
 deModEnrich_table <- do.call("cbind", deModEnrich_markers)
 
@@ -101,30 +107,22 @@ deModEnrich_long <- deModEnrich_table %>%
   separate(stat, into = c("test", "stat")) %>%
   pivot_wider(names_from = "stat", values_from = "value") %>%
   select(OR, Pval = Pvalue, ID, test) %>%
-  mutate(fdr = p.adjust(Pval, "fdr")) %>%
+  filter(ID != "grey") %>%
+  mutate(fdr = p.adjust(Pval, "fdr"),
+         Pval.bonf = p.adjust(Pval, "bonferroni")) %>%
   as.data.frame()
 
 deModEnrich_long %>% filter(fdr < 0.05) %>% arrange(fdr)
-#              OR          Pval           ID  test           fdr
-# 1  1.061881e+03 2.405140e-205          red Micro 4.545715e-203
-# 2  1.081775e+02 4.229358e-128        black Astro 3.996743e-126
-# 3           Inf  8.627184e-88       yellow Oligo  5.435126e-86
-# 4  1.160046e+02  2.505465e-75    royalblue  Endo  1.183832e-73
-# 5  6.638033e+01  8.395293e-71      magenta Mural  3.173421e-69
-# 6  2.260251e+01  7.620750e-23         blue Inhib  2.400536e-21
-# 7  1.824175e+01  1.284366e-19    turquoise Excit  3.467788e-18
-# 8  0.000000e+00  4.440064e-07         grey Oligo  1.048965e-05
-# 9  2.720761e+01  6.441992e-07 midnightblue   OPC  1.352818e-05
-# 10 1.564349e+01  9.552242e-07      magenta  Endo  1.805374e-05
-# 11 3.776635e-02  3.345374e-06         grey Micro  5.268964e-05
-# 12 3.776635e-02  3.345374e-06         grey Excit  5.268964e-05
-# 13 2.174870e+01  1.072296e-05       salmon Excit  1.558954e-04
-# 14 8.127867e+00  9.602235e-05          red Tcell  1.296302e-03
-# 15 1.727289e-01  5.681121e-04         grey Inhib  7.158213e-03
-# 16 2.267429e-01  2.321124e-03         grey Astro  2.741828e-02
-
-deModEnrich_long %>% filter(ID == "grey", test == "Oligo")
-deModEnrich_long %>% filter(OR == 0 & fdr < .9)
+#            OR         Pval        ID  test          fdr    Pval.bonf
+# 1 1061.881081 7.597905e-39       red Micro 1.367623e-36 1.367623e-36
+# 2         Inf 7.342561e-32    yellow Oligo 6.608305e-30 1.321661e-29
+# 3  108.177460 4.606883e-21     black Astro 2.764130e-19 8.292389e-19
+# 4   22.602506 3.652416e-13      blue Inhib 1.643587e-11 6.574349e-11
+# 5   66.380332 4.627276e-13   magenta Mural 1.665819e-11 8.329096e-11
+# 6   18.241746 1.018357e-11 turquoise Excit 3.055071e-10 1.833043e-09
+# 7  116.004630 3.070244e-09 royalblue  Endo 7.894913e-08 5.526439e-07
+# 8   15.643486 1.319499e-03   magenta  Endo 2.968873e-02 2.375099e-01
+# 9    8.127867 2.399039e-03       red Tcell 4.798079e-02 4.318271e-01
 
 png(here("wgcna","gene_set_enrichment_cellType_markers.png"),
     width = 800, height = 600)
