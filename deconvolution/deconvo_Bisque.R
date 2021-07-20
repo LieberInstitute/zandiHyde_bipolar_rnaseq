@@ -17,7 +17,22 @@ rownames(rse_gene) <- rowData(rse_gene)$ensemblID
 
 ## sce Data
 load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/sce_pan.Rdata", verbose = TRUE)
+donor_region<- unique(colData(sce_pan)[, c("Sample","donor","region")])
+table(donor_region$donor, donor_region$region)
+table(donor_region$donor, donor_region$region)
+#        amy dlpfc hpc nac sacc
+# br5161   1     1   1   1    1
+# br5182   0     0   0   1    0
+# br5207   0     1   0   1    0
+# br5212   1     1   1   1    1
+# br5276   1     0   0   1    1
+# br5287   0     0   1   1    0
+# br5400   1     0   0   1    1
+# br5701   1     0   0   1    1
 
+table(donor_region$region)
+# amy dlpfc   hpc   nac  sacc 
+# 5     3     3     8     5 
 ## marker data
 load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/marker_stats_pan.Rdata", verbose = TRUE)
 marker_stats_filter <- marker_stats %>%
