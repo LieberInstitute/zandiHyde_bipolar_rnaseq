@@ -20,3 +20,9 @@ leafcutter_output
 .Rproj.user
 twas
 bim_out
+qSV_mat.Rdata
+deStats_region_t_plots.pdf
+*.Rdata
+
+deStats_region_t_plots.pdf
+case_control/plots/*.pdf
