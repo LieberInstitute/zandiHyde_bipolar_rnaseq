@@ -4,7 +4,7 @@ This GitHub repository contains the code for analyzing the RNA-seq data from the
 
 In order to cite this project, please cite:
 
-* Zandi PP,+, Jaffe AE, Goes F, Burke EE, Collado-Torres L, Barry BK, Seyedian A, Lin Y, Seifuddin F, Pirooznia M, Ross CA, Kleinman JE, Weinberger DR, Hyde TM,+, _bioRxiv_, 2020
+* Zandi PP,+, Jaffe AE, Goes FS, Burke EE, Collado-Torres L, Huuli LA, Seyedian A, Lin Y, Seifuddin F, Pirooznia M, Ross CA, Kleinman JE, Weinberger DR, Hyde TM,+, _TBD_, 2021
 
 + Correspondence to: pzandi1@jhu.edu or thomas.hyde@libd.org
 
