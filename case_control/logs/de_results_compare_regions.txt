@@ -1,0 +1,210 @@
+Adding LIBD modules
+Loading git
+Loading LIBD module for git-status-size/github
+Loading LIBD module for git-lfs/2.8.0
+Loading LIBD module for rmate/1.5.9
+Loading LIBD module for ruby/2.6.4p104
+Loading conda_R/4.1
+**** Job starts ****
+Mon Jul 12 18:05:34 EDT 2021
+**** JHPCE info ****
+User: lhuuki
+Job id: 6543190
+Job name: de_results_compare_regions
+Hostname: compute-098.cm.cluster
+Task id: undefined
+Unloading conda_R/4.1
+Loading conda_R/4.0.x
+
+The following have been reloaded with a version change:
+  1) conda_R/4.1 => conda_R/4.0.x
+
+
+Currently Loaded Modules:
+  1) matlab/R2019a     6) COMMUNITY_CENTOS7_DEFAULT_ENV  11) ruby/2.6.4p104
+  2) stata/16          7) JHPCE_CENTOS7_DEFAULT_ENV      12) rmate/1.5.9
+  3) JHPCE_tools/1.0   8) git-status-size/github         13) conda/3-4.6.14
+  4) sge/8.1.9         9) git/2.28.0                     14) conda_R/4.0.x
+  5) gcc/4.4.7        10) git-lfs/2.8.0
+
+ 
+
+── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+✔ ggplot2 3.3.3     ✔ purrr   0.3.4
+✔ tibble  3.1.1     ✔ dplyr   1.0.5
+✔ tidyr   1.1.3     ✔ stringr 1.4.0
+✔ readr   1.4.0     ✔ forcats 0.5.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+here() starts at /dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq
+Loading objects:
+  statOut
+Loading required package: S4Vectors
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:dplyr’:
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min
+
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:dplyr’:
+
+    first, rename
+
+The following object is masked from ‘package:tidyr’:
+
+    expand
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+DataFrame with 6 rows and 17 columns
+                  logFC_Amyg AveExpr_Amyg    t_Amyg P.Value_Amyg adj.P.Val_Amyg
+                   <numeric>    <numeric> <numeric>    <numeric>      <numeric>
+ENSG00000227232.5 -0.0330728     1.340582 -0.414687   0.67877922       0.909528
+ENSG00000278267.1  0.1612828    -1.412959  1.236884   0.21746318       0.658652
+ENSG00000269981.1  0.0810748    -2.146991  0.470339   0.63858384       0.896763
+ENSG00000279457.3  0.2116777     2.184323  3.114915   0.00208757       0.117127
+ENSG00000228463.9  0.0745462     1.862994  0.635151   0.52599712       0.852000
+ENSG00000236679.2  0.1817031    -0.492242  2.053826   0.04118791       0.365443
+                     B_Amyg logFC_sACC AveExpr_sACC    t_sACC P.Value_sACC
+                  <numeric>  <numeric>    <numeric> <numeric>    <numeric>
+ENSG00000227232.5  -5.84638 0.00132064      1.35091 0.0162341    0.9870610
+ENSG00000278267.1  -4.75310 0.05092425     -1.30810 0.4402495    0.6601466
+ENSG00000269981.1  -5.16546 0.33776932     -2.44735 2.0371945    0.0427113
+ENSG00000279457.3  -1.57665 0.11896450      2.20583 1.8870357    0.0603442
+ENSG00000228463.9  -5.84781 0.01144101      1.78457 0.1266352    0.8993336
+ENSG00000236679.2  -3.75354 0.08722632     -0.55163 1.0176247    0.3098656
+                  adj.P.Val_sACC    B_sACC         gencodeID      Symbol
+                       <numeric> <numeric>       <character> <character>
+ENSG00000227232.5       0.996119  -5.73480 ENSG00000227232.5      WASH7P
+ENSG00000278267.1       0.886615  -5.12574 ENSG00000278267.1   MIR6859-1
+ENSG00000269981.1       0.290631  -3.84247 ENSG00000269981.1            
+ENSG00000279457.3       0.340016  -4.28670 ENSG00000279457.3            
+ENSG00000228463.9       0.971597  -5.82341 ENSG00000228463.9            
+ENSG00000236679.2       0.683774  -4.91603 ENSG00000236679.2   RPL23AP24
+                         Type       Class  EntrezID
+                  <character> <character> <integer>
+ENSG00000227232.5        Gene       InGen        NA
+ENSG00000278267.1        Gene       InGen 102466751
+ENSG00000269981.1        Gene       InGen        NA
+ENSG00000279457.3        Gene       InGen 102723897
+ENSG00000228463.9        Gene       InGen        NA
+ENSG00000236679.2        Gene       InGen        NA
+
+      Exon       Gene   Junction Transcript 
+    396818      25136     266197      73214 
+
+    Both Amygdala     sACC     None 
+      67      253     1768   759277 
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+[1] "Reproducibility information:"
+[1] "2021-07-12 18:07:08 EDT"
+   user  system elapsed 
+ 89.976   1.132  92.428 
+─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+ setting  value                                 
+ version  R version 4.0.4 RC (2021-02-08 r79975)
+ os       CentOS Linux 7 (Core)                 
+ system   x86_64, linux-gnu                     
+ ui       X11                                   
+ language (EN)                                  
+ collate  en_US.UTF-8                           
+ ctype    en_US.UTF-8                           
+ tz       US/Eastern                            
+ date     2021-07-12                            
+
+─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+ package      * version date       lib source        
+ assertthat     0.2.1   2019-03-21 [2] CRAN (R 4.0.3)
+ backports      1.2.1   2020-12-09 [1] CRAN (R 4.0.4)
+ BiocGenerics * 0.36.1  2021-04-16 [2] Bioconductor  
+ broom          0.7.6   2021-04-05 [2] CRAN (R 4.0.4)
+ cellranger     1.1.0   2016-07-27 [2] CRAN (R 4.0.3)
+ cli            2.5.0   2021-04-26 [1] CRAN (R 4.0.4)
+ colorspace     2.0-0   2020-11-11 [2] CRAN (R 4.0.3)
+ crayon         1.4.1   2021-02-08 [2] CRAN (R 4.0.3)
+ DBI            1.1.1   2021-01-15 [2] CRAN (R 4.0.3)
+ dbplyr         2.1.1   2021-04-06 [2] CRAN (R 4.0.4)
+ digest         0.6.27  2020-10-24 [1] CRAN (R 4.0.3)
+ dplyr        * 1.0.5   2021-03-05 [1] CRAN (R 4.0.4)
+ ellipsis       0.3.2   2021-04-29 [2] CRAN (R 4.0.4)
+ fansi          0.4.2   2021-01-15 [2] CRAN (R 4.0.3)
+ farver         2.1.0   2021-02-28 [2] CRAN (R 4.0.4)
+ forcats      * 0.5.1   2021-01-27 [2] CRAN (R 4.0.3)
+ fs             1.5.0   2020-07-31 [1] CRAN (R 4.0.3)
+ generics       0.1.0   2020-10-31 [2] CRAN (R 4.0.3)
+ ggplot2      * 3.3.3   2020-12-30 [2] CRAN (R 4.0.3)
+ glue           1.4.2   2020-08-27 [1] CRAN (R 4.0.3)
+ gtable         0.3.0   2019-03-25 [2] CRAN (R 4.0.3)
+ haven          2.4.1   2021-04-23 [1] CRAN (R 4.0.4)
+ here         * 1.0.1   2020-12-13 [1] CRAN (R 4.0.3)
+ hms            1.0.0   2021-01-13 [2] CRAN (R 4.0.3)
+ httr           1.4.2   2020-07-20 [1] CRAN (R 4.0.3)
+ jsonlite       1.7.2   2020-12-09 [1] CRAN (R 4.0.3)
+ labeling       0.4.2   2020-10-20 [2] CRAN (R 4.0.3)
+ lifecycle      1.0.0   2021-02-15 [1] CRAN (R 4.0.4)
+ lubridate      1.7.10  2021-02-26 [1] CRAN (R 4.0.4)
+ magrittr       2.0.1   2020-11-17 [2] CRAN (R 4.0.3)
+ modelr         0.1.8   2020-05-19 [2] CRAN (R 4.0.3)
+ munsell        0.5.0   2018-06-12 [2] CRAN (R 4.0.3)
+ pillar         1.6.0   2021-04-13 [1] CRAN (R 4.0.4)
+ pkgconfig      2.0.3   2019-09-22 [2] CRAN (R 4.0.3)
+ ps             1.6.0   2021-02-28 [1] CRAN (R 4.0.4)
+ purrr        * 0.3.4   2020-04-17 [1] CRAN (R 4.0.3)
+ R6             2.5.0   2020-10-28 [1] CRAN (R 4.0.3)
+ Rcpp           1.0.6   2021-01-15 [1] CRAN (R 4.0.3)
+ readr        * 1.4.0   2020-10-05 [2] CRAN (R 4.0.3)
+ readxl         1.3.1   2019-03-13 [2] CRAN (R 4.0.3)
+ reprex         2.0.0   2021-04-02 [2] CRAN (R 4.0.4)
+ rlang          0.4.11  2021-04-30 [1] CRAN (R 4.0.4)
+ rprojroot      2.0.2   2020-11-15 [2] CRAN (R 4.0.3)
+ rstudioapi     0.13    2020-11-12 [2] CRAN (R 4.0.3)
+ rvest          1.0.0   2021-03-09 [2] CRAN (R 4.0.4)
+ S4Vectors    * 0.28.1  2020-12-09 [2] Bioconductor  
+ scales         1.1.1   2020-05-11 [2] CRAN (R 4.0.3)
+ sessioninfo  * 1.1.1   2018-11-05 [2] CRAN (R 4.0.3)
+ stringi        1.5.3   2020-09-09 [1] CRAN (R 4.0.3)
+ stringr      * 1.4.0   2019-02-10 [2] CRAN (R 4.0.3)
+ tibble       * 3.1.1   2021-04-18 [1] CRAN (R 4.0.4)
+ tidyr        * 1.1.3   2021-03-03 [2] CRAN (R 4.0.4)
+ tidyselect     1.1.1   2021-04-30 [2] CRAN (R 4.0.4)
+ tidyverse    * 1.3.1   2021-04-15 [1] CRAN (R 4.0.4)
+ utf8           1.2.1   2021-03-12 [2] CRAN (R 4.0.4)
+ vctrs          0.3.8   2021-04-29 [1] CRAN (R 4.0.4)
+ withr          2.4.2   2021-04-18 [1] CRAN (R 4.0.4)
+ xml2           1.3.2   2020-04-23 [2] CRAN (R 4.0.3)
+
+[1] /users/lhuuki/R/4.0.x
+[2] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0.x/R/4.0.x/lib64/R/site-library
+[3] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0.x/R/4.0.x/lib64/R/library
+**** Job ends ****
+Mon Jul 12 18:07:09 EDT 2021
