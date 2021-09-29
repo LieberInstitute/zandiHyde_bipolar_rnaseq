@@ -2,58 +2,37 @@ library(SingleCellExperiment)
 library(edgeR)
 library(scran)
 library(scuttle)
-
 library(here)
 library(sessioninfo)
+library(purrr)
 
-## sce Data
+## Use V1 sce Data
 load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/sce_pan.Rdata", verbose = TRUE)
-table(sce_pan$region)
-table(sce_pan$region, sce_pan$donor)
+load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/marker_stats_pan.Rdata", verbose = TRUE)
+
 
 ## filter to regions of intrest
+table(sce_pan$region)
+table(sce_pan$region, sce_pan$donor)
 sce_pan <- sce_pan[,sce_pan$region %in% c("amy","sacc")]
-table(sce_pan$Sample)
+
+table(sce_pan$sampleID, sce_pan$cellType.Broad)
 
 summed <- aggregateAcrossCells(sce_pan, 
-                               id=colData(sce_pan)[,c("cellType.Broad", "Sample")])
-## Create DGRList
-current <- summed[,summed$cellType.Broad == "Astro"]
-y <- DGEList(counts(current), samples=colData(current))
-dim(y)
+                               id=colData(sce_pan)[,c("cellType.Broad", "sampleID")])
 
-## Romove samples w/ < 10 cells
-discarded <- current$ncells < 10
-y <- y[,!discarded]
-summary(discarded)
-
-# Remove lowly expressed genes
-keep <- filterByExpr(y, group=current$Sample)
-# keep <- filterByExpr(y, group=current$region)
-y <- y[keep,]
-summary(keep)
-
-## compute normalization
-y <- calcNormFactors(y)
-y$samples
-
-## Check normalizations w/ plot
-pdf("plots/sc_ref_norm.pdf")
-par(mfrow=c(2,3))
-for (i in seq_len(ncol(y))) {
-  plotMD(y, column=i)
-}
-dev.off()
-
-## Model
-design <- model.matrix(~factor(pool) + factor(tomato), y$samples)
+colData(summed)
 
 #33 preform DE w/ pseudobulk data
+summed.filt <- summed[,summed$ncells >= 10]
 
 de.results <- pseudoBulkDGE(summed.filt, 
-                            label=summed.filt$celltype.mapped,
-                            design=~factor(pool) + tomato,
-                            coef="tomatoTRUE",
-                            condition=summed.filt$tomato 
+                            label=summed.filt$cellType.Broad,
+                            design= ~region + donor,
+                            coef="regionsacc",
+                            condition=summed.filt$region
 )
 
+map(list(de.results),~sum(.x$FDR < 0.05))
+sum(de.results$Astro$FDR < 0.05, na.rm = TRUE)
+sum(de.results$Oligo$FDR < 0.05, na.rm = TRUE)
