@@ -14,6 +14,12 @@ cell_colors <- create_cell_colors(pallet = "classic",
 
 
 sce_pan <- sce_pan[,sce_pan$region %in% c("amy","sacc")]
+table(sce_pan$region)
+# amy  sacc 
+# 14039 15323
+length(unique(sce_pan$donor))
+# [1] 5
+table(sce_pan$region, sce_pan$donor)
 
 genes_of_intrest <- c("SCN2A", "GRIN2A")
 
