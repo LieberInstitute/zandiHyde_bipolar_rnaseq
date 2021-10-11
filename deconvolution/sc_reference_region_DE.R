@@ -35,7 +35,9 @@ summed <- aggregateAcrossCells(sce_pan,
 
 colData(summed)
 
-#33 preform DE w/ pseudobulk data
+#### preform DE w/ pseudobulk data ####
+table(summed$cellType.Broad, summed$region)
+
 summed.filt <- summed[,summed$ncells >= 10]
 table(summed.filt$cellType.Broad, summed.filt$region)
 
@@ -73,6 +75,9 @@ de.results.all %>%
 # 5 Oligo             531
 # 6 OPC               183
 
+
+write_csv(de.results.all, file = here("deconvolution","sc_reference_region_DE.csv"))
+
 de_markers <- de.results.all %>%
   filter(!is.na(rank_ratio),FDR < 0.05) 
 #               gene      logFC   logCPM         F       PValue          FDR cellType.target rank_ratio      Symbol
@@ -89,8 +94,12 @@ de_markers <- de.results.all %>%
 # 11 ENSG00000141668  2.1988192 8.078708 116.19709 1.328376e-06 0.0004142014           Excit          3       CBLN2
 # 12 ENSG00000235448  0.6747846 8.376845  18.92126 4.667003e-05 0.0029141960           Oligo         20 LURAP1L-AS1
 
+
+write_csv(de_markers, file = here("deconvolution","sc_reference_region_DE_significant_markers.csv"))
+
 de_markers %>% count(cellType.target)  
 #   cellType.target n
 # 1           Astro 5
 # 2           Excit 6
 # 3           Oligo 1
+
