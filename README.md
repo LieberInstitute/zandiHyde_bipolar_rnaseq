@@ -15,4 +15,4 @@ This GitHub repository follows a similar file structure to the one from [BrainSE
 
 ## Internal
 
-JHPCE location: `/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq`
+JHPCE location: `/dcs04/lieber/lcolladotor/hydeZandi_LIBD2005/zandiHyde_bipolar_rnaseq`
