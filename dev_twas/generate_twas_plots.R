@@ -25,9 +25,9 @@ dir.create(file.path("analysis/tables"),
 # Filter N/A Z scores
 twas_z <- twas_exp_fin %>% filter(!is.na(TWAS.Z))
 
-twas_z_sacc <- twas_z[twas_z$region == "sacc",]
+twas_z_sacc <- twas_z[twas_z$region == "sacc", ]
 
-twas_z_amyg <- twas_z[twas_z$region == "amygdala",]
+twas_z_amyg <- twas_z[twas_z$region == "amygdala", ]
 
 don <- list()
 
@@ -48,29 +48,29 @@ for (i in 1:2) {
     } else{
         twas_var <- twas_z_sacc
     }
-
+    
     don[[i]] <-
         twas_var %>%
         # Compute chromosome size
         group_by(CHR) %>%
         summarise(chr_len = max(end)) %>%
-
+        
         # Calculate cumulative position of each chromosome
         mutate(tot = cumsum(as.numeric(chr_len)) - chr_len) %>%
         select(-chr_len) %>%
-
+        
         # Add this info to the initial dataset
         left_join(twas_var,
                   .,
                   by = c("CHR" = "CHR")) %>%
-
+        
         # Add a cumulative position of each SNP
         arrange(CHR, twas_mean_dist) %>%
         mutate(BPcum = twas_mean_dist + tot)
-
-
+    
+    
     axisdf[[i]] = don[[i]] %>% group_by(CHR) %>% summarise(center = (max(BPcum) + min(BPcum)) / 2)
-
+    
     # Prepare text description for each SNP:
     don[[i]]$text <-
         paste0(
@@ -89,7 +89,7 @@ for (i in 1:2) {
             "\nZ score: ",
             don[[i]]$TWAS.Z %>% round(2)
         )
-
+    
     don_key[[i]] <-
         highlight_key(don[[i]], ~ genesymbol, group = "Gene Symbol")
 }
@@ -102,24 +102,24 @@ sig <- qnorm(1 - 0.025 / table(twas_exp_fin$region))
 for (i in 1:2) {
     # Bonferroni Correction
     sig_bonf <- sig[[i]]
-
+    
     p[[i]] <-
         ggplot(don_key[[i]], aes(x = BPcum, y = TWAS.Z, text = text)) +
-
+        
         ggtitle(paste0("Gene Windows of ", ifelse(i == 1, "Amygdala", "sACC") , " TWAS")) +
         # Show all points
         geom_point(aes(color = as.factor(CHR)), alpha = 0.8, size = 1.3) +
         scale_color_manual(values = rep(c("#861657", "#D56AA0"), 22)) +
         geom_hline(
-            yintercept = c(sig_bonf, -sig_bonf),
+            yintercept = c(sig_bonf,-sig_bonf),
             color = "grey40",
             linetype = "dashed"
         ) +
-
+        
         # custom X axis:
         scale_x_continuous(labels = axisdf[[i]]$CHR, breaks = axisdf[[i]]$center) +
         scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
-
+        
         # Custom the theme:
         theme_bw() +
         theme(
@@ -128,22 +128,22 @@ for (i in 1:2) {
             panel.grid.major.x = element_blank(),
             panel.grid.minor.x = element_blank()
         )
-
+    
     print(p[[i]])
 }
 dev.off()
 
 # Z scores threshold
 twas_z_amyg_threshold <-
-    rbind(twas_z_amyg[TWAS.Z > sig[[1]],], twas_z_amyg[TWAS.Z < -sig[[1]],])
+    rbind(twas_z_amyg[TWAS.Z > sig[[1]], ], twas_z_amyg[TWAS.Z < -sig[[1]], ])
 twas_z_sacc_threshold <-
-    rbind(twas_z_sacc[TWAS.Z > sig[[2]],], twas_z_sacc[TWAS.Z < -sig[[2]],])
+    rbind(twas_z_sacc[TWAS.Z > sig[[2]], ], twas_z_sacc[TWAS.Z < -sig[[2]], ])
 
 # Interactive TWAS Z Manhattan Plots ####
 for (i in 1:2) {
     ##### Plotly
     intctv_plot[[i]] <- ggplotly(p[[i]], tooltip = "text")
-
+    
     fin_plot[[i]] <- highlight(
         intctv_plot[[i]],
         on = "plotly_click",
@@ -151,7 +151,7 @@ for (i in 1:2) {
         color = "#60D394",
         selectize = TRUE
     )
-
+    
     saveWidget(fin_plot[[i]],
                file.path(paste0(
                    # "analysis/plots/",
@@ -204,18 +204,17 @@ twas_z_wide$FDR.5perc[twas_z_wide$amygdala.fdr.p < 0.05 &
                           twas_z_wide$sacc.fdr.p < 0.05] <- 'Both'
 
 # Remove NAs
-twas_z_wide[is.na(twas_z_wide)] <- 0
+# twas_z_wide[is.na(twas_z_wide)] <- 0
+twas_z_wide <- twas_z_wide[twas_z_wide$in_both,]
 
 twas_z_wide$FDR.5perc <-
     factor(twas_z_wide$FDR.5perc,
            levels = c('None', 'amygdala', 'sACC', 'Both'))
 
 ggplot(twas_z_wide,
-       aes(
-           x = TWAS.Z_amygdala,
+       aes(x = TWAS.Z_amygdala,
            y = TWAS.Z_sacc,
-           color = FDR.5perc
-       )) +
+           color = FDR.5perc)) +
     xlab("Amygdala Z-Score") +
     ylab("sACC Z-Score") +
     labs(color = "FDR < 5%") +
@@ -228,16 +227,22 @@ dev.off()
 
 ## Z-Score Correlation Test ####
 
-both_genes_sacc <- twas_z_sacc[twas_z_sacc$geneid %in% twas_z_amyg$geneid]
-both_genes_amyg <- twas_z_amyg[twas_z_amyg$geneid %in% twas_z_sacc$geneid]
+both_genes_sacc <-
+    twas_z_sacc[twas_z_sacc$geneid %in% twas_z_amyg$geneid]
+both_genes_amyg <-
+    twas_z_amyg[twas_z_amyg$geneid %in% twas_z_sacc$geneid]
 
-z_score_cor <- cor.test(both_genes_sacc$TWAS.Z, both_genes_amyg$TWAS.Z, method = "pearson")
+z_score_cor <-
+    cor.test(both_genes_sacc$TWAS.Z, both_genes_amyg$TWAS.Z, method = "pearson")
 z_score_cor
 
 both_z_scores <- both_genes_sacc %>%
     select(TWAS.Z) %>%
-    mutate(sacc_TWAS_Z_both = TWAS.Z,
-       amyg_TWAS_Z_both = both_genes_amyg$TWAS.Z, .keep = "unused")
+    mutate(
+        sacc_TWAS_Z_both = TWAS.Z,
+        amyg_TWAS_Z_both = both_genes_amyg$TWAS.Z,
+        .keep = "unused"
+    )
 
 pdf(
     'analysis/plots/BD_TWAS_Z_Correlation.pdf',
@@ -270,7 +275,7 @@ load(
     verbose = TRUE
 )
 
-statOutGene <- statOut[statOut$Type == "Gene",] %>%
+statOutGene <- statOut[statOut$Type == "Gene", ] %>%
     as.data.table(keep.rownames = "geneid") %>%
     select(geneid, t_Amyg, t_sACC)
 
@@ -284,17 +289,49 @@ pdf(
     height = 10
 )
 
-amyg_rho <- format(cor(merged_t$TWAS.Z_amygdala, merged_t$t_Amyg), digits = 3, scientific = TRUE)
-sacc_rho <- format(cor(merged_t$TWAS.Z_sacc, merged_t$t_sACC), digits = 3, scientific = TRUE)
+amyg_rho <-
+    format(
+        cor(merged_t$TWAS.Z_amygdala, merged_t$t_Amyg),
+        digits = 3,
+        scientific = TRUE
+    )
+sacc_rho <-
+    format(
+        cor(merged_t$TWAS.Z_sacc, merged_t$t_sACC),
+        digits = 3,
+        scientific = TRUE
+    )
 
-ggplot(merged_t,
+ggplot(merged_t[which(merged_t$TWAS.Z_amygdala != 0,)],
        aes(x = TWAS.Z_amygdala,
-           y = t_Amyg)) + geom_point() + labs(title = toTitleCase("TWAS vs BD differential expression in Amygdala"), x = "TWAS Z-Score", y = "BD vs Control t-Statistic") + annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(amyg_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) + xlim(-6, 6) +
+           y = t_Amyg)) + geom_point(alpha = 0.4) + labs(
+               title = toTitleCase("TWAS vs BD differential expression in Amygdala"),
+               x = "TWAS Z-Score",
+               y = "BD vs Control t-Statistic"
+           ) + annotate(
+               "text",
+               x = -4.5,
+               y = 5,
+               label = paste0("rho == ", formatC(amyg_rho, format = "e")),
+               parse = TRUE,
+               size = 5.5
+           ) + scale_y_continuous(breaks = c(-6,-3, 0, 3, 6)) + xlim(-6, 6) +
     theme_bw(base_size = 20)
 
-ggplot(merged_t,
+ggplot(merged_t[which(merged_t$TWAS.Z_sacc != 0,)],
        aes(x = TWAS.Z_sacc,
-           y = t_sACC)) + geom_point() + labs(title = toTitleCase("TWAS vs BD differential expression in sACC"), x = "TWAS Z-Score", y = "BD vs Control t-Statistic")+ annotate("text", x = -5.5, y = 6, label = paste0("rho == ", formatC(sacc_rho, format = "e")), parse = TRUE) + scale_y_continuous(breaks = c(-6, -3, 0, 3, 6)) +
+           y = t_sACC)) + geom_point(alpha = 0.4) + labs(
+               title = toTitleCase("TWAS vs BD differential expression in sACC"),
+               x = "TWAS Z-Score",
+               y = "BD vs Control t-Statistic"
+           ) + annotate(
+               "text",
+               x = -4.5,
+               y = 5,
+               label = paste0("rho == ", formatC(sacc_rho, format = "e")),
+               parse = TRUE,
+               size = 5.5
+           ) + scale_y_continuous(breaks = c(-6,-3, 0, 3, 6)) +
     scale_x_continuous(breaks = waiver()) +
     theme_bw(base_size = 20)
 
@@ -303,7 +340,13 @@ dev.off()
 # XLSX Output ####
 
 # xlsx does not work with conda_R/4.0, needs 4.0.x
-save(twas_z_amyg_threshold, twas_z_sacc_threshold, twas_z_wide, merged_t, "rda/xlsx_output.RData")
+save(
+    twas_z_amyg_threshold,
+    twas_z_sacc_threshold,
+    twas_z_wide,
+    merged_t,
+    "rda/xlsx_output.RData"
+)
 
 # for enrichment test
 save.image("rda/generate_plots_data.RData")
