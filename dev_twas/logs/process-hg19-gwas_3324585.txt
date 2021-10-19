@@ -1,0 +1,63 @@
+Adding LIBD modules
+Loading git
+Loading LIBD module for git-status-size/github
+Loading LIBD module for git-lfs/2.8.0
+Loading LIBD module for rmate/1.5.9
+Loading LIBD module for ruby/2.6.4p104
+Loading conda_R/4.0
+**** Job starts ****
+Wed Oct  7 15:29:56 EDT 2020
+**** JHPCE info ****
+User: ${USER}
+Job id: ${JOB_ID}
+Job name: ${JOB_NAME}
+Hostname: ${HOSTNAME}
+Task id: ${TASK_ID}
+Unloading conda_R/4.0
+Loading conda_R/4.0
+
+Currently Loaded Modules:
+  1) matlab/R2019a     6) COMMUNITY_CENTOS7_DEFAULT_ENV  11) ruby/2.6.4p104
+  2) stata/16          7) JHPCE_CENTOS7_DEFAULT_ENV      12) rmate/1.5.9
+  3) JHPCE_tools/1.0   8) git-status-size/github         13) conda/3-4.6.14
+  4) sge/8.1.9         9) git/2.28.0                     14) conda_R/4.0
+  5) gcc/4.4.7        10) git-lfs/2.8.0
+
+ 
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:data.table’:
+
+    between, first, last
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+  FALSE    TRUE 
+3101196 7885983 
+Warning messages:
+1: In plot.window(xlim, ylim, "", ...) :
+  "color" is not a graphical parameter
+2: In title(main = main, sub = sub, xlab = xlab, ylab = ylab, ...) :
+  "color" is not a graphical parameter
+3: In axis(1, ...) : "color" is not a graphical parameter
+4: In axis(2, ...) : "color" is not a graphical parameter
+Warning messages:
+1: In plot.window(xlim, ylim, "", ...) :
+  "color" is not a graphical parameter
+2: In title(main = main, sub = sub, xlab = xlab, ylab = ylab, ...) :
+  "color" is not a graphical parameter
+3: In axis(1, ...) : "color" is not a graphical parameter
+4: In axis(2, ...) : "color" is not a graphical parameter
+null device 
+          1 
+**** Job ends ****
+Wed Oct  7 15:40:04 EDT 2020

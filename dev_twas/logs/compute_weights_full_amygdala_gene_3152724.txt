@@ -1,0 +1,106 @@
+Adding LIBD modules
+Loading git
+Loading LIBD module for git-status-size/github
+Loading LIBD module for git-lfs/2.8.0
+Loading LIBD module for rmate/1.5.9
+Loading LIBD module for ruby/2.6.4p104
+Loading conda_R/4.0
+**** Job starts ****
+Mon Sep 28 16:50:37 EDT 2020
+**** JHPCE info ****
+User: ${USER}
+Job id: ${JOB_ID}
+Job name: ${JOB_NAME}
+Hostname: ${HOSTNAME}
+Task id: ${TASK_ID}
+Loading LIBD module for plink/1.90b6.6
+Loading LIBD module for fusion_twas/github
+Loading LIBD module for plink/1.90b6.6
+Loading LIBD module for plink/1.90b6.6
+See /jhpce/shared/jhpce/libd/fusion_twas/github/README.md for installing the R
+dependencies 
+Run using the full path, for example: Rscript
+/jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R
+--help 
+Unloading conda_R/4.0
+Loading conda_R/4.0
+
+Currently Loaded Modules:
+  1) matlab/R2019a                   9) git/2.28.0
+  2) stata/16                       10) git-lfs/2.8.0
+  3) JHPCE_tools/1.0                11) ruby/2.6.4p104
+  4) sge/8.1.9                      12) rmate/1.5.9
+  5) gcc/4.4.7                      13) plink/1.90b6.6
+  6) COMMUNITY_CENTOS7_DEFAULT_ENV  14) fusion_twas/github
+  7) JHPCE_CENTOS7_DEFAULT_ENV      15) conda/3-4.6.14
+  8) git-status-size/github         16) conda_R/4.0
+
+ 
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply, rowsum
+
+Error: file.exists(rse_file) is not TRUE
+Execution halted
+**** Job ends ****
+Mon Sep 28 16:50:53 EDT 2020
