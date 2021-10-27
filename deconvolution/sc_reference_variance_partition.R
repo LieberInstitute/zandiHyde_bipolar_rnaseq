@@ -1,9 +1,11 @@
 
 library(variancePartition)
 library(SingleCellExperiment)
-library(purrr)
+library(tidyverse)
 library(limma)
 library(edgeR)
+library(DeconvoBuddies)
+library(jaffelab)
 library(sessioninfo)
 library(here)
 
@@ -14,16 +16,29 @@ donor_region<- unique(colData(sce_pan)[, c("Sample","donor","region")])
 table(donor_region$region)
 # amy dlpfc   hpc   nac  sacc 
 # 5     3     3     8     5 
+## there are 24 sampels
 
-pd <- colData(sce_pan)
+#### Pseudobulk sce samples ####
+length(unique(sce_pan$sampleID))
 
-mod <- model.matrix(~cellType.Broad, pd)
-gExpr<- calcNormFactors(sce_pan)
-vobjGenes <- voom(gExpr, mod)
+pseuobulk_counts <- pseudobulk(sce_pan, cell_group_cols = c("sampleID", "cellType.Broad"))
+dim(pseuobulk_counts)
+corner(pseuobulk_counts)
 
-message("VarPart Amyg")
+## pseudobulk pd
+pseudobulk_pd <- as.data.frame(colData(sce_pan)) %>%
+  select(sampleID, donor, region, cellType.Broad) %>%
+  group_by(sampleID, donor, region, cellType.Broad) %>%
+  summarise(n_cells = n())
+
+# mod <- model.matrix(~cellType.Broad, pd)
+# gExpr<- calcNormFactors(sce_pan)
+# vobjGenes <- voom(gExpr, mod)
+
+message("Starting VarPart ", Sys.time())
 form <- ~(1|cellType.Broad) + (1|region) + (1|donor)
-varPart <- fitExtractVarPartModel(exprObj = vobjGenes, formula = form, data = pd)
+# varPart <- fitExtractVarPartModel(exprObj = vobjGenes, formula = form, data = pd)
+varPart <- fitExtractVarPartModel(exprObj = pseuobulk_counts, formula = form, data = pseudobulk_pd)
 save(varPart, file = "sce_refrence_variance_partition.rdata")
 
 vp <- sortCols(varPart)
