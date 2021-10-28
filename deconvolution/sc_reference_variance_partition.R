@@ -42,9 +42,6 @@ pseudobulk_pd <- as.data.frame(colData(sce_pan)) %>%
 rse_pseudobulk <- SummarizedExperiment(assays = list(counts = pseuobulk_counts),
                                        colData = DataFrame(pseudobulk_pd))
 
-# mod <- model.matrix(~protocol, pseudobulk_pd)
-# gExpr<- calcNormFactors(rse_pseudobulk)
-# vobjGenes <- voom(gExpr, mod)
 
 message("Starting VarPart ", Sys.time())
 # linear mixed model
