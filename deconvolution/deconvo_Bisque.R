@@ -49,9 +49,10 @@ marker_genes <- marker_stats_filter$gene
 rd <- as.data.frame(rowData(rse_gene))
 
 marker_table <- marker_stats_filter %>%
-  select(ensemblID = gene, `Cell Type` = cellType.target, Symbol) %>%
+  select(ensemblID = gene, `Cell Type` = cellType.target) %>%
   left_join(rd) %>%
-  select(gencodeID, `Cell Type`, Symbol)
+  select(ensemblID, gencodeID, Symbol, `Cell Type`) %>%
+  filter(gencodeID != "ENSG00000198223.16_PAR_Y")
 
 write_csv(marker_table, file = here("deconvolution", "bipseq-deconvolution-markers.csv"))
 
