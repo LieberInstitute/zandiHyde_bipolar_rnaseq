@@ -2,14 +2,14 @@
 library(variancePartition)
 library(SingleCellExperiment)
 library(tidyverse)
-# library(limma)
-# library(edgeR)
 library(DeconvoBuddies)
 library(jaffelab)
 library(scuttle)
 library(sessioninfo)
 library(here)
 library(scater)
+library(edgeR)
+
 
 ## sce Data
 load("/dcl01/lieber/ajaffe/lab/deconvolution_bsp2/data/sce_pan.Rdata", verbose = TRUE)
@@ -51,22 +51,18 @@ message("Starting VarPart ", Sys.time())
 form <- ~(1|cellType.Broad) + (1|region) + (1|donor)
 
 varPart <- fitExtractVarPartModel(exprObj = pseuobulk_counts_cnf, formula = form, data = pseudobulk_pd)
-# save(varPart, file = "sce_refrence_variance_partition.rdata")
+save(varPart, file = "sce_varPart.Rdata")
 
 vp <- sortCols(varPart)
 colMeans(vp)
 # cellType.Broad         region          donor      Residuals 
-#     0.45896885     0.03677204     0.01453426     0.48972486 
+#     0.22778704     0.02136963     0.01949914     0.73134419 
+colnames(vp) <- c("CellType", "BrainRegion", "BrNum", "Residuals")
 
-# cellType.Broad         region          donor      Residuals 
-# 0.22778704     0.02136963     0.01949914     0.73134419 
+vp_violin <- plotVarPart(vp, col = rep("white", ncol(vp))) +
+  theme(text = element_text(size=15)) 
 
-vp_violin <- plotVarPart(vp) +
-  scale_fill_manual(values = RColorBrewer::brewer.pal(name = "Accent", n = 4)) + 
-  labs(title = "Variance Partition for 225 Marker Genes - Normalized", 
-       subtitle = "model: ~(1 | cellType.Broad) + (1 | region) + (1 | donor)")
-
-ggsave(plot = vp_violin, filename = "plots/sc_refrence_vp_violin_norm.png", width = 10)
+ggsave(plot = vp_violin, filename = "plots/sc_refrence_vp_violin_norm.png", width = 4)
 
 #### logNormCounts + getVarianceExplained approach ###
 

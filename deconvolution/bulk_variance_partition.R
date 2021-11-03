@@ -63,11 +63,15 @@ colMeans(varPart_joint_sum)
 save(varPart_simple, varPart_simple_sum, varPart_joint, varPart_joint_sum,file = "bulk_varPart.Rdata")
 
 #### Plot ####
-violin_simple <- plotVarPart(varPart_simple_sum) 
-ggsave(violin_simple, filename = "plots/bulk_vp_violin_simple.png")
+violin_simple <- plotVarPart(varPart_simple_sum, col = rep("white", ncol(varPart_simple_sum))) +
+  labs(y = "Variance explained (%)") +
+  theme(text = element_text(size=15))
+ggsave(violin_simple, filename = "plots/bulk_vp_violin_simple.png", width = 4)
 
-violin_joint <- plotVarPart(varPart_joint_sum)
-ggsave(violin_joint, filename = "plots/bulk_vp_violin_joint.png")
+violin_joint <- plotVarPart(varPart_joint_sum, col = rep("white", ncol(varPart_joint_sum)))+
+  labs(y = "Variance explained (%)") +
+  theme(text = element_text(size=15)) 
+ggsave(violin_joint, filename = "plots/bulk_vp_violin_joint.png", width = 10, height = 7.5) 
 
 # sgejobs::job_single('bulk_variance_partition', create_shell = TRUE, queue= 'bluejay', memory = '50G', command = "Rscript bulk_variance_partition.R")
 
