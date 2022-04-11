@@ -8,7 +8,7 @@ In order to cite this project, please cite:
 
 + Correspondence to: pzandi1@jhu.edu or thomas.hyde@libd.org
 
-Here's the citation in [BibTex](http://www.bibtex.org/) format:
+Here's the citation in [BibTeX](http://www.bibtex.org/) format:
 
 ```
 
