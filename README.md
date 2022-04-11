@@ -2,16 +2,9 @@
 
 This GitHub repository contains the code for analyzing the RNA-seq data from the BipSeq project available through PsychENCODE at https://psychencode.synapse.org/Explore/Studies/DetailsPage?study=syn5844980. 
 
-In order to cite this project, please cite:
-
-* Zandi PP,+, Jaffe AE, Goes FS, Burke EE, Collado-Torres L, Huuli LA, Seyedian A, Lin Y, Seifuddin F, Pirooznia M, Ross CA, Kleinman JE, Weinberger DR, Hyde TM,+, _TBD_, 2021
-
-+ Correspondence to: pzandi1@jhu.edu or thomas.hyde@libd.org
-
-Here's the citation in [BibTeX](http://www.bibtex.org/) format:
+In order to cite this project, please cite [DOI: 10.1038/s41593-022-01024-6](https://doi.org/10.1038/s41593-022-01024-6). Here's the citation in [BibTeX](http://www.bibtex.org/) format:
 
 ```
-
 @article{zandi_amygdala_2022,
 	title = {Amygdala and anterior cingulate transcriptomes from individuals with bipolar disorder reveal downregulated neuroimmune and synaptic pathways},
 	volume = {25},
